@@ -230,6 +230,8 @@ package kx.xmap;
 			
 			m_XMapItemToXLogicObject.set (__item, __logicObject);
 
+			trace (": logicObject: ", __logicObject);
+			
 			__logicObject.setXMapModel (m_currLayer + 1, m_XMapModel, m_XMapView);
 			
 			__logicObject.addKillListener (removeXMapItem);
