@@ -438,6 +438,8 @@ package kx.xmap;
 			__c2 = XType.min (__c2, m_submapCols-1);
 			__r1 = XType.min (__r1, m_submapRows-1);
 			__r2 = XType.min (__r2, m_submapRows-1);
+			
+			/*
 // ul
 			m_XSubmaps[__r1][__c1].addItem (__item);
 // ur
@@ -446,7 +448,17 @@ package kx.xmap;
 			m_XSubmaps[__r2][__c1].addItem (__item);
 // lr
 			m_XSubmaps[__r2][__c2].addItem (__item);
-
+			*/
+			
+			var __r:Int;
+			var __c:Int;
+			
+			for (__r in __r1 ... __r2+1) {
+				for (__c in __c1 ... __c2+1) {
+					m_XSubmaps[__r][__c].addItem (__item);
+				}
+			}
+			
 			trackItem (__item);
 			
 			return __item;
@@ -549,6 +561,8 @@ package kx.xmap;
 			__c2 = XType.min (__c2, m_submapCols-1);
 			__r1 = XType.min (__r1, m_submapRows-1);
 			__r2 = XType.min (__r2, m_submapRows-1);
+			
+			/*
 // ul
 			m_XSubmaps[__r1][__c1].removeItem (__item);
 // ur
@@ -557,7 +571,17 @@ package kx.xmap;
 			m_XSubmaps[__r2][__c1].removeItem (__item);
 // lr
 			m_XSubmaps[__r2][__c2].removeItem (__item);
-				
+			*/
+	
+			var __r:Int;
+			var __c:Int;
+			
+			for (__r in __r1 ... __r2+1) {
+						for (__c in __c1 ... __c2+1) {
+					m_XSubmaps[__r][__c].removeItem (__item);
+				}
+			}
+			
 			untrackItem (__item);
 		}
 				

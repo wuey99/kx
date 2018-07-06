@@ -374,6 +374,22 @@ package kx.resource.manager;
 // looks up Class based on the full class name
 //------------------------------------------------------------------------------------------
 		public function getClassByName (__className:String):Class<Dynamic> /* <Dynamic> */ {
+			try {
+				return __getClassByName (__className);
+			}
+			catch (e:Dynamic) {
+				try {
+					return __getClassByName ("ErrorImages:undefinedClass");
+				}
+				catch (e:Dynamic) {
+					throw (e);
+				}
+			}
+			
+			return null;
+		}
+		
+		private function __getClassByName (__className:String):Class<Dynamic> /* <Dynamic> */ {
 			if (!resourceManagerReady ()) {
 				return null;
 			}
