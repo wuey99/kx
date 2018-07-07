@@ -63,6 +63,9 @@ package kx.xmap;
 		private var m_viewPort:XRect;
 		
 		private var m_visible:Bool;
+		private var m_scale:Float;
+		private var m_regX:Float;
+		private var m_regY:Float;
 		private var m_name:String;
 		private var m_grid:Bool;
 		
@@ -216,6 +219,9 @@ package kx.xmap;
 				m_XSubmaps.push (null);
 			}
 			m_visible = true;
+			m_scale = 1.0;
+			m_regX = 0.0;
+			m_regY = 0.0;
 			m_name = "layer" + __layer;
 			m_grid = false;
 			m_retrievedSubmaps = new Array<XSubmapModel> (); // <XSubmapModel>
@@ -301,6 +307,48 @@ package kx.xmap;
 		}
 		/* @:end */
 	
+//------------------------------------------------------------------------------------------
+		public var scale (get, set):Float;
+		
+		public function get_scale ():Float {
+			return m_scale;
+		}
+		
+		public function set_scale (__val:Float): Float {
+			m_scale = __val;
+			
+			return __val;			
+		}
+		/* @:end */
+		
+//------------------------------------------------------------------------------------------
+		public var regX (get, set):Float;
+		
+		public function get_regX ():Float {
+			return m_regX;
+		}
+		
+		public function set_regX (__val:Float): Float {
+			m_regX = __val;
+			
+			return __val;			
+		}
+		/* @:end */
+		
+//------------------------------------------------------------------------------------------
+		public var regY (get, set):Float;
+		
+		public function get_regY ():Float {
+			return m_regY;
+		}
+		
+		public function set_regY (__val:Float): Float {
+			m_regY = __val;
+			
+			return __val;			
+		}
+		/* @:end */
+		
 //------------------------------------------------------------------------------------------
 		public var name (get, set):String;
 		
@@ -1053,6 +1101,9 @@ package kx.xmap;
 				"submapHeight",	m_submapHeight,
 				"currID",		m_currID,
 				"visible", 		m_visible,
+				"scale",		m_scale,
+				"regX",			m_regX,
+				"regY",			m_regY,
 				"name",			m_name,
 				"grid", 		m_grid,
 			];
@@ -1180,6 +1231,27 @@ package kx.xmap;
 			else
 			{
 				m_visible = true;
+			}
+			if (__xml.hasAttribute ("scale")) {
+				m_scale = __xml.getAttributeFloat ("scale");
+			}
+			else
+			{
+				m_scale = 1.0;
+			}
+			if (__xml.hasAttribute ("regX")) {
+				m_regX = __xml.getAttributeFloat ("regX");
+			}
+			else
+			{
+				m_regX = 0.0;
+			}
+			if (__xml.hasAttribute ("regY")) {
+				m_regY = __xml.getAttributeFloat ("regY");
+			}
+			else
+			{
+				m_regY = 0.0;
 			}
 			if (__xml.hasAttribute ("name")) {
 				m_name = __xml.getAttributeString ("name");

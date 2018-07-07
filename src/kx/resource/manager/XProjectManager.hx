@@ -411,7 +411,7 @@ package kx.resource.manager;
 				catch (e:Dynamic) {
 					var error:String = "className not found in manifest";
 					
-					if (e.message.substring (0, error.length) == error) {
+					if (XType.errorMessage (e).substring (0, error.length) == error) {
 						continue;
 					}
 					else

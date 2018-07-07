@@ -693,7 +693,7 @@ package kx;
 			trace ("active tasks XApp: ");
 												
 			for (__key__ in m_XApp.getXTaskManager ().getTasks ().keys ()) {
-				function (x:XSignal):Void {
+				function (x:XTask):Void {
 //					trace (": task: ",  i, ": ",  x,  ", parent: ", x.getParent ());
 				} (cast __key__);
 			}
