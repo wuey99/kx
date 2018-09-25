@@ -46,7 +46,6 @@ package kx.world.sprite;
 		public static var g_XApp:XApp;
 		
 		public var m_tilemap:Tilemap;
-		public var m_tileArray:TileArray;
 
 		//------------------------------------------------------------------------------------------
 		public function new () {
@@ -58,11 +57,17 @@ package kx.world.sprite;
 			super.setup ();
 			
 			m_tilemap = null;
+			m_frame = -1;
 		}
 		
 		//------------------------------------------------------------------------------------------
 		public override function cleanup ():Void {
 			super.cleanup ();
+			
+			alpha = 1.0;
+			visible = true;
+			visible2 = true;
+			scaleX = scaleY = 1.0;
 			
 			if (m_tilemap != null) {
 				var __tile:Tile;
@@ -101,16 +106,12 @@ package kx.world.sprite;
 			function __init ():Void {
 				addChild (m_tilemap);
 				
-				var __tileArray:TileArray = m_tilemap.getTiles ();
-				
 				var i:Int;
 				
-				for (i in 0 ... __tileArray.length) {
-					__tileArray.position = i;
-					__tileArray.visible = false;
+				for (i in 0 ... m_tilemap.numTiles) {
+					var __tile:Tile = m_tilemap.getTileAt (i);
+					__tile.visible = false;
 				}
-				
-				m_tilemap.setTiles (__tileArray);
 				
 				gotoAndStop (1);
 			}
@@ -146,19 +147,21 @@ package kx.world.sprite;
 		
 		//------------------------------------------------------------------------------------------
 		public override function goto (__frame:Int):Void {
-			var __tileArray:TileArray = m_tilemap.getTiles ();
+			var __tile:Tile;
 			
 			if (m_frame >= 0) {
-				__tileArray.position = m_frame;
-				__tileArray.visible = false;
+				__tile = m_tilemap.getTileAt (m_frame);
+				if (__tile != null) {
+					__tile.visible = false;
+				}
 			}
 			
 			m_frame = __frame - 1;
 			
-			__tileArray.position = m_frame;
-			__tileArray.visible = true;
-			
-			m_tilemap.setTiles (__tileArray);
+			__tile = m_tilemap.getTileAt (m_frame);
+			if (__tile != null) {
+				__tile.visible = true;
+			}
 		}
 
 		//------------------------------------------------------------------------------------------

@@ -69,6 +69,11 @@ package kx.world.sprite;
 		public override function cleanup ():Void {
 			super.cleanup ();
 				
+			alpha = 1.0;
+			visible = true;
+			visible2 = true;
+			scaleX = scaleY = 1.0;
+		
 			if (m_bitmapDataAnimManager != null) {
 				m_bitmapDataAnimManager.remove (m_className);
 			}

@@ -346,7 +346,6 @@ package kx.resource.manager;
 		// returns true if when the resource is successfully unloaded.
 		//------------------------------------------------------------------------------------------
 		public function unloadClassByName (__className:String):Bool {
-			return false;
 			
 			if (!m_loadComplete) {
 				return false;

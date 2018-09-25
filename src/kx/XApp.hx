@@ -88,7 +88,7 @@ package kx;
 //------------------------------------------------------------------------------------------
 		public function setup (__poolSettings:Dynamic /* Object */):Void {
 			m_useTilemaps = true;
-			m_useBGTilemaps = false;
+			m_useBGTilemaps = true;
 
 			m_XTaskManager = new XTaskManager (this);
 			m_XSignalManager = new XSignalManager (this);

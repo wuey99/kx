@@ -36,6 +36,7 @@ package kx.xmap;
 	import kx.world.logic.*;
 	import kx.world.sprite.*;
 	import kx.xmap.*;
+	import kx.pool.*;
 	
 	import openfl.display.*;
 	import openfl.geom.*;
@@ -47,6 +48,9 @@ package kx.xmap;
 	class XSubmapViewTilemapCache extends XSubmapViewCache {
 		private var m_tilemap:XSubmapTilemap;
 		private var m_movieClipCacheManager:XMovieClipCacheManager;
+		private var m_XRectPoolManager:XObjectPoolManager;
+		
+		private var m_tileScaleFactor:Float;
 		
 //------------------------------------------------------------------------------------------	
 		public function new () {
@@ -57,7 +61,10 @@ package kx.xmap;
 		public override function setup (__xxx:XWorld, args:Array<Dynamic> /* <Dynamic> */):Void {
 			super.setup (__xxx, args);
 	
+			m_tileScaleFactor = (XSubmapModel.TX_TILE_WIDTH + 2) / XSubmapModel.TX_TILE_WIDTH;
+			
 			m_movieClipCacheManager = xxx.getMovieClipCacheManager ();
+			m_XRectPoolManager = xxx.getXRectPoolManager ();
 		}
 
 //------------------------------------------------------------------------------------------
@@ -69,6 +76,14 @@ package kx.xmap;
 			m_XMapView.getSubmapBitmapPoolManager ().returnObject (m_tilemap);
 		}
 
+//------------------------------------------------------------------------------------------
+		public override function setModel (__model:XSubmapModel):Void {
+			super.setModel (__model);
+			
+			m_tilemap.scaleX = (m_submapModel.width + 2) / m_submapModel.width;
+			m_tilemap.scaleY = (m_submapModel.height + 2) / m_submapModel.height;
+		}
+		
 //------------------------------------------------------------------------------------------
 		public override function dictRefresh ():Void {
 //			m_tilemap.bitmap.bitmapData.lock ();
@@ -175,6 +190,65 @@ package kx.xmap;
 					}
 				}
 			}
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public override function tileRefresh ():Void {
+			tempRect.x = 0;
+			tempRect.y = 0;
+			tempRect.width = m_submapModel.width;
+			tempRect.height = m_submapModel.height;
+			
+			m_tilemap.removeTiles ();
+			
+			var __movieClip:XMovieClip;
+			var __srcTilemap:XTilemap;
+			var __tmap:Array<Array<Dynamic>> = m_submapModel.tmap;
+			var __tileCols:Int = m_submapModel.tileCols;
+			var __tileRows:Int = m_submapModel.tileRows;
+			
+			var __boundingRect:XRect = cast m_XRectPoolManager.borrowObject (); /* as XRect */
+			
+			__boundingRect.x = 0;
+			__boundingRect.y = 0;
+			__boundingRect.width = XSubmapModel.TX_TILE_WIDTH;
+			__boundingRect.height = XSubmapModel.TX_TILE_HEIGHT;
+			
+			for (__row in 0 ... __tileRows) {
+				for (__col in 0 ... __tileCols) {
+					var __tile:Array<Dynamic> /* <Dynamic> */  = __tmap[__row * __tileCols + __col];
+					
+					__movieClip = m_movieClipCacheManager.get (m_submapModel.XMapLayer.getClassNameFromIndex (__tile[0]));
+				
+					if (__movieClip != null) {
+						__srcTilemap = cast __movieClip.getMovieClip (); /* as XTilemap */
+						
+						var __srcTile:Tile = null;
+						var __dstTile:Tile = null;
+						
+						if (__tile[1] != 0) {
+							__srcTile = __srcTilemap.m_tilemap.getTileAt (Std.int (__tile[1]) - 1);
+						}
+						
+						tempPoint.x = __col * XSubmapModel.TX_TILE_WIDTH;
+						tempPoint.y = __row * XSubmapModel.TX_TILE_HEIGHT;
+						
+						__dstTile = new Tile (0, 0, 0, 1.0, 1.0, 0.0);
+						__dstTile.id = __srcTile.id;
+						__dstTile.tileset = __srcTile.tileset;
+						__dstTile.x = tempPoint.x;
+						__dstTile.y = tempPoint.y;
+						__dstTile.scaleX = m_tileScaleFactor;
+						__dstTile.scaleY = m_tileScaleFactor;
+						
+						m_tilemap.tileset = __srcTilemap.m_tilemap.tileset;
+						
+						m_tilemap.addTile (__dstTile);
+					}
+				}
+			}
+			
+			m_XRectPoolManager.returnObject (__boundingRect);
 		}
 		
 //------------------------------------------------------------------------------------------

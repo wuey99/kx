@@ -36,6 +36,9 @@ package kx.texture.openfl;
 		public var tileset:Tileset;
 		public var x:Float;
 		public var y:Float;
+		public var visible:Bool;
+		public var scaleX:Float;
+		public var scaleY:Float;
 		
 		//------------------------------------------------------------------------------------------
 		public function new (id:Int = 0, x:Float = 0, y:Float = 0, scaleX:Float = 1, scaleY:Float = 1, rotation:Float = 0) {

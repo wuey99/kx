@@ -284,6 +284,8 @@ package kx.world;
 			
 			addEventListener (Event.ENTER_FRAME, onFPSCounter);
 			
+			m_timer = null;
+			
 			if (__timerInterval > 0) {
 				// Add event for main loop
 				m_timer = new Timer (__timerInterval, 0);
@@ -292,30 +294,48 @@ package kx.world;
 			}
 			else
 			{
-	
 				addEventListener (Event.ENTER_FRAME, onEnterFrame);		
 			}
 		}
 
-//------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------
 		public override function cleanup ():Void {
 			super.cleanup ();
 			
 			quitMouseScript ();
 			
+			if (m_timer != null) {
+				m_timer.removeEventListener (TimerEvent.TIMER, onEnterFrame);
+				
+				m_timer.stop ();
+			} else {
+				removeEventListener(Event.ENTER_FRAME, onEnterFrame);					
+			}
+			
+			m_timer1000.removeEventListener (TimerEvent.TIMER, onUpdateTimer1000);
+			m_timer1000.stop ();
+			
 			m_XLogicManager.cleanup ();
 			m_XLogicManager2.cleanup ();
 			
-// deprecate this?
+			// deprecate this?
 			m_XTaskManager.removeAllTasks ();
 			m_XTaskManagerCX.removeAllTasks ();
 			
 			m_renderManager.removeAllTasks ();
 			m_XSignalManager.removeAllXSignals ();
 			m_XBulletCollisionManager.cleanup ();
-				
-			removeEventListener(Event.ENTER_FRAME, onEnterFrame);	
-			removeEventListener(Event.RENDER, onRenderFrame);
+			
+			removeEventListener (Event.RENDER, onRenderFrame);
+			removeEventListener (Event.ENTER_FRAME, onFPSCounter);
+			
+			for (i in 0 ... MAX_LAYERS) {
+				m_XWorldLayers[i].cleanup ();
+				removeChild (m_XWorldLayers[i]);
+			}
+			
+			m_XHudLayer.cleanup();
+			removeChild (m_XHudLayer);
 		}
 		
 //------------------------------------------------------------------------------------------

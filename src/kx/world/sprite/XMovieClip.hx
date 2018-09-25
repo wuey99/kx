@@ -74,6 +74,8 @@ package kx.world.sprite;
 		public override function cleanup ():Void {
 			super.cleanup ();
 			
+			removeChild (m_bitmap);
+			
 			m_bitmap.cleanup ();	
 			
 			m_poolManager.returnObject (m_bitmap);

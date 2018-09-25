@@ -555,8 +555,8 @@ package kx.world.logic;
 			}
 				
 // yep, kill it
-			trace (": ---------------------------------------: ");
-			trace (": cull: ", this);
+//			trace (": ---------------------------------------: ");
+//			trace (": cull: ", this);
 			
 			killLater ();
 		}
