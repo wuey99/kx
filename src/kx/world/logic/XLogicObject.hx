@@ -27,6 +27,10 @@
 //------------------------------------------------------------------------------------------
 package kx.world.logic;
 
+	import openfl.geom.*;
+	import openfl.text.*;
+	import openfl.utils.*;
+	
 	import kx.collections.*;
 	import kx.geom.*;
 	import kx.mvc.*;
@@ -34,12 +38,8 @@ package kx.world.logic;
 	import kx.task.*;
 	import kx.world.*;
 	import kx.world.sprite.*;
-	import kx.xml.*;
 	import kx.xmap.*;
-	
-	import openfl.geom.*;
-	import openfl.text.*;
-	import openfl.utils.*;
+	import kx.xml.*;
 
 	// begin include "..\\..\\flash.h";
 	import openfl.display.*;
@@ -84,6 +84,10 @@ package kx.world.logic;
 		public var m_scaleY:Float;
 		public var m_masterScaleX:Float;
 		public var m_masterScaleY:Float;
+		public var m_flipX:Float;
+		public var m_flipY:Float;
+		public var m_masterFlipX:Float;
+		public var m_masterFlipY:Float;
 		public var m_rotation:Float;
 		public var m_masterRotation:Float;
 		public var m_delayed:Int;
@@ -364,11 +368,15 @@ package kx.world.logic;
 //------------------------------------------------------------------------------------------
 		public function setup (__xxx:XWorld, args:Array<Dynamic> /* <Dynamic> */):Void {	
 			m_masterScaleX = m_masterScaleY = 1.0;
+			m_masterFlipX = m_masterFlipY = 1.0;
 			m_masterRotation = 0;
 			m_masterVisible = true;
 			m_masterDepth = 0;
 			m_masterAlpha = 1.0;
 		
+			oFlipX = 1.0;
+			oFlipY = 1.0;
+			
 			m_isDead = false;
 			m_cleanedUp = false;
 			
@@ -1436,6 +1444,80 @@ package kx.world.logic;
 		}
 				
 //------------------------------------------------------------------------------------------
+		public var oFlipX (get, set):Float;
+		
+		// [Inline]
+		public function get_oFlipX ():Float {
+			return m_flipX;
+		}
+		
+		// [Inline]
+		public function set_oFlipX (__val:Float): Float {
+			m_flipX = __val;
+			
+			return __val;	
+		}
+		/* @:end */
+		
+//------------------------------------------------------------------------------------------
+		public var oFlipY (get, set):Float;
+		
+		// [Inline]
+		public function get_oFlipY ():Float {
+			return m_flipY;
+		}		
+		
+		// [Inline]
+		public function set_oFlipY (__val:Float): Float {
+			m_flipY = __val;
+			
+			return __val;	
+		}
+		/* @:end */
+		
+//------------------------------------------------------------------------------------------		
+		public function setMasterFlipX(__value:Float):Void {
+			m_masterFlipX = __value;
+		}
+		
+//------------------------------------------------------------------------------------------		
+		public function getMasterFlipX ():Float {
+			return m_masterFlipX;
+		}
+		
+//------------------------------------------------------------------------------------------		
+		public function setMasterFlipY(__value:Float):Void {
+			m_masterFlipY = __value;
+		}
+		
+//------------------------------------------------------------------------------------------		
+		public function getMasterFlipY ():Float {
+			return m_masterFlipY;
+		}
+		
+//------------------------------------------------------------------------------------------
+		// [Inline]
+		public function getFlipX ():Float {
+			return m_flipX;
+		}
+		
+		// [Inline]
+		public function setFlipX (__value:Float):Void {
+			m_flipX = __value;
+		}
+		
+//------------------------------------------------------------------------------------------
+		// [Inline]
+		public function getFlipY ():Float {
+			return m_flipY;
+		}
+		
+		// [Inline]
+		public function setFlipY (__value:Float):Void {
+			m_flipY = __value;
+		}
+		
+//------------------------------------------------------------------------------------------
 		// [Inline]
 		public function setDepth (__depth:Float):Void {
 			m_depth = __depth;
@@ -1488,10 +1570,12 @@ package kx.world.logic;
 			var __visible:Bool = getMasterVisible ();
 			var __scaleX:Float = getMasterScaleX ();
 			var __scaleY:Float = getMasterScaleY ();
+			var __flipX:Float = getMasterFlipX ();
+			var __flipY:Float = getMasterFlipY ();
 			var __rotation:Float = getMasterRotation ();
 			var __depth:Float = getMasterDepth ();
 			var __alpha:Float = getMasterAlpha ();
-			
+	
 //------------------------------------------------------------------------------------------
 			var logicObject:XLogicObject;
 			
@@ -1505,14 +1589,16 @@ package kx.world.logic;
 						logicObject.y2 = __y;
 						logicObject.rotation2 = __rotation;
 						logicObject.visible = __visible;
-						logicObject.scaleX2 = __scaleX;
-						logicObject.scaleY2 = __scaleY;
+						logicObject.scaleX2 = __scaleX * __flipX;
+						logicObject.scaleY2 = __scaleY * __flipY;
 						logicObject.alpha = __alpha;
 						
 						// propagate rotation, scale, visibility, alpha
 						logicObject.setMasterRotation (logicObject.getRotation () + __rotation);
 						logicObject.setMasterScaleX (logicObject.getScaleX () * __scaleX);
 						logicObject.setMasterScaleY (logicObject.getScaleY () * __scaleY);
+						logicObject.setMasterFlipX (logicObject.getFlipX () * __flipX);
+						logicObject.setMasterFlipY (logicObject.getFlipY () * __flipY);
 						logicObject.setMasterVisible (logicObject.getVisible () && __visible);
 						if (logicObject.getRelativeDepthFlag ()) {
 							logicObject.setMasterDepth (logicObject.getDepth () + __depth);
@@ -1554,8 +1640,8 @@ package kx.world.logic;
 						{
 							sprite.depth2 = sprite.depth;
 						}
-						sprite.scaleX2 = __scaleX;
-						sprite.scaleY2 = __scaleY;
+						sprite.scaleX2 = __scaleX * __flipX;
+						sprite.scaleY2 = __scaleY * __flipY;
 						sprite.alpha = __alpha;
 					}
 				} (__key__);
@@ -1578,8 +1664,8 @@ package kx.world.logic;
 						{
 							sprite.depth2 = sprite.depth;
 						}
-						sprite.scaleX2 = __scaleX;
-						sprite.scaleY2 = __scaleY;
+						sprite.scaleX2 = __scaleX * __flipX;
+						sprite.scaleY2 = __scaleY * __flipY;
 						sprite.alpha = __alpha;
 					}
 				} (__key__);

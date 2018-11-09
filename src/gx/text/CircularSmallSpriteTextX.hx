@@ -100,10 +100,12 @@ package gx.text;
 		//------------------------------------------------------------------------------------------
 		public var angle (get, set):Float;
 		
-public function get_angle ():Float {			return m_angle;
+		public function get_angle ():Float {
+			return m_angle;
 		}
 		
-public function set_angle (__val:Float): Float {			m_angle = __val;
+		public function set_angle (__val:Float): Float {
+			m_angle = __val;
 				
 			return 0;			
 		}
@@ -112,10 +114,12 @@ public function set_angle (__val:Float): Float {			m_angle = __val;
 		//------------------------------------------------------------------------------------------
 		public var dist (get, set):Float;
 		
-public function get_dist ():Float {			return m_dist;
+		public function get_dist ():Float {
+			return m_dist;
 		}
 
-public function set_dist (__val:Float): Float {			m_dist = __val;
+		public function set_dist (__val:Float): Float {
+			m_dist = __val;
 				
 			return 0;			
 		}
@@ -124,10 +128,12 @@ public function set_dist (__val:Float): Float {			m_dist = __val;
 		//------------------------------------------------------------------------------------------
 		public var delta (get, set):Float;
 		
-public function get_delta ():Float {			return m_delta;
+		public function get_delta ():Float {
+			return m_delta;
 		}
 		
-public function set_delta (__val:Float): Float {			m_delta = __val;
+		public function set_delta (__val:Float): Float {
+			m_delta = __val;
 			
 			return 0;			
 		}
@@ -136,10 +142,12 @@ public function set_delta (__val:Float): Float {			m_delta = __val;
 		//------------------------------------------------------------------------------------------
 		public var speed (get, set):Float;
 		
-public function get_speed ():Float {			return m_speed;
+		public function get_speed ():Float {
+			return m_speed;
 		}
 		
-public function set_speed (__val:Float): Float {			m_speed = __val;
+		public function set_speed (__val:Float): Float {
+			m_speed = __val;
 			
 			return 0;			
 		}

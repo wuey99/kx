@@ -280,7 +280,7 @@ package kx.world;
 					
 			m_mouseX = m_mouseY = 0;
 			
-//			setupDebug ();
+			setupDebug ();
 			
 			addEventListener (Event.ENTER_FRAME, onFPSCounter);
 			

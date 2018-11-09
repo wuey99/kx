@@ -4,6 +4,8 @@
 //------------------------------------------------------------------------------------------
 package gx.game;
 		
+	import gx.*;
+	
 	import kx.*;
 	import kx.geom.*;
 	import kx.task.*;
@@ -38,7 +40,11 @@ package gx.game;
 			super.setupX ();
 			
 			script = addEmptyTask ();
+		}
 
+		//------------------------------------------------------------------------------------------
+		public function gotoState (__name:String, __params:Array<Dynamic> /* <Dynamic> */ = null, __layer:Int = 0, __depth:Float = 0.0):Gamestate {
+			return GX.appX.gotoState (__name, __params, __layer, __depth);	
 		}
 		
 	//------------------------------------------------------------------------------------------

@@ -67,10 +67,12 @@ package gx.mickey;
 //------------------------------------------------------------------------------------------
 		public var extraDX (get, set):Float;
 		
-public function get_extraDX ():Float {			return m_extraDX;
+		public function get_extraDX ():Float {
+			return m_extraDX;
 		}
 		
-public function set_extraDX (__val:Float): Float {			m_extraDX = __val;
+		public function set_extraDX (__val:Float): Float {
+			m_extraDX = __val;
 			
 			return 0;			
 		}
@@ -79,10 +81,12 @@ public function set_extraDX (__val:Float): Float {			m_extraDX = __val;
 //------------------------------------------------------------------------------------------
 		public var extraDY (get, set):Float;
 		
-public function get_extraDY ():Float {			return m_extraDY;
+		public function get_extraDY ():Float {
+			return m_extraDY;
 		}
 		
-public function set_extraDY (__val:Float): Float {			m_extraDY = __val;
+		public function set_extraDY (__val:Float): Float {
+			m_extraDY = __val;
 			
 			return 0;			
 		}

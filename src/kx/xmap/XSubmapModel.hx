@@ -184,6 +184,16 @@ package kx.xmap;
 		
 		public static inline var TX_TILE_WIDTH_UNMASK:Int = 0xffffffc0;
 		public static inline var TX_TILE_HEIGHT_UNMASK:Int = 0xffffffc0;
+		
+		// (tikiedit) tile width, height
+		public static inline var CX_BOTH_WIDTH:Int = 64;
+		public static inline var CX_BOTH_HEIGHT:Int = 64;
+		
+		public static inline var CX_BOTH_WIDTH_MASK:Int = 63;
+		public static inline var CX_BOTH_HEIGHT_MASK:Int = 63;
+		
+		public static inline var CX_BOTH_WIDTH_UNMASK:Int = 0xffffffc0;
+		public static inline var CX_BOTH_HEIGHT_UNMASK:Int = 0xffffffc0;
 		// end include "..\\World\\Collision\\cx.h";
 		
 		private static var CXToChar:String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -759,7 +769,7 @@ package kx.xmap;
 							__imageClassIndex = CXToChar.indexOf (__tilesString.charAt (i * 4));
 							__frame = XType.parseInt (__tilesString.substr (i * 4 + 1, 3));
 	
-							m_tmap[__row * m_tileCols + __col] = [__imageClassIndex, __frame];
+							m_tmap[__row * m_tileCols + __col] = [__imageClassIndex, __frame != 0 ? __frame : 1];
 						} else {
 							m_tmap[__row * m_tileCols + __col] = [-1, 0];
 						}

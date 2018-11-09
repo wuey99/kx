@@ -172,6 +172,16 @@ package kx.world.logic;
 		
 		public static inline var TX_TILE_WIDTH_UNMASK:Int = 0xffffffc0;
 		public static inline var TX_TILE_HEIGHT_UNMASK:Int = 0xffffffc0;
+		
+		// (tikiedit) tile width, height
+		public static inline var CX_BOTH_WIDTH:Int = 64;
+		public static inline var CX_BOTH_HEIGHT:Int = 64;
+		
+		public static inline var CX_BOTH_WIDTH_MASK:Int = 63;
+		public static inline var CX_BOTH_HEIGHT_MASK:Int = 63;
+		
+		public static inline var CX_BOTH_WIDTH_UNMASK:Int = 0xffffffc0;
+		public static inline var CX_BOTH_HEIGHT_UNMASK:Int = 0xffffffc0;
 		// end include "..\\..\\World\\Collision\\cx.h";
 		
 //------------------------------------------------------------------------------------------

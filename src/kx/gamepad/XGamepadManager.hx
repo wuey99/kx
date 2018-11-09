@@ -61,7 +61,7 @@ package kx.gamepad;
 			
 			m_mapIDs = new Map<String, String> (); // <String, String>
 						
-			#if (windows || html5)
+			#if (windows || html5 || android)
 			m_mapIDs.set ("LEFT_X", XGamepad.ANALOG_LEFT_X);
 			m_mapIDs.set ("LEFT_Y", XGamepad.ANALOG_LEFT_Y);				
 			m_mapIDs.set ("RIGHT_X", XGamepad.ANALOG_RIGHT_X);			
