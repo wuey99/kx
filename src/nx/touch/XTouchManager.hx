@@ -41,6 +41,7 @@ package nx.touch;
 		private var m_world:XWorld;
 		
 		private var m_touchTrackers:Map<Int, XTouchTracker>;
+		private var m_trackerCount:Int;
 		
 		private var m_touchBeginSignal:XSignal;
 		private var m_touchMoveSignal:XSignal;
@@ -56,6 +57,7 @@ package nx.touch;
 			m_world = __world;
 			
 			m_touchTrackers = new Map <Int, XTouchTracker> ();
+			m_trackerCount = 0;
 			
 			m_touchBeginSignal = m_XApp.createXSignal ();
 			m_touchMoveSignal = m_XApp.createXSignal ();
@@ -98,7 +100,7 @@ package nx.touch;
 				
 				__touchTracker.cleanup ();
 				
-				m_touchTrackers.remove (e.touchPointID);
+				removeTouchTracker (e.touchPointID);
 			}
 		}
 		
@@ -131,22 +133,41 @@ package nx.touch;
 		public function removeTouchEndListener (__id:Int):Void {
 			m_touchEndSignal.removeListener (__id);
 		}
+
+		//------------------------------------------------------------------------------------------
+		public function getTrackerCount ():Int {
+			return m_trackerCount;
+		}
 		
 		//------------------------------------------------------------------------------------------
 		public function getTouchTrackers ():Map<Int, XTouchTracker> {
 			return m_touchTrackers;
 		}
+
+		//------------------------------------------------------------------------------------------
+		public function createTouchTracker ():XTouchTracker {
+			return new XTouchTracker ();
+		}
 		
 		//------------------------------------------------------------------------------------------
-		public function addTouchTracker (e:TouchEvent, __type:String):XTouchTracker {
-			var __touchTracker:XTouchTracker = new XTouchTracker ();
-			__touchTracker.setup (m_XApp, __type);
+		public function addTouchTracker (e:TouchEvent, __type:String, __params:Array<Dynamic>):XTouchTracker {
+			var __touchTracker:XTouchTracker = createTouchTracker ();
+			__touchTracker.setup (m_XApp, __type, __params);
 
 			m_touchTrackers.set (e.touchPointID, __touchTracker);
 			
 			__touchTracker.initPos (e);
 						
+			m_trackerCount++;
+			
 			return __touchTracker;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function removeTouchTracker (__touchPointID):Void {
+			m_touchTrackers.remove (__touchPointID);
+			
+			m_trackerCount--;
 		}
 		
 	//------------------------------------------------------------------------------------------

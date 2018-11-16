@@ -27,12 +27,13 @@
 //------------------------------------------------------------------------------------------
 package nx.touch;
 	
-	import kx.XApp;
-	import openfl.events.*;
-	import openfl.ui.*;
+	import kx.*;
 	import kx.collections.*;
 	import kx.signals.*;
 	
+	import openfl.events.*;
+	import openfl.ui.*;
+
 	//------------------------------------------------------------------------------------------	
 	class XTouchTracker {
 		private var m_XApp:XApp;
@@ -57,7 +58,7 @@ package nx.touch;
 		}
 
 		//------------------------------------------------------------------------------------------
-		public function setup (__XApp:XApp, __type:String):Void {
+		public function setup (__XApp:XApp, __type:String, __params:Array<Dynamic>):Void {
 			m_XApp = __XApp;
 			m_type = __type;
 			
@@ -83,6 +84,51 @@ package nx.touch;
 			return m_touchEndSignal.addListener (__listener);
 		}
 		
+		//------------------------------------------------------------------------------------------
+		public function setType (__type:String):Void {
+			m_type = __type;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function getStartLocalX ():Float {
+			return m_startLocalX;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function getStartLocalY ():Float {
+			return m_startLocalY;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getStartStageX ():Float {
+			return m_startStageX;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getStartStageY ():Float {
+			return m_startStageY;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getCurrentLocalX ():Float {
+			return m_currentLocalX;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function getCurrentLocalY ():Float {
+			return m_currentLocalY;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getCurrentStageX ():Float {
+			return m_currentStageX;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getCurrentStageY ():Float {
+			return m_currentStageY;
+		}
+
 		//------------------------------------------------------------------------------------------
 		public function initPos (e:TouchEvent):Void {
 			m_startLocalX = e.localX;
