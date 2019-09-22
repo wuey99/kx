@@ -40,6 +40,7 @@ package kx.world.logic;
 	import kx.world.sprite.*;
 	import kx.xmap.*;
 	import kx.xml.*;
+	import kx.type.*;
 
 	// begin include "..\\..\\flash.h";
 	import openfl.display.*;
@@ -66,7 +67,7 @@ package kx.world.logic;
 //
 // XLogicObjects can hold either XSprites or child XLogicObjects.
 //------------------------------------------------------------------------------------------
-	class XLogicObject extends XSprite0 implements XRegistration {
+	class XLogicObject extends XSprite0 {
 //		public var xxx:XWorld;
 		public var m_XLogicManager:XLogicManager;
 		public var m_parent:XLogicObject;
@@ -113,7 +114,6 @@ package kx.world.logic;
 		public var m_cleanedUp:Bool;
 		public var m_autoCulling:Bool;
 		public var m_poolClass:Class<Dynamic>; // <Dynamic>
-		public var __XTask:XTask_CONSTANTS;
 		public var m_viewPortRect:XRect;
 		public var m_selfRect:XRect;
 		public var m_itemRect:XRect;
@@ -130,194 +130,6 @@ package kx.world.logic;
 		public var m_iClassName:String;
 		
 		private static var g_GUID:Int = 0;
-		
-		public var rp:XPoint;
-		
-//------------------------------------------------------------------------------------------
-		// begin include "..\\Sprite\\XRegistration_impl.h";
-//------------------------------------------------------------------------------------------
-// <$begin$/>
-// The MIT License (MIT)
-//
-// The "X-Engine"
-//
-// Copyright (c) 2014 Jimmy Huey (wuey99@gmail.com)
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-// <$end$/>
-//------------------------------------------------------------------------------------------
-// import kx.geom.XPoint;
-
-//------------------------------------------------------------------------------------------
-		public function globalToParent():Point {
-// unused
-			return null;
-		}
-
-//------------------------------------------------------------------------------------------
-		public function setRegistration(x:Float=0, y:Float=0):Void {
-			rp.x = x;
-			rp.y = y;
-		}
-
-//------------------------------------------------------------------------------------------
-		public function getRegistration():XPoint {
-			return rp;
-		}
-				
-//------------------------------------------------------------------------------------------
-		public var x2 (get, set):Float;
-				
-		public function get_x2 ():Float {
-			var p:Point = parent.globalToLocal (localToGlobal (rp));
-			
-			return p.x;
-		}
-
-		public function set_x2 (value:Float): Float {
-			var p:Point = parent.globalToLocal (localToGlobal (rp));
-			
-			this.x += value - p.x;
-			
-			return 0;	
-		}
-		/* @:end */
-
-//------------------------------------------------------------------------------------------
-		public var y2 (get, set):Float;
-		
-		// [Inline]
-		public function get_y2():Float {
-			var p:Point = parent.globalToLocal (localToGlobal (rp));
-			
-			return p.y;
-		}
-
-		// [Inline]
-		public function set_y2(value:Float):  Float {
-			var p:Point = parent.globalToLocal (localToGlobal (rp));
-			
-			this.y += value - p.y;
-			
-			return 0;	
-		}
-		/* @:end */
-
-//------------------------------------------------------------------------------------------
-		public var scaleX2 (get, set):Float;
-		
-		// [Inline]
-		public function get_scaleX2():Float {
-			return this.scaleX;
-		}
-
-		// [Inline]
-		public function set_scaleX2(value:Float): Float {
-			var a:Point = parent.globalToLocal (localToGlobal (rp));
-			
-			this.scaleX = value;
-
-			var b:Point = parent.globalToLocal (localToGlobal (rp));
-
-			this.x -= b.x - a.x;
-			this.y -= b.y - a.y;
-			
-			return 0;	
-		}
-		/* @:end */
-
-//------------------------------------------------------------------------------------------
-		public var scaleY2 (get, set):Float;
-		
-		// [Inline]
-		public function get_scaleY2():Float {
-			return this.scaleY;
-		}
-
-		// [Inline]
-		public function set_scaleY2(value:Float): Float {
-			var a:Point = parent.globalToLocal (localToGlobal (rp));
-			
-			this.scaleY = value;
-
-			var b:Point = parent.globalToLocal (localToGlobal (rp));
-
-			this.x -= b.x - a.x;
-			this.y -= b.y - a.y;
-			
-			return 0;	
-		}
-		/* @:end */
-
-//------------------------------------------------------------------------------------------
-		public var rotation2 (get, set):Float;
-		
-		// [Inline]
-		public function get_rotation2():Float {
-			return this.rotation;
-		}
-
-		// [Inline]
-		public function set_rotation2(value:Float): Float {
-			var a:Point = parent.globalToLocal (localToGlobal (rp));
-			
-			this.rotation = value;
-
-			var b:Point = parent.globalToLocal (localToGlobal (rp));
-
-			this.x -= b.x - a.x;
-			this.y -= b.y - a.y;
-			
-			return 0;	
-		}
-		/* @:end */
-
-//------------------------------------------------------------------------------------------
-		public var mouseX2 (get, set):Float;
-		
-		public function get_mouseX2():Float {
-			return Math.round (this.mouseX - rp.x);
-		}
-		
-		public function set_mouseX2(value:Float): Float {
-			return 0;	
-		}
-		/* @:end */		
-
-//------------------------------------------------------------------------------------------
-		public var mouseY2 (get, set):Float;
-		
-		public function get_mouseY2():Float {
-			return Math.round (this.mouseY - rp.y);
-		}
-		
-		public function set_mouseY2(value:Float): Float {
-			return 0;	
-		}
-		/* @:end */	
-		
-//------------------------------------------------------------------------------------------
-		public function setProperty2(prop:String, n:Float):Void {			
-// unused
-		}
-		
-		// end include "..\\Sprite\\XRegistration_impl.h";
 						
 //------------------------------------------------------------------------------------------
 		public function new (__xxx:XWorld = null) {
@@ -344,9 +156,7 @@ package kx.world.logic;
 			iRelativeDepth = false;
 			iLayer = 0;
 			iClassName = "";
-		
-			__XTask = new XTask_CONSTANTS ();
-			
+				
 			if (__xxx != null) {
 				xxx = __xxx;
 				
@@ -445,13 +255,16 @@ package kx.world.logic;
 		
 //------------------------------------------------------------------------------------------
 		public function cleanup ():Void {
+			/*
 			xxx.getXPointPoolManager ().returnObject (m_pos);
 			xxx.getXPointPoolManager ().returnObject (rp);
-			
 			xxx.getXRectPoolManager ().returnObject (m_viewPortRect);
 			xxx.getXRectPoolManager ().returnObject (m_selfRect);
 			xxx.getXRectPoolManager ().returnObject (m_itemRect);
 			xxx.getXPointPoolManager ().returnObject (m_itemPos);
+			*/
+			
+			returnBorrowedObjects ();
 			
 // if this item was spawned from a Level, decrement the item count and
 // broadcast a "kill" signal.  it's possible for outsiders to subscribe
@@ -478,6 +291,16 @@ package kx.world.logic;
 			cleanedUp = true;
 		}
 
+//------------------------------------------------------------------------------------------
+		public function returnBorrowedObjects ():Void {
+			xxx.getXPointPoolManager ().returnObject (m_pos);
+			xxx.getXPointPoolManager ().returnObject (rp);		
+			xxx.getXRectPoolManager ().returnObject (m_viewPortRect);
+			xxx.getXRectPoolManager ().returnObject (m_selfRect);
+			xxx.getXRectPoolManager ().returnObject (m_itemRect);
+			xxx.getXPointPoolManager ().returnObject (m_itemPos);			
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function nukeLater ():Void {
 			if (m_item != null) {
@@ -729,22 +552,22 @@ package kx.world.logic;
 		
 //------------------------------------------------------------------------------------------
 		public function removeAllXBitmaps ():Void {
-			for (__key__ in m_bitmaps.keys ()) {
+			XType.forEach (m_bitmaps, 
 				function (__name:Dynamic /* */):Void {
 					var __bitmap:XBitmap = cast m_bitmaps.get (__name); /* as XBitmap */
 					
 					__bitmap.cleanup ();
 					
 					xxx.getXBitmapPoolManager ().returnObject (__bitmap);
-				} (__key__);
-			}
+				}
+			);
 			
 			for (__key__ in m_bitmaps.keys ()) { m_bitmaps.remove (__key__); } // removeAllKeys
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function removeAllMovieClips ():Void {
-			for (__key__ in m_movieClips.keys ()) {
+			XType.forEach (m_movieClips, 
 				function (__name:Dynamic /* */):Void {
 					var __xmovieClip:XMovieClip = cast m_movieClips.get (__name); /* as XMovieClip */
 					
@@ -755,8 +578,8 @@ package kx.world.logic;
 					}
 					
 					xxx.getXMovieClipPoolManager ().returnObject (__xmovieClip);
-				} (__key__);
-			}
+				}
+			);
 			
 			for (__key__ in m_movieClips.keys ()) { m_movieClips.remove (__key__); } // removeAllKeys
 		}
@@ -772,13 +595,13 @@ package kx.world.logic;
 		
 //------------------------------------------------------------------------------------------
 		public function removeAllXTextSprites ():Void {
-			for (__key__ in m_textSprites.keys ()) {
+			XType.forEach (m_textSprites, 
 				function (x:Dynamic /* */):Void {
 					var __textSprite:XTextSprite = cast x; /* as XTextSprite */
 					
 					__textSprite.cleanup ();
-				} (__key__);
-			}
+				}
+			);
 			
 			for (__key__ in m_textSprites.keys ()) { m_textSprites.remove (__key__); } // removeAllKeys
 		}
@@ -861,11 +684,11 @@ package kx.world.logic;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllWorldSprites ():Void {
-			for (__key__ in m_worldSprites.keys ()) {
+			XType.forEach (m_worldSprites, 
 				function (x:Dynamic /* */):Void {
 					removeSprite (x);
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -908,11 +731,11 @@ package kx.world.logic;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllHudSprites ():Void {
-			for (__key__ in m_hudSprites.keys ()) {
+			XType.forEach (m_hudSprites, 
 				function (x:Dynamic /* */):Void {
 					removeSpriteFromHud (x);
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -948,11 +771,11 @@ package kx.world.logic;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllXLogicObjects ():Void {
-			for (__key__ in m_XLogicObjects.keys ()) {
+			XType.forEach (m_XLogicObjects, 
 				function (x:Dynamic /* */):Void {
 					removeXLogicObject (x);
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -1059,12 +882,12 @@ package kx.world.logic;
 //------------------------------------------------------------------------------------------
 		public function setLayer (__layer:Int):Void {
 			if (__layer != m_layer && m_layer != -1) {
-				for (__key__ in m_worldSprites.keys ()) {
+				XType.forEach (m_worldSprites, 
 					function (x:Dynamic /* */):Void {
 						xxx.getXWorldLayer (m_layer).moveSprite (x);
 						xxx.getXWorldLayer (__layer).addDepthSprite (x);
-					} (__key__);
-				}
+					}
+				);
 			}
 			
 			m_layer = __layer;
@@ -1548,7 +1371,7 @@ package kx.world.logic;
 		public function getRelativeDepthFlag ():Bool {
 			return m_relativeDepthFlag;
 		}
-
+					   
 //------------------------------------------------------------------------------------------
 // the function updates all the children that live inside the XLogicObject container
 //
@@ -1580,7 +1403,7 @@ package kx.world.logic;
 			var logicObject:XLogicObject;
 			
 // update children XLogicObjects
-			for (__key__ in m_XLogicObjects.keys ()) {
+			XType.forEach (m_XLogicObjects, 
 				function (i:Dynamic /* */):Void {
 					logicObject = cast i; /* as XLogicObject */
 							
@@ -1611,20 +1434,20 @@ package kx.world.logic;
 						
 						logicObject.updateDisplay ();
 					}
-				} (__key__);
-			}
+				}
+			);
 			
 //------------------------------------------------------------------------------------------
 			var sprite:XDepthSprite;
 
 // update child sprites that live as children of the Sprite
-			for (__key__ in m_childSprites.keys ()) {
+			XType.forEach (m_childSprites, 
 				function (i:Dynamic /* */):Void {
-				} (__key__);
-			}
+				}
+			);
 								
 // update child sprites that live in the World
-			for (__key__ in m_worldSprites.keys ()) {
+			XType.forEach (m_worldSprites, 
 				function (i:Dynamic /* */):Void {
 					sprite = cast i; /* as XDepthSprite */
 					
@@ -1644,11 +1467,11 @@ package kx.world.logic;
 						sprite.scaleY2 = __scaleY * __flipY;
 						sprite.alpha = __alpha;
 					}
-				} (__key__);
-			}
+				}
+			);
 			
 // update child sprites that live in the HUD
-			for (__key__ in m_hudSprites.keys ()) {
+			XType.forEach (m_hudSprites, 
 				function (i:Dynamic /* */):Void {
 					sprite = cast i; /* as XDepthSprite */
 					
@@ -1668,8 +1491,8 @@ package kx.world.logic;
 						sprite.scaleY2 = __scaleY * __flipY;
 						sprite.alpha = __alpha;
 					}
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------
@@ -1704,11 +1527,11 @@ package kx.world.logic;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllXSignals ():Void {
-			for (__key__ in m_XSignals.keys ()) {
+			XType.forEach (m_XSignals, 
 				function (x:Dynamic /* */):Void {
 					removeXSignal (cast x /* as XSignal */);
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------

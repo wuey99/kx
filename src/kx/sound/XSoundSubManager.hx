@@ -30,6 +30,7 @@ package kx.sound;
 	import kx.*;
 	import kx.collections.*;
 	import kx.task.*;
+	import kx.type.*;
 	
 	import openfl.media.*;
 	import openfl.utils.*;
@@ -244,7 +245,7 @@ package kx.sound;
 			var __firstChoice:Int = -1;
 			var __secondChoice:Int = -1;
 			
-			for (__key__ in m_soundChannels.keys ()) {
+			XType.forEach (m_soundChannels, 
 				function (__targetGuid:Int):Void {
 					var __targetPriority:Float = m_soundChannels.get (__targetGuid);
 					
@@ -255,8 +256,8 @@ package kx.sound;
 					if (__priority == __targetPriority) {
 						__secondChoice = __targetGuid;
 					}
-				} (__key__);
-			}
+				}
+			);
 			
 			if (__firstChoice != -1) {
 				removeSound (__firstChoice);
@@ -287,11 +288,11 @@ package kx.sound;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllSounds ():Void {
-			for (__key__ in m_soundChannels.keys ()) {
+			XType.forEach (m_soundChannels, 
 				function (__guid:Dynamic /* */):Void {
 					removeSound (cast __guid /* as Int */);
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------

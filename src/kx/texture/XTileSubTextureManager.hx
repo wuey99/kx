@@ -114,7 +114,7 @@ package kx.texture;
 				m_currentBitmap.fillRect (__rect, 0x00000000);
 				
 				//------------------------------------------------------------------------------------------
-				for (__key__ in m_movieClips.keys ()) {
+				XType.forEach (m_movieClips, 
 					function (x:Dynamic /* */):Void {
 						var __className:String = cast x; /* as String */
 						
@@ -134,8 +134,8 @@ package kx.texture;
 								m_currentBitmap.draw (__movieClip, __matrix);
 							}
 						}
-					} (__key__);
-				}	
+					}
+				);	
 				
 				//------------------------------------------------------------------------------------------
 				var __tileset:Tileset = new Tileset (m_currentBitmap);
@@ -144,7 +144,7 @@ package kx.texture;
 				m_tilesets.push (__tileset);
 				
 				//------------------------------------------------------------------------------------------
-				for (__key__ in m_movieClips.keys ()) {
+				XType.forEach (m_movieClips, 
 					function (x:Dynamic /* */):Void {
 						var __className:String = cast x; /* as String */
 						
@@ -176,8 +176,8 @@ package kx.texture;
 								trace (":    rect: ", __rect);
 							}
 						}
-					} (__key__);
-				}	
+					}
+				);	
 				
 				//------------------------------------------------------------------------------------------
 //				m_currentBitmap.dispose ();
@@ -206,7 +206,7 @@ package kx.texture;
 				m_currentBitmap.fillRect (__rect, 0x00000000);
 				
 				//------------------------------------------------------------------------------------------
-				for (__key__ in m_movieClips.keys ()) {
+				XType.forEach (m_movieClips, 
 					function (x:Dynamic /* */):Void {
 						var __className:String = cast x; /* as String */
 						
@@ -228,8 +228,8 @@ package kx.texture;
 								m_currentBitmap.draw (__movieClip, __matrix);
 							}
 						}
-					} (__key__);
-				}	
+					}
+				);	
 				
 				//------------------------------------------------------------------------------------------
 				var __tileset:Tileset = new Tileset (m_currentBitmap);
@@ -238,7 +238,7 @@ package kx.texture;
 				m_tilesets.push (__tileset);
 				
 				//------------------------------------------------------------------------------------------
-				for (__key__ in m_movieClips.keys ()) {
+				XType.forEach (m_movieClips, 
 					function (x:Dynamic /* */):Void {
 						var __className:String = cast x; /* as String */
 						
@@ -270,8 +270,8 @@ package kx.texture;
 								trace (":    rect: ", __rect);
 							}
 						}
-					} (__key__);
-				}	
+					}
+				);	
 				
 				//------------------------------------------------------------------------------------------
 				// m_currentBitmap.dispose ();

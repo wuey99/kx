@@ -32,13 +32,15 @@ package kx.pool;
 	import kx.type.*;
 	import kx.world.*;
 	
+	@:coreType abstract ClassKey from Class<Dynamic> to {} {}
+	
 //------------------------------------------------------------------------------------------	
 	class XClassPoolManager {
-		private var m_pools:ClassMap<Class<Dynamic>, XObjectPoolManager>; // <Class<Dynamic>, XObjectPoolManager>
+		private var m_pools:Map<ClassKey, XObjectPoolManager>; // <Class<Dynamic>, XObjectPoolManager>
 		
 //------------------------------------------------------------------------------------------
 		public function new () {
-			m_pools = new ClassMap<Class<Dynamic>, XObjectPoolManager> (); // <Class<Dynamic>, XObjectPoolManager>
+			m_pools = new Map<ClassKey, XObjectPoolManager> (); // <Class<Dynamic>, XObjectPoolManager>
 		}
 
 //------------------------------------------------------------------------------------------
@@ -102,13 +104,13 @@ package kx.pool;
 			}
 			else
 			{
-				for (__key__ in m_pools.keys ()) {
+				XType.forEach (m_pools, 
 					function (x:Dynamic /* */):Void {
 						__pool = m_pools.get (__class);
 						
 						__pool.returnAllObjects ();
-					} (__key__);
-				}
+					}
+				);
 			}
 		}		
 		

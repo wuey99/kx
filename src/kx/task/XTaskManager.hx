@@ -32,6 +32,7 @@ package kx.task;
 	import kx.pool.*;
 	import kx.task.*;
 	import kx.world.logic.*;
+	import kx.type.*;
 	
 //------------------------------------------------------------------------------------------	
 	class XTaskManager {
@@ -91,11 +92,11 @@ package kx.task;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllTasks ():Void {
-			for (__key__ in m_XTasks.keys ()) {
+			XType.forEach (m_XTasks, 
 				function (__task:Dynamic /* */):Void {
 					removeTask (__task);
-				} (__key__);
-			}
+				}
+			);
 		}		
 		
 //------------------------------------------------------------------------------------------
@@ -139,13 +140,13 @@ package kx.task;
 				return;
 			}
 
-			for (__key__ in m_XTasks.keys ()) {
+			XType.forEach (m_XTasks, 
 				function (x:XTask):Void {
 					var __task:XTask = cast x; /* as XTask */
 					
 					__task.run ();
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------

@@ -29,7 +29,6 @@ package kx.type;
 	import kx.collections.XDict;
 
 	
-	
 	//------------------------------------------------------------------------------------------	
 	class XType {
 
@@ -167,6 +166,20 @@ package kx.type;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public static function forEach (__map:Map<Dynamic, Dynamic>, __callback:Dynamic):Void {
+			for (__key in __map.keys ()) {
+				__callback (__key);
+			}
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public static function doWhile (__map:Map<Dynamic, Dynamic>, __callback:Dynamic):Void {
+			for (__key in __map.keys ()) {
+				if (!__callback (__key)) {
+					return;
+				}
+			}
+		}
 	}
 	
 	//------------------------------------------------------------------------------------------

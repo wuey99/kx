@@ -28,6 +28,7 @@
 package kx.signals;
 
 	import kx.collections.*;
+	import kx.type.*;
 
 	import haxe.ds.ObjectMap;
 	
@@ -115,11 +116,11 @@ package kx.signals;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllListeners ():Void {
-			for (__key__ in m_listeners.keys ()) {
+			XType.forEach (m_listeners, 
 				function (__id:Int):Void {
 					m_listeners.remove (__id);
-				} (__key__);
-			}
+				}
+			);
 		}
 				
 //------------------------------------------------------------------------------------------

@@ -106,7 +106,7 @@ package kx;
 			XTask.setXApp (this);
 			XTilemap.setXApp (this);
 			XMovieClip.setXApp (this);
-			XSplat.setXApp (this);
+			XImagemap.setXApp (this);
 			XSubmapTilemap.setXApp (this);
 			
 			m_frameRateScale = 1.0;
@@ -692,11 +692,11 @@ package kx;
 			trace ("------------------------------");
 			trace ("active tasks XApp: ");
 												
-			for (__key__ in m_XApp.getXTaskManager ().getTasks ().keys ()) {
+			XType.forEach (m_XApp.getXTaskManager ().getTasks (),  /* @:castkey */
 				function (x:XTask):Void {
 //					trace (": task: ",  i, ": ",  x,  ", parent: ", x.getParent ());
-				} (cast __key__);
-			}
+				}
+			);
 			
 			trace ("------------------------------");
 			trace ("XSignalPoolManager XApp: ");

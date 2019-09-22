@@ -61,6 +61,7 @@ package kx.xmap;
 		private var m_imageClassNames:Map<String, Int>; // <String, Int>
 		
 		private var m_viewPort:XRect;
+		private var m_startingViewPort:XRect;
 		
 		private var m_visible:Bool;
 		private var m_scale:Float;
@@ -75,128 +76,6 @@ package kx.xmap;
 
 		private var m_retrievedSubmaps:Array<XSubmapModel>; // <XSubmapModel>
 		private var m_retrievedItems:Array<XMapItemModel>; // <XMapItemModel>
-		
-		// begin include "..\\World\\Collision\\cx.h";
-//------------------------------------------------------------------------------------------
-// <$begin$/>
-// The MIT License (MIT)
-//
-// The "X-Engine"
-//
-// Copyright (c) 2014 Jimmy Huey (wuey99@gmail.com)
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-// <$end$/>
-//------------------------------------------------------------------------------------------
-		public var CX_COLLIDE_LF:Int = 0x0001;
-		public var CX_COLLIDE_RT:Int = 0x0002;
-		public var CX_COLLIDE_HORZ:Int = 0x0001 | 0x0002; 
-		public var CX_COLLIDE_UP:Int = 0x0004;
-		public var CX_COLLIDE_DN:Int = 0x0008;
-		public var CX_COLLIDE_VERT:Int = 0x0004 | 0x0008;
-	
-		// empty
-		public static inline var CX_EMPTY:Int = 0;
-		
-		// solid solid
-		public static inline var CX_SOLID:Int = 1;
-		
-		// soft
-		public static inline var CX_SOFT:Int = 2;	
-		
-		// jump thru
-		public static inline var CX_JUMP_THRU:Int = 3;
-		
-		// 45 degree diagonals
-		public static inline var CX_UL45:Int = 4;
-		public static inline var CX_UR45:Int = 5;
-		public static inline var CX_LL45:Int = 6;
-		public static inline var CX_LR45:Int = 7;
-		
-		// 22.5 degree diagonals
-		public static inline var CX_UL225A:Int = 8;
-		public static inline var CX_UL225B:Int = 9;
-		public static inline var CX_UR225A:Int = 10;
-		public static inline var CX_UR225B:Int = 11;
-		public static inline var CX_LL225A:Int = 12;
-		public static inline var CX_LL225B:Int = 13;
-		public static inline var CX_LR225A:Int = 14;
-		public static inline var CX_LR225B:Int = 15;
-		
-		// 67.5 degree diagonals
-		public static inline var CX_UL675A:Int = 16;
-		public static inline var CX_UL675B:Int = 17;
-		public static inline var CX_UR675A:Int = 18;
-		public static inline var CX_UR675B:Int = 19;
-		public static inline var CX_LL675A:Int = 20;
-		public static inline var CX_LL675B:Int = 21;
-		public static inline var CX_LR675A:Int = 22;
-		public static inline var CX_LR675B:Int = 23;
-		
-		// soft tiles
-		public static inline var CX_SOFTLF:Int = 24;
-		public static inline var CX_SOFTRT:Int = 25;
-		public static inline var CX_SOFTUP:Int = 26;
-		public static inline var CX_SOFTDN:Int = 27;
-	
-		// special solids
-		public static inline var CX_SOLIDX001:Int = 28;
-		
-		// death
-		public static inline var CX_DEATH:Int = 29;
-		
-		// ice
-		public static inline var CX_ICE:Int = 30;
-		
-		// max
-		public static inline var CX_MAX:Int = 31;
-		
-		// collision tile width, height
-		public static inline var CX_TILE_WIDTH:Int = 16;
-		public static inline var CX_TILE_HEIGHT:Int = 16;
-		
-		public static inline var CX_TILE_WIDTH_MASK:Int = 15;
-		public static inline var CX_TILE_HEIGHT_MASK:Int = 15;
-		
-		public static inline var CX_TILE_WIDTH_UNMASK:Int = 0xfffffff0;
-		public static inline var CX_TILE_HEIGHT_UNMASK:Int = 0xfffffff0;
-		
-		// alternate tile width, height
-		public static inline var TX_TILE_WIDTH:Int = 64;
-		public static inline var TX_TILE_HEIGHT:Int = 64;
-		
-		public static inline var TX_TILE_WIDTH_MASK:Int = 63;
-		public static inline var TX_TILE_HEIGHT_MASK:Int = 63;
-		
-		public static inline var TX_TILE_WIDTH_UNMASK:Int = 0xffffffc0;
-		public static inline var TX_TILE_HEIGHT_UNMASK:Int = 0xffffffc0;
-		
-		// (tikiedit) tile width, height
-		public static inline var CX_BOTH_WIDTH:Int = 64;
-		public static inline var CX_BOTH_HEIGHT:Int = 64;
-		
-		public static inline var CX_BOTH_WIDTH_MASK:Int = 63;
-		public static inline var CX_BOTH_HEIGHT_MASK:Int = 63;
-		
-		public static inline var CX_BOTH_WIDTH_UNMASK:Int = 0xffffffc0;
-		public static inline var CX_BOTH_HEIGHT_UNMASK:Int = 0xffffffc0;
-		// end include "..\\World\\Collision\\cx.h";
 		
 //------------------------------------------------------------------------------------------	
 		public function new () {
@@ -256,6 +135,7 @@ package kx.xmap;
 			m_itemInuse = new Map<Int, Int> ();  // <Int, Int>
 			
 			m_viewPort = new XRect ();
+			m_startingViewPort = new XRect ();
 		}
 
 //------------------------------------------------------------------------------------------
@@ -287,6 +167,11 @@ package kx.xmap;
 //------------------------------------------------------------------------------------------
 		public function setViewPort (__viewPort:XRect):Void {
 			m_viewPort = __viewPort;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function getStartingViewPort ():XRect {
+			return m_startingViewPort;
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -644,6 +529,14 @@ package kx.xmap;
 		}
 				
 //------------------------------------------------------------------------------------------
+		public function addItemAsTile (__item:XMapItemModel):Void {
+			var __c:Int = Std.int (__item.x / m_submapWidth);
+			var __r:Int = Std.int (__item.y / m_submapHeight);
+			
+			m_XSubmaps[__r][__c].addItemAsTile (__item);
+		}
+		
+//------------------------------------------------------------------------------------------
 		public function getSubmapsAt (
 				__x1:Float, __y1:Float,
 				__x2:Float, __y2:Float
@@ -708,7 +601,7 @@ package kx.xmap;
 			for (i in 0 ... submaps.length) {
 				src_items = submaps[i].items ();
 											
-				for (__key__ in src_items.keys ()) {
+				XType.forEach (src_items, 
 					function (x:Dynamic /* */):Void {
 						item = cast x; /* as XMapItemModel */
 						
@@ -723,8 +616,8 @@ package kx.xmap;
 								m_retrievedItems[push++] = (item);
 //							}
 						}
-					} (__key__);
-				}
+					}
+				);
 			}
 			
 			return m_retrievedItems;		
@@ -803,7 +696,7 @@ package kx.xmap;
 			for (i in 0 ... submaps.length) {
 				src_items = submaps[i].items ();
 								
-				for (__key__ in src_items.keys ()) {
+				XType.forEach (src_items, 
 					function (x:Dynamic /* */):Void {
 						item = cast x; /* as XMapItemModel */
 				
@@ -819,8 +712,8 @@ package kx.xmap;
 								dst_items.push (item);
 							}
 						}
-					} (__key__);
-				}
+					}
+				);
 			}
 			
 			return dst_items;		
@@ -874,6 +767,118 @@ package kx.xmap;
 		}
 		
 //------------------------------------------------------------------------------------------
+		public function getTiles (
+			c1:Int, r1:Int,
+			c2:Int, r2:Int
+		):Array<Array<Dynamic>> {
+			
+			// tile array to return
+			var tiles:Array<Array<Dynamic>>;
+			
+			// col, row divisor
+			var row8:Int = Std.int (m_submapHeight/XSubmapModel.TX_TILE_HEIGHT);
+			var col8:Int = Std.int (m_submapWidth/XSubmapModel.TX_TILE_WIDTH);
+			
+			// col, row mask for the submap
+			var rowMask:Int = Std.int (row8-1);
+			var colMask:Int = Std.int (col8-1);
+			
+			// total columns wide, rows high
+			var cols:Int = c2-c1+1;
+			var rows:Int = r2-r1+1;
+			
+			tiles = new Array<Array<Dynamic>> ();
+			for (i in 0 ... cols * rows) {
+				tiles.push ([-1, 0]);
+			}
+			
+			for (row in r1 ... r2+1) {
+				var submapRow:Int = Std.int (row/row8);
+				
+				for (col in c1 ... c2+1) {
+					var dstCol:Int = col-c1, dstRow:Int = row-r1;
+					
+					var submapCol:Int = Std.int (col/col8);
+					
+					tiles[dstRow * cols + dstCol] =
+						m_XSubmaps[submapRow][submapCol].getTile (col & colMask, row & rowMask);
+				}
+			}
+			
+			return tiles;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function setTiles (
+			tiles:Array<Array<Dynamic>>,
+			c1:Int, r1:Int,
+			c2:Int, r2:Int
+		):Void {
+			// col, row divisor
+			var row8:Int = Std.int (m_submapHeight/XSubmapModel.TX_TILE_HEIGHT);
+			var col8:Int = Std.int (m_submapWidth/XSubmapModel.TX_TILE_WIDTH);
+			
+			// col, row mask for the submap
+			var rowMask:Int = Std.int (row8-1);
+			var colMask:Int = Std.int (col8-1);
+			
+			// total columns wide, rows high
+			var cols:Int = c2-c1+1;
+			var rows:Int = r2-r1+1;
+			
+			for (row in r1 ... r2+1) {
+				var submapRow:Int = Std.int (row/row8);
+				
+				for (col in c1 ... c2+1) {
+					var dstCol:Int = col-c1, dstRow:Int = row-r1;
+					
+					var submapCol:Int = Std.int (col/col8);
+					
+					m_XSubmaps[submapRow][submapCol].setTile (
+						tiles[dstRow * cols + dstCol],
+						col & colMask, row & rowMask
+					);
+				}
+			}
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function eraseWithTiles (
+			tiles:Array<Array<Dynamic>>,
+			c1:Int, r1:Int,
+			c2:Int, r2:Int
+		):Void {
+			// col, row divisor
+			var row8:Int = Std.int (m_submapHeight/XSubmapModel.TX_TILE_HEIGHT);
+			var col8:Int = Std.int (m_submapWidth/XSubmapModel.TX_TILE_WIDTH);
+			
+			// col, row mask for the submap
+			var rowMask:Int = Std.int (row8-1);
+			var colMask:Int = Std.int (col8-1);
+			
+			// total columns wide, rows high
+			var cols:Int = c2-c1+1;
+			var rows:Int = r2-r1+1;
+			
+			for (row in r1 ... r2+1) {
+				var submapRow:Int = Std.int (row/row8);
+				
+				for (col in c1 ... c2+1) {
+					var dstCol:Int = col-c1, dstRow:Int = row-r1;
+					
+					var submapCol:Int = Std.int (col/col8);
+					
+					/* TODO *
+					m_XSubmaps[submapRow][submapCol].setTile (
+						CX_EMPTY,
+						col & colMask, row & rowMask
+					);
+					*/
+				}
+			}
+		}
+		
+//------------------------------------------------------------------------------------------
 		public function getCXTiles (
 			c1:Int, r1:Int,
 			c2:Int, r2:Int
@@ -883,8 +888,8 @@ package kx.xmap;
 			var tiles:Array<Int>; // <Int>
 
 // col, row divisor
-			var row32:Int = Std.int (m_submapHeight/CX_TILE_HEIGHT);
-			var col32:Int = Std.int (m_submapWidth/CX_TILE_WIDTH);
+			var row32:Int = Std.int (m_submapHeight/XSubmapModel.CX_TILE_HEIGHT);
+			var col32:Int = Std.int (m_submapWidth/XSubmapModel.CX_TILE_WIDTH);
 
 // col, row mask for the submap
 			var rowMask:Int = Std.int (row32-1);
@@ -922,8 +927,8 @@ package kx.xmap;
 			c2:Int, r2:Int
 		):Void {
 // col, row divisor
-			var row32:Int = Std.int (m_submapHeight/CX_TILE_HEIGHT);
-			var col32:Int = Std.int (m_submapWidth/CX_TILE_WIDTH);
+			var row32:Int = Std.int (m_submapHeight/XSubmapModel.CX_TILE_HEIGHT);
+			var col32:Int = Std.int (m_submapWidth/XSubmapModel.CX_TILE_WIDTH);
 
 // col, row mask for the submap
 			var rowMask:Int = Std.int (row32-1);
@@ -956,8 +961,8 @@ package kx.xmap;
 			c2:Int, r2:Int
 		):Void {
 // col, row divisor
-			var row32:Int = Std.int (m_submapHeight/CX_TILE_HEIGHT);
-			var col32:Int = Std.int (m_submapWidth/CX_TILE_WIDTH);
+			var row32:Int = Std.int (m_submapHeight/XSubmapModel.CX_TILE_HEIGHT);
+			var col32:Int = Std.int (m_submapWidth/XSubmapModel.CX_TILE_WIDTH);
 
 // col, row mask for the submap
 			var rowMask:Int = Std.int (row32-1);
@@ -976,7 +981,7 @@ package kx.xmap;
 					var submapCol:Int = Std.int (col/col32);
 								
 					m_XSubmaps[submapRow][submapCol].setCXTile (
-						CX_EMPTY,
+						XSubmapModel.CX_EMPTY,
 						col & colMask, row & rowMask
 					);
 				}
@@ -1179,18 +1184,18 @@ package kx.xmap;
 			
 			for (__row in 0 ... m_submapRows) {
 				for (__col in 0 ... m_submapCols) {
-					for (__key__ in m_XSubmaps[__row][__col].items ().keys ()) {
+					XType.forEach (m_XSubmaps[__row][__col].items (), 
 						function (__item:XMapItemModel):Void {
 							__imageClassNames.set (__item.imageClassName, 0);
-						} (__key__);
-					}
+						}
+					);
 				}
 			}
 	
 			var __xml:XSimpleXMLNode = new XSimpleXMLNode ();		
 			__xml.setupWithParams ("imageClassNames", "", []);
 					
-			for (__key__ in __imageClassNames.keys ()) {
+			XType.forEach (__imageClassNames, 
 				function (__imageClassName:Dynamic /* */):Void {
 					var __attribs:Array<Dynamic> /* <Dynamic> */ = [
 						"name",	cast(__imageClassName, String) ,					
@@ -1199,8 +1204,8 @@ package kx.xmap;
 					var __className:XSimpleXMLNode = new XSimpleXMLNode ();				
 					__className.setupWithParams ("imageClassName", "", __attribs);
 					__xml.addChildWithXMLNode (__className);
-				} (__key__);
-			}
+				}
+			);
 			
 			return __xml;
 		}
@@ -1209,11 +1214,11 @@ package kx.xmap;
 		public function submapIsNotEmpty (submap:XSubmapModel):Bool {
 			var count:Float = 0;
 					
-			for (__key__ in submap.items ().keys ()) {
+			XType.forEach (submap.items (), 
 				function (x:Dynamic /* */):Void {	
 					count++;
-				} (__key__);
-			}
+				}
+			);
 			
 			return count > 0 || submap.hasCXTiles ();
 		}
@@ -1222,7 +1227,7 @@ package kx.xmap;
 		public function deserialize (__xml:XSimpleXMLNode, __readOnly:Bool=false):Void {
 			trace (": [XMapLayer]: deserialize: ");
 			
-			m_viewPort = new XRect (
+			m_viewPort = m_startingViewPort = new XRect (
 				__xml.getAttributeFloat ("vx"),
 				__xml.getAttributeFloat ("vy"),
 				__xml.getAttributeFloat ("vw"),
@@ -1389,11 +1394,11 @@ package kx.xmap;
 			{
 				for (__row in 0 ... m_submapRows) {
 					for (__col in 0 ... m_submapCols) {
-						for (__key__ in m_XSubmaps[__row][__col].items ().keys ()) {
+						XType.forEach (m_XSubmaps[__row][__col].items (), 
 							function (__item:Dynamic /* */):Void {
 								trackItem (__item);
-							} (__key__);
-						}
+							}
+						);
 					}
 				}
 			}
@@ -1435,7 +1440,7 @@ package kx.xmap;
 						m_submapWidth, m_submapHeight
 					);
 							
-					for (__key__ in m_XSubmaps[__row][__col].items ().keys ()) {
+					XType.forEach (m_XSubmaps[__row][__col].items (), 
 						function (__item:XMapItemModel):Void {			
 							var __itemRect:XRect = __item.boundingRect.cloneX ();
 							__itemRect.offset (__item.x, __item.y);
@@ -1445,8 +1450,8 @@ package kx.xmap;
 							if (!__submapRect.intersects (__itemRect)) {
 								m_XSubmaps[__row][__col].removeItem (__item);
 							}
-						} (__key__);
-					}
+						}
+					);
 				}
 			}		
 		}

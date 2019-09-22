@@ -57,7 +57,7 @@ package kx.bitmap;
 					XTask.WAIT, 0x0100,
 					
 					function ():Void {
-						for (__key__ in m_queue.keys ()) {
+						XType.forEach (m_queue, 
 							function (x:Dynamic /* */):Void {
 								var __className:String = cast x; /* as String */
 								var __class:Class<Dynamic> /* <Dynamic> */ = m_XApp.getClass (__className);
@@ -77,8 +77,8 @@ package kx.bitmap;
 									
 									m_XApp.unloadClass (__className);
 								}
-							} (__key__);
-						}
+							}
+						);
 					},
 						
 				XTask.GOTO, "loop",

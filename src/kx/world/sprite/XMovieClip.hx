@@ -45,7 +45,7 @@ package kx.world.sprite;
 	class XMovieClip extends XSprite {
 		public static var g_XApp:XApp;
 		
-		public var m_bitmap:XSplat;
+		public var m_bitmap:XImagemap;
 		public var m_XApp:XApp;
 		
 		public var m_poolManager:XObjectPoolManager;
@@ -67,7 +67,7 @@ package kx.world.sprite;
 				m_poolManager = g_XApp.getXBitmapPoolManager ();
 			}
 			
-			m_bitmap = cast m_poolManager.borrowObject (); /* as XSplat */
+			m_bitmap = cast m_poolManager.borrowObject (); /* as XImagemap */
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -107,17 +107,17 @@ package kx.world.sprite;
 		}
 		
 		//------------------------------------------------------------------------------------------
-		public function getMovieClip ():XSplat {
+		public function getMovieClip ():XImagemap {
 			return m_bitmap;
 		}
 			
-		public var movieclip (get, set):XSplat;
+		public var movieclip (get, set):XImagemap;
 		
-		public function get_movieclip ():XSplat {
+		public function get_movieclip ():XImagemap {
 			return m_bitmap;
 		}
 		
-		public function set_movieclip (__val:XSplat): XSplat {
+		public function set_movieclip (__val:XImagemap): XImagemap {
 			m_bitmap = __val;
 			
 			return __val;			
@@ -139,6 +139,11 @@ package kx.world.sprite;
 			m_bitmap.gotoAndStop (__frame);
 		}
 
+		//------------------------------------------------------------------------------------------
+		public function getTotalFrames ():Int {
+			return m_bitmap.getTotalFrames ();	
+		}	
+		
 		//------------------------------------------------------------------------------------------
 		public function play ():Void {
 		}

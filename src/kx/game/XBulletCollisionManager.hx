@@ -32,6 +32,7 @@ package kx.game;
 	import kx.pool.*;
 	import kx.world.XWorld;
 	import kx.xmap.*;
+	import kx.type.*;
 	
 //------------------------------------------------------------------------------------------
 	class XBulletCollisionManager {
@@ -58,13 +59,13 @@ package kx.game;
 		
 //------------------------------------------------------------------------------------------
 		public function clearCollisions ():Void {
-			for (__key__ in m_collisionLists.keys ()) {
+			XType.forEach (m_collisionLists, 
 				function (x:Dynamic /* */):Void {
 					var __collisionList:XBulletCollisionList = cast x; /* as XBulletCollisionList */
 					
 					__collisionList.clear ();
-				} (__key__);
-			}
+				}
+			);
 		}
 	
 //------------------------------------------------------------------------------------------
@@ -87,15 +88,15 @@ package kx.game;
 		
 //------------------------------------------------------------------------------------------
 		public function removeAllCollisionLists ():Void {
-			for (__key__ in m_collisionLists.keys ()) {
+			XType.forEach (m_collisionLists, 
 				function (x:Dynamic /* */):Void {
 					var __collisionList:XBulletCollisionList = cast x; /* as XBulletCollisionList */
 					
 					__collisionList.cleanup ();
 					
 					m_collisionLists.remove (x);
-				} (__key__);
-			}			
+				}
+			);			
 		}
 		
 //------------------------------------------------------------------------------------------

@@ -309,7 +309,7 @@ package kx.world;
 		
 //------------------------------------------------------------------------------------------
 		public function emptyKillQueue ():Void {	
-			for (__key__ in m_killQueue.keys ()) {
+			XType.forEach (m_killQueue, 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 					
@@ -320,8 +320,8 @@ package kx.world;
 					removeXLogicObject (__logicObject);
 					
 					m_killQueue.remove (__logicObject);
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------
@@ -370,72 +370,72 @@ package kx.world;
 		
 //------------------------------------------------------------------------------------------
 		public function setCollisions ():Void {
-			for (__key__ in m_XLogicObjects.keys ()) {
+			XType.forEach (m_XLogicObjects, 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 					
 					if (!__logicObject.isDead) {
 						__logicObject.setCollisions ();
 					}
-				} (__key__);
-			}		
+				}
+			);		
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function updateLogic ():Void {
-			for (__key__ in m_XLogicObjects.keys ()) {
+			XType.forEach (m_XLogicObjects, 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 					
 					if (!__logicObject.isDead) {
 						__logicObject.updateLogic ();
 					}
-				} (__key__);
-			}		
+				}
+			);		
 		}
 
 //------------------------------------------------------------------------------------------
 		public function updatePhysics ():Void {
-			for (__key__ in m_XLogicObjects.keys ()) {
+			XType.forEach (m_XLogicObjects, 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 					
 					if (!__logicObject.isDead) {
 						__logicObject.updatePhysics ();
 					}
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function cullObjects ():Void {
-			for (__key__ in m_XLogicObjectsTopLevel.keys ()) {
+			XType.forEach (m_XLogicObjectsTopLevel, 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 					
 					if (!__logicObject.isDead) {
 						__logicObject.cullObject ();
 					}
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------
 		public function setValues ():Void {
-			for (__key__ in m_XLogicObjects.keys ()) {
+			XType.forEach (m_XLogicObjects, 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 					
 					if (!__logicObject.isDead) {
 						__logicObject.setValues ();
 					}
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function updateDisplay ():Void {					
-			for (__key__ in m_XLogicObjectsTopLevel.keys ()) {
+			XType.forEach (m_XLogicObjectsTopLevel, 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 				
@@ -452,8 +452,8 @@ package kx.world;
 								
 						__logicObject.updateDisplay ();
 					}
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------

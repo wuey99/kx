@@ -30,6 +30,7 @@ package kx.task;
 	import kx.*;
 	import kx.collections.*;
 	import kx.world.logic.*;
+	import kx.type.*;
 	
 //------------------------------------------------------------------------------------------	
 	class XTaskSubManager {
@@ -134,11 +135,11 @@ package kx.task;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllTasks ():Void {	
-			for (__key__ in m_XTasks.keys ()) {
+			XType.forEach (m_XTasks, 
 				function (x:Dynamic /* */):Void {
 					removeTask (cast x /* as XTask */);
-				} (__key__);
-			}
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------

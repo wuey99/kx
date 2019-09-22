@@ -170,7 +170,7 @@ package gx.zone;
 			//------------------------------------------------------------------------------------------
 			// find killCount for the zone
 			//------------------------------------------------------------------------------------------
-			for (__key__ in __list.keys ()) {
+			XType.forEach (__list, 
 				function (__id:Dynamic /* */):Void {
 					var __item:XMapItemModel = cast __list.get (__id); /* as XMapItemModel */
 					// objects are double instantiated here.  normal XMapLayerView instantiates it first sometimes.
@@ -194,8 +194,8 @@ package gx.zone;
 							addToZoneKillCount ();
 						}
 					}
-				}	 (__key__);
-			}
+				}	
+			);
 			
 			//----------------------------------------------------------------------------------------
 			trace (": zoneKillCount: ", m_zoneKillCount);
@@ -239,7 +239,7 @@ package gx.zone;
 					
 			m_zoneItemObjects = new Map<Int, ZoneX> (); /* <Int, ZoneX> */
 					
-			for (__key__ in m_zoneItems.keys ()) {
+			XType.forEach (m_zoneItems, 
 				function (__id:Dynamic /* */):Void {
 					var __item:XMapItemModel = m_zoneItems.get (__id);
 							
@@ -261,15 +261,15 @@ package gx.zone;
 					__item.inuse++;
 							
 					m_zoneItemObjects.set (__zoneItemObject.getZone (), __zoneItemObject);
-				} (__key__);
-			}
+				}
+			);
 					
 			//------------------------------------------------------------------------------------------
 			m_starterRingItems = __layerModel.lookForItem ("StarterRing_Item");
 					
 			m_starterRingItemObjects = new Map<Int, StarterRingControllerX> (); /* <Int, StarterRingControllerX> */
 					
-			for (__key__ in m_starterRingItems.keys ()) {
+			XType.forEach (m_starterRingItems, 
 				function (__id:Dynamic /* */):Void {
 					var __item:XMapItemModel = m_starterRingItems.get (__id);
 							
@@ -291,8 +291,8 @@ package gx.zone;
 					__item.inuse++;
 							
 					m_starterRingItemObjects.set (__starterRingItemObject.getZone (), __starterRingItemObject);
-				} (__key__);
-			}
+				}
+			);
 					
 			//------------------------------------------------------------------------------------------
 			m_gateItems = __layerModel.lookForItem ("Horz_Gate_Item");
@@ -301,7 +301,7 @@ package gx.zone;
 			m_gateItemObjects = new Map<Int, GateX> (); /* <Int, GateX> */
 					
 			if (m_Horz_GateX != null && m_Vert_GateX != null)
-				for (__key__ in m_gateItems.keys ()) {
+				XType.forEach (m_gateItems, 
 					function (__id:Dynamic /* */):Void {
 						var __item:XMapItemModel = m_gateItems.get (__id);
 								
@@ -350,8 +350,8 @@ package gx.zone;
 						__item.inuse++;
 								
 						__gateItemObject.setXMapModel (GX.appX.__getMickeyObject ().getLayer () + 1, xxx.getXMapModel (), GX.appX.getLevelObject ());	
-					} (__key__);
-				}
+					}
+				);
 					
 			//------------------------------------------------------------------------------------------
 			m_doorItems = __layerModel.lookForItem ("Horz_Door_Item");
@@ -360,7 +360,7 @@ package gx.zone;
 			m_doorItemObjects = new Map<Int, DoorX> (); /* <Int, DoorX> */
 					
 			if (m_Horz_DoorX != null && m_Vert_DoorX != null)
-				for (__key__ in m_doorItems.keys ()) {
+				XType.forEach (m_doorItems, 
 					function (__id:Dynamic /* */):Void {
 						var __item:XMapItemModel = m_doorItems.get (__id);
 								
@@ -403,15 +403,15 @@ package gx.zone;
 						__item.inuse++;
 								
 						__doorItemObject.setXMapModel (GX.appX.__getMickeyObject ().getLayer () + 1, xxx.getXMapModel (), GX.appX.getLevelObject ());	
-					} (__key__);
-				}
+					}
+				);
 					
 			//------------------------------------------------------------------------------------------
 			m_currentGateItems = __layerModel.lookForItem ("Current_Gate_Item");
 					
 			m_currentGateItemObjects = new Map<Int, CurrentGateX> (); /* <Int, CurrentGateX> */
 					
-			for (__key__ in m_currentGateItems.keys ()) {
+			XType.forEach (m_currentGateItems, 
 				function (__id:Dynamic /* */):Void {
 					var __item:XMapItemModel = m_currentGateItems.get (__id);
 							
@@ -440,8 +440,8 @@ package gx.zone;
 					__item.inuse++;
 							
 					__currentGateItemObject.setXMapModel (GX.appX.__getMickeyObject ().getLayer () + 1, xxx.getXMapModel (), GX.appX.getLevelObject ());	
-				} (__key__);
-			}
+				}
+			);
 		}
 				
 		//------------------------------------------------------------------------------------------

@@ -36,12 +36,13 @@ package kx.xmap;
 	import kx.bitmap.XBitmapCacheManager;
 	import kx.collections.*;
 	import kx.geom.*;
+	import kx.pool.*;
 	import kx.world.*;
 	import kx.world.collision.*;
 	import kx.world.logic.*;
 	import kx.world.sprite.*;
 	import kx.xmap.*;
-	import kx.pool.*;
+	import kx.type.*;
 	
 //------------------------------------------------------------------------------------------
 	class XSubmapViewBitmapCache extends XSubmapViewCache {
@@ -57,7 +58,7 @@ package kx.xmap;
 //------------------------------------------------------------------------------------------			
 		public override function setup (__xxx:XWorld, args:Array<Dynamic> /* <Dynamic> */):Void {
 			super.setup (__xxx, args);
-	
+				
 			m_bitmapCacheManager = xxx.getBitmapCacheManager ();
 			m_XRectPoolManager = xxx.getXRectPoolManager ();
 		}
@@ -66,7 +67,7 @@ package kx.xmap;
 		public override function cleanup ():Void {
 			super.cleanup();
 			
-			m_XMapView.getSubmapBitmapPoolManager ().returnObject (m_bitmap);
+			m_poolManager.returnObject (m_bitmap);
 		}
 
 //------------------------------------------------------------------------------------------
@@ -98,7 +99,7 @@ package kx.xmap;
 			
 			var i:Int;
 			
-			for (__key__ in __items.keys ()) {
+			XType.forEach (__items, 
 				function (x:Dynamic /* */):Void {
 					__item = cast x; /* as XMapItemModel */
 
@@ -121,8 +122,8 @@ package kx.xmap;
 							__bitmap.bitmap.bitmapData, tempRect, tempPoint, null, null, true
 						);
 					}
-				} (__key__);
-			}
+				}
+			);
 							
 			m_bitmap.bitmap.bitmapData.unlock ();
 			
@@ -176,7 +177,6 @@ package kx.xmap;
 				__srcBitmap = m_bitmapCacheManager.get (__item.imageClassName);
 					
 //				trace (": imageClassName: ", __item.imageClassName, __srcBitmap, __srcBitmap.bitmap.bitmapData, __item.frame, __item.boundingRect.width, __item.boundingRect.height);
-					
 				if (__srcBitmap != null) {
 					if (__item.frame != 0) {
 						__srcBitmap.gotoAndStop (__item.frame);
@@ -247,12 +247,12 @@ package kx.xmap;
 			
 			m_bitmap.bitmap.bitmapData.unlock ();
 		}
-		
+			
 //------------------------------------------------------------------------------------------
 // create sprites
 //------------------------------------------------------------------------------------------
 		public override function createSprites ():Void {
-			m_bitmap = cast m_XMapView.getSubmapBitmapPoolManager ().borrowObject (); /* as XSubmapBitmap */
+			m_bitmap = cast m_poolManager.borrowObject (); /* as XSubmapBitmap */
 			x_sprite = addSpriteAt (m_bitmap, 0, 0);
 			x_sprite.setDepth (getDepth ());
 			

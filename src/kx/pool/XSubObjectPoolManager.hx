@@ -28,19 +28,20 @@
 package kx.pool;
 	
 	import kx.collections.*;
+	import kx.type.*;
 	
 	import haxe.ds.ObjectMap;
 	
 //------------------------------------------------------------------------------------------	
 	class XSubObjectPoolManager {
 		private var m_manager:XObjectPoolManager;
-		private var m_inuseObjects:ObjectMap<Dynamic, Int>;  // <Dynamic, Int>
+		private var m_inuseObjects:Map<{}, Int>;  // <Dynamic, Int>
 		
 //------------------------------------------------------------------------------------------
 		public function new (__manager:XObjectPoolManager) {
 			m_manager = __manager;
 			
-			m_inuseObjects = new ObjectMap<Dynamic, Int> ();  // <Dynamic, Int>
+			m_inuseObjects = new Map<{}, Int> ();  // <Dynamic, Int>
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -49,17 +50,17 @@ package kx.pool;
 		}	
 
 //------------------------------------------------------------------------------------------
-		public function getObjects ():ObjectMap<Dynamic, Int> /* <Dynamic, Int> */ {
+		public function getObjects ():Map<{}, Int> /* <Dynamic, Int> */ {
 			return m_manager.getObjects ();
 		}
 
 //------------------------------------------------------------------------------------------
 		public function returnAllObjects ():Void {
-			for (__key__ in m_inuseObjects.keys ()) {
+			XType.forEach (m_inuseObjects, 
 				function (__object:Dynamic /* */):Void {
 					returnObject (cast __object /* as Object */);
-				} (__key__);
-			}
+				}
+			);
 		}		
 		
 //------------------------------------------------------------------------------------------

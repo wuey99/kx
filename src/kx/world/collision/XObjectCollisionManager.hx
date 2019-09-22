@@ -32,6 +32,7 @@ package kx.world.collision;
 	import kx.pool.*;
 	import kx.world.XWorld;
 	import kx.xmap.*;
+	import kx.type.*;
 	
 //------------------------------------------------------------------------------------------
 	class XObjectCollisionManager {
@@ -63,13 +64,13 @@ package kx.world.collision;
 		
 //------------------------------------------------------------------------------------------
 		public function clearCollisions ():Void {
-			for (__key__ in m_collisionLists.keys ()) {
+			XType.forEach (m_collisionLists, 
 				function (x:Dynamic /* */):Void {
 					var __collisionList:XObjectCollisionList = cast x; /* as XObjectCollisionList */
 					
 					__collisionList.clear ();
-				} (__key__);
-			}
+				}
+			);
 		}
 	
 //------------------------------------------------------------------------------------------
@@ -92,15 +93,15 @@ package kx.world.collision;
 		
 //------------------------------------------------------------------------------------------
 		public function removeAllCollisionLists ():Void {
-			for (__key__ in m_collisionLists.keys ()) {
+			XType.forEach (m_collisionLists, 
 				function (x:Dynamic /* */):Void {
 					var __collisionList:XObjectCollisionList = cast x; /* as XObjectCollisionList */
 					
 					__collisionList.cleanup ();
 					
 					m_collisionLists.remove (x);
-				} (__key__);
-			}			
+				}
+			);			
 		}
 		
 //------------------------------------------------------------------------------------------

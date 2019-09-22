@@ -34,13 +34,14 @@ package kx.world.sprite;
 	import kx.task.*;
 	import kx.world.*;
 	import kx.world.logic.XLogicObject;
+	import kx.type.*;
 	
 	import openfl.display.*;
 	import openfl.geom.*;
 	import openfl.utils.*;
 	
 	//------------------------------------------------------------------------------------------	
-	class XBitmap extends XSplat {
+	class XBitmap extends XImagemap {
 		public static var g_XApp:XApp;
 		
 		public var m_bitmapDataAnimManager:XBitmapDataAnimManager;
@@ -78,7 +79,7 @@ package kx.world.sprite;
 				m_bitmapDataAnimManager.remove (m_className);
 			}
 			
-			for (__key__ in m_bitmapNames.keys ()) {
+			XType.forEach (m_bitmapNames, 
 				function (x:Dynamic /* */):Void {
 					var __name:String = cast x; /* as String */
 					
@@ -86,8 +87,8 @@ package kx.world.sprite;
 					__bitmapData.dispose ();
 					
 					m_bitmapNames.remove (__name);
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -150,6 +151,11 @@ package kx.world.sprite;
 			{
 				return 0;
 			}
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public override function getTotalFrames ():Int {
+			return getNumBitmaps ();
 		}
 		
 		//------------------------------------------------------------------------------------------

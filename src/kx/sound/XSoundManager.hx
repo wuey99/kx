@@ -234,11 +234,11 @@ package kx.sound;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllSounds ():Void {	
-			for (__key__ in m_soundChannels.keys ()) {
+			XType.forEach (m_soundChannels, 
 				function (__guid:Int):Void {
 					removeSound (__guid);
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -254,28 +254,28 @@ package kx.sound;
 
 //------------------------------------------------------------------------------------------
 		public function pause ():Void {
-			for (__key__ in m_soundChannels.keys ()) {
+			XType.forEach (m_soundChannels, 
 				function (__guid:Int):Void {
 					var __soundChannel:MP3Sound = getSoundChannel (__guid);
 					
 					if (__soundChannel != null) {
 						__soundChannel.pause ();
 					}
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function resume ():Void {	
-			for (__key__ in m_soundChannels.keys ()) {
+			XType.forEach (m_soundChannels, 
 				function (__guid:Int):Void {
 					var __soundChannel:MP3Sound = getSoundChannel (__guid);
 					
 					if (__soundChannel != null) {
 						__soundChannel.resume ();
 					}
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 //------------------------------------------------------------------------------------------

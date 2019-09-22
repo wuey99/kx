@@ -51,13 +51,13 @@ package kx.display;
 		public var m_isOver:Bool;
 		public var m_numChildEvents:Int;
 
-		public var m_CLICKS:ObjectMap<Dynamic, Int>;	// <Dynamic, Int>
-		public var m_DOUBLE_CLICKS:ObjectMap<Dynamic, Int>; // <Dynamic, Int>
-		public var m_MOUSE_DOWNS:ObjectMap<Dynamic, Int>; // <Dynamic, Int>
-		public var m_MOUSE_MOVES:ObjectMap<Dynamic, Int>; // <Dynamic, Int>
-		public var m_MOUSE_OUTS:ObjectMap<Dynamic, Int>; // <Dynamic, Int>
-		public var m_MOUSE_OVERS:ObjectMap<Dynamic, Int>; // <Dynamic, Int>
-		public var m_MOUSE_UPS:ObjectMap<Dynamic, Int>; // <Dynamic, Int>
+		public var m_CLICKS:Map<{}, Int>;	// <Dynamic, Int>
+		public var m_DOUBLE_CLICKS:Map<{}, Int>; // <Dynamic, Int>
+		public var m_MOUSE_DOWNS:Map<{}, Int>; // <Dynamic, Int>
+		public var m_MOUSE_MOVES:Map<{}, Int>; // <Dynamic, Int>
+		public var m_MOUSE_OUTS:Map<{}, Int>; // <Dynamic, Int>
+		public var m_MOUSE_OVERS:Map<{}, Int>; // <Dynamic, Int>
+		public var m_MOUSE_UPS:Map<{}, Int>; // <Dynamic, Int>
 
 		//------------------------------------------------------------------------------------------
 		public function new () {
@@ -80,13 +80,13 @@ package kx.display;
 			m_isOver = false;
 			m_numChildEvents = 0;
 			
-			m_CLICKS = ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
-			m_DOUBLE_CLICKS = new ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
-			m_MOUSE_DOWNS = new ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
-			m_MOUSE_MOVES = new ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
-			m_MOUSE_OUTS = new ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
-			m_MOUSE_OVERS = new ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
-			m_MOUSE_UPS = new ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
+			m_CLICKS = Map<{}, Int> (); // <Dynamic, Int>
+			m_DOUBLE_CLICKS = new Map<{}, Int> (); // <Dynamic, Int>
+			m_MOUSE_DOWNS = new Map<{}, Int> (); // <Dynamic, Int>
+			m_MOUSE_MOVES = new Map<{}, Int> (); // <Dynamic, Int>
+			m_MOUSE_OUTS = new Map<{}, Int> (); // <Dynamic, Int>
+			m_MOUSE_OVERS = new Map<{}, Int> (); // <Dynamic, Int>
+			m_MOUSE_UPS = new Map<{}, Int> (); // <Dynamic, Int>
 		}
 
 		//------------------------------------------------------------------------------------------	

@@ -29,6 +29,7 @@ package kx.signals;
 	
 	import kx.collections.*;
 	import kx.XApp;
+	import kx.type.*;
 	
 //------------------------------------------------------------------------------------------	
 	class XSignalManager {
@@ -55,11 +56,11 @@ package kx.signals;
 
 //------------------------------------------------------------------------------------------
 		public function removeAllXSignals ():Void {
-			for (__key__ in m_XSignals.keys ()) {
+			XType.forEach (m_XSignals, 
 				function (__signal:Dynamic /* */):Void {
 					removeXSignal (cast __signal /* as XSignal */);
-				} (__key__);
-			}
+				}
+			);
 		}		
 		
 //------------------------------------------------------------------------------------------

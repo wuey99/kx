@@ -66,7 +66,7 @@ package kx.debug ;
 						// font name
 						"Aller",
 						// font size
-						24,
+						16,
 						// color
 						0xe0e0e0,
 						// bold

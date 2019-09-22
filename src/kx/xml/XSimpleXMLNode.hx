@@ -260,12 +260,12 @@ package kx.xml;
 			
 			__string += __tab (__indent) + "<" + m_tag;
 					
-			for (__key__ in m_attribsMap.keys ()) {
+			XType.forEach (m_attribsMap, 
 				function (x:Dynamic /* */):Void {
 					var __key:String = cast x; /* as String */
 					__string += " " + __key + "=" + "\"" + m_attribsMap.get (__key) + "\"";	
-				} (__key__);
-			}
+				}
+			);
 			
 			if (m_text != "" || m_children.length != 0) {
 				__string += ">\n";
@@ -298,12 +298,12 @@ package kx.xml;
 			
 			__string += __tab (__indent) + "\"<" + m_tag;
 			
-			for (__key__ in m_attribsMap.keys ()) {
+			XType.forEach (m_attribsMap, 
 				function (x:Dynamic /* */):Void {
 					var __key:String = cast x; /* as String */
 					__string += " " + __key + "=" + "\\\"" + m_attribsMap.get (__key) + "\\\"";	
-				} (__key__);
-			}
+				}
+			);
 			
 			if (m_text != "" || m_children.length != 0) {
 				__string += ">\" +\n";
@@ -336,12 +336,12 @@ package kx.xml;
 			
 			__string += "<" + m_tag;
 			
-			for (__key__ in m_attribsMap.keys ()) {
+			XType.forEach (m_attribsMap, 
 				function (x:Dynamic /* */):Void {
 					var __key:String = cast x; /* as String */
 					__string += " " + __key + "=" + "\\\"" + m_attribsMap.get (__key) + "\\\"";	
-				} (__key__);
-			}
+				}
+			);
 			
 			if (m_text != "" || m_children.length != 0) {
 				__string += ">";

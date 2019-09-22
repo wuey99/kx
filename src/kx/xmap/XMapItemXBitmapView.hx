@@ -43,7 +43,7 @@ package kx.xmap;
 	
 	//------------------------------------------------------------------------------------------
 	class XMapItemXBitmapView extends XMapItemView {
-		private var m_bitmap:XBitmap;
+		private var m_bitmap:XMovieClip;
 		
 		//------------------------------------------------------------------------------------------
 		public function new () {
@@ -58,21 +58,14 @@ package kx.xmap;
 		//------------------------------------------------------------------------------------------
 		public override function cleanup ():Void {
 			super.cleanup ();
-			
-			m_bitmap.cleanup ();
 		}
 		
 		//------------------------------------------------------------------------------------------
 		// create sprite
 		//------------------------------------------------------------------------------------------
-		private override function __createSprites (__spriteClassName:String):Void {			
-			m_bitmap = new XBitmap ();
-			m_bitmap.setup ();
-			m_bitmap.initWithClassName (xxx, null, __spriteClassName);
-// !STARLING!
-			if (true /* CONFIG::flash */) {
-				x_sprite = addSpriteAt (m_bitmap, m_bitmap.dx, m_bitmap.dy);
-			}
+		private override function __createSprites (__spriteClassName:String):Void {		
+			m_sprite = createXMovieClip (__spriteClassName);
+			x_sprite = addSpriteAt (m_bitmap, m_bitmap.dx, m_bitmap.dy);
 			
 			if (m_frame != 0) {
 				gotoAndStop (m_frame);
@@ -85,7 +78,7 @@ package kx.xmap;
 		
 		//------------------------------------------------------------------------------------------
 		public override function getTotalFrames ():Int {
-			return m_bitmap.getNumBitmaps ();	
+			return m_bitmap.getTotalFrames ();	
 		}	
 		
 		//------------------------------------------------------------------------------------------

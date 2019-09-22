@@ -33,6 +33,7 @@ package kx.game;
 	import kx.world.logic.*;
 	import kx.world.XWorld;
 	import kx.xmap.*;
+	import kx.type.*;
 	
 //------------------------------------------------------------------------------------------
 	class XBulletCollisionList {
@@ -103,15 +104,15 @@ package kx.game;
 			var __rect:XRect = cast m_XSubRectPoolManager.borrowObject (); /* as XRect */
 			__srcRect.copy2 (__rect); __rect.offsetPoint (__srcPoint);
 			
-			for (__key__ in m_rects[__layer].keys ()) {
+			XType.forEach (m_rects[__layer], 
 				function (x:Dynamic /* */):Void {
 					var __dstRect:XRect = cast m_rects[__layer].get (x);
 					
 					if (__dstRect.intersects (__rect)) {
 						__logicObject = cast x; /* as XLogicObject */
 					}
-				} (__key__);
-			}	
+				}
+			);	
 			
 			m_XSubRectPoolManager.returnObject (__rect);
 	
@@ -130,15 +131,15 @@ package kx.game;
 			var __rect:XRect = cast m_XSubRectPoolManager.borrowObject (); /* as XRect */
 			__srcRect.copy2 (__rect); __rect.offsetPoint (__srcPoint);
 
-			for (__key__ in m_rects[__layer].keys ()) {
+			XType.forEach (m_rects[__layer], 
 				function (x:Dynamic /* */):Void {
 					var __dstRect:XRect = cast m_rects[__layer].get (x);
 					
 					if (__dstRect.intersects (__rect)) {
 						__logicObjects.push (x);
 					}
-				} (__key__);
-			}	
+				}
+			);	
 			
 			m_XSubRectPoolManager.returnObject (__rect);
 			

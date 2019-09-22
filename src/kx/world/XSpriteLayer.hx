@@ -128,11 +128,11 @@ package kx.world;
 			
 				XType.clearArray (list);
 			
-			for (__key__ in m_XDepthSpriteMap.keys ()) {
+			XType.forEach (m_XDepthSpriteMap, 
 				function (sprite:Dynamic /* */):Void {
 					list[length++] = sprite;
-				} (__key__);
-			}
+				}
+			);
 		
 				list.sort (
 					function (a:XDepthSprite, b:XDepthSprite):Int {

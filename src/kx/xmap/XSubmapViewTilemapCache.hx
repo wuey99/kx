@@ -37,6 +37,7 @@ package kx.xmap;
 	import kx.world.sprite.*;
 	import kx.xmap.*;
 	import kx.pool.*;
+	import kx.type.*;
 	
 	import openfl.display.*;
 	import openfl.geom.*;
@@ -73,7 +74,7 @@ package kx.xmap;
 						
 			m_tilemap.cleanup ();
 			
-			m_XMapView.getSubmapBitmapPoolManager ().returnObject (m_tilemap);
+			m_poolManager.returnObject (m_tilemap);
 		}
 
 //------------------------------------------------------------------------------------------
@@ -109,7 +110,7 @@ package kx.xmap;
 			
 			var i:Int;
 			
-			for (__key__ in __items.keys ()) {
+			XType.forEach (__items, 
 				function (x:Dynamic /* */):Void {
 					__item = cast x; /* as XMapItemModel */
 
@@ -134,8 +135,8 @@ package kx.xmap;
 						);
 					}
 					*/
-				} (__key__);
-			}
+				}
+			);
 			
 //			m_tilemap.bitmap.bitmapData.unlock ();
 		}
@@ -255,7 +256,7 @@ package kx.xmap;
 // create sprites
 //------------------------------------------------------------------------------------------
 		public override function createSprites ():Void {
-			m_tilemap = cast m_XMapView.getSubmapBitmapPoolManager ().borrowObject (); /* as XSubmapTilemap */
+			m_tilemap = cast m_poolManager.borrowObject (); /* as XSubmapTilemap */
 			x_sprite = addSpriteAt (m_tilemap, 0, 0);
 			x_sprite.setDepth (getDepth ());
 			

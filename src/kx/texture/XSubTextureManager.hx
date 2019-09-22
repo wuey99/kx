@@ -33,6 +33,7 @@ package kx.texture;
 	import kx.world.sprite.*;
 	import kx.XApp;
 	import kx.texture.*;
+	import kx.type.*;
 	
 	import openfl.display.BitmapData;
 	import openfl.geom.*;
@@ -67,7 +68,7 @@ package kx.texture;
 					XTask.WAIT, 0x0100,
 				
 					function ():Void {
-						for (__key__ in m_queue.keys ()) {
+						XType.forEach (m_queue, 
 							function (x:Dynamic /* */):Void {
 								var __className:String = cast x; /* as String */
 								var __class:Class<Dynamic> /* <Dynamic> */ = m_XApp.getClass (__className);
@@ -79,8 +80,8 @@ package kx.texture;
 								
 									m_XApp.unloadClass (__className);
 								}
-							} (__key__);
-						}
+							}
+						);
 					},
 						
 					XTask.GOTO, "loop",

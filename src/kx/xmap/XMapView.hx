@@ -39,6 +39,7 @@ package kx.xmap;
 	import kx.world.sprite.*;
 	import kx.xml.*;
 	import kx.xmap.*;
+	import kx.type.*;
 	
 	import openfl.geom.*;
 	import openfl.text.*;
@@ -91,13 +92,13 @@ package kx.xmap;
 
 //------------------------------------------------------------------------------------------
 		public override function cullObject ():Void {
-			for (__key__ in getXLogicObjects ().keys ()) {
+			XType.forEach (getXLogicObjects (), 
 				function (x:Dynamic /* */):Void {
 					var __logicObject:XLogicObject = cast x; /* as XLogicObject */
 					
 					__logicObject.cullObject ();
-				} (__key__);
-			}
+				}
+			);
 			
 			super.cullObject ();
 		}
@@ -121,7 +122,7 @@ package kx.xmap;
 			for (i in 0 ... m_XMapModel.getLayers ().length) {
 				var __layer:XMapLayerModel = cast m_XMapModel.getLayers ()[i]; /* as XMapLayerModel */
 	
-				for (__key__ in __layer.getImageClassNames ().keys ()) {
+				XType.forEach (__layer.getImageClassNames (), 
 					function (__name:Dynamic /* */):Void {
 						if (__name == "ErrorImages:undefinedClass") {
 							return;	
@@ -142,8 +143,8 @@ package kx.xmap;
 								__flags = false;
 							}
 						}
-					} (__key__);
-				}
+					}
+				);
 				
 				if (!__flags) {
 					return false;
@@ -162,7 +163,7 @@ package kx.xmap;
 			for (i in 0 ... m_XMapModel.getLayers ().length) {
 					var __layer:XMapLayerModel = cast m_XMapModel.getLayers ()[i]; /* as XMapLayerModel */
 					
-					for (__key__ in __layer.getImageClassNames ().keys ()) {
+					XType.forEach (__layer.getImageClassNames (), 
 						function (__name:Dynamic /* */):Void {
 							trace (": cacheImageClassName: ", __name);
 			
@@ -173,8 +174,8 @@ package kx.xmap;
 							{
 								xxx.getBitmapCacheManager ().add (cast __name /* as String */);
 							}
-						} (__key__);
-					}
+						}
+					);
 			}			
 		}	
 		
@@ -185,7 +186,7 @@ package kx.xmap;
 				for (i in 0 ... m_XMapModel.getLayers ().length) {
 					var __layer:XMapLayerModel = cast m_XMapModel.getLayers ()[i]; /* as XMapLayerModel */
 		
-					for (__key__ in __layer.getImageClassNames ().keys ()) {
+					XType.forEach (__layer.getImageClassNames (), 
 						function (__name:Dynamic /* */):Void {
 							if (xxx.useBGTilemaps ()) {
 								xxx.getMovieClipCacheManager () /* as String) */;
@@ -194,8 +195,8 @@ package kx.xmap;
 							{
 								xxx.getBitmapCacheManager () /* as String) */;
 							}
-						} (__key__);
-					}
+						}
+					);
 				}
 		}
 

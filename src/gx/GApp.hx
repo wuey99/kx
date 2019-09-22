@@ -393,11 +393,11 @@ package gx;
 			
 			t.start ();
 			
-			for (__key__ in m_XApp.getAllClassNames ().keys ()) {
+			XType.forEach (m_XApp.getAllClassNames (), 
 				function (x:Dynamic /* */):Void {
 					t.add (cast(x, String) );					
-				} (__key__);
-			}
+				}
+			);
 			
 			t.finish ();
 		}

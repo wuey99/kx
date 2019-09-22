@@ -28,19 +28,25 @@
 package kx.pool;
 	
 	import kx.collections.*;
+	import kx.type.*;
 	
 	import haxe.ds.ObjectMap;
 	
 //------------------------------------------------------------------------------------------	
 	class XObjectPoolManager {
-		public var m_freeObjects:Array<Dynamic>; // <Dynamic>
+		public var m_freeObjects:Array<Array<Dynamic>>;
 		public var m_numFreeObjects:Int;
-		private var m_inuseObjects:ObjectMap<Dynamic, Int>; // <Dynamic, Int>
+		private var m_inuseObjects:Map<{}, Int>; // <Dynamic, Int>
 		private var m_newObject:Dynamic /* Function */;
 		private var m_cloneObject:Dynamic /* Function */;
 		private var m_overflow:Int;
 		private var m_cleanup:Dynamic /* Function */;
 		private var m_numberOfBorrowedObjects:Int;
+		private var m_sectionSize:Int;
+		private var m_otherSize:Int;
+		private var m_section:Int;
+		private var m_otherSection:Int;
+		private var m_sectionIndex:Int;
 		
 //------------------------------------------------------------------------------------------
 		public function new (
@@ -51,12 +57,23 @@ package kx.pool;
 			__cleanup:Dynamic /* Function */ = null
 		) {
 				
-			m_freeObjects = new Array<Dynamic> (); // <Dynamic>
-			m_inuseObjects = new ObjectMap<Dynamic, Int> (); // <Dynamic, Int>
+			m_freeObjects = new Array<Array<Dynamic>> ();
+			m_inuseObjects = new Map<{}, Int> (); // <Dynamic, Int>
 			m_newObject = __newObject;
 			m_cloneObject = __cloneObject;
 			m_overflow = __overflow;
 			m_cleanup = __cleanup;
+			
+			m_freeObjects.push (new Array<Dynamic> () /* <Dynamic> */);
+			m_freeObjects.push (new Array<Dynamic> () /* <Dynamic> */);
+			
+			m_sectionSize = 0;
+			m_otherSize = 0;
+			
+			m_section = 0;
+			m_otherSection = 1;
+			
+			m_sectionIndex = 0;
 			
 			m_numFreeObjects = 0;
 			m_numberOfBorrowedObjects = 0;
@@ -74,8 +91,12 @@ package kx.pool;
 			
 			var i:Int;
 			
-			for (i in 0 ... m_freeObjects.length) {
-				m_cleanup (m_freeObjects[i]);
+			for (i in 0 ... m_sectionSize) {
+				m_cleanup (m_freeObjects[m_section][i]);
+			}
+			
+			for (i in 0 ... m_otherSize) {
+				m_cleanup (m_freeObjects[m_otherSection][i]);
 			}
 		}
 		
@@ -84,15 +105,24 @@ package kx.pool;
 			var i:Int;
 			
 			for (i in 0 ... __numObjects) {
-				m_freeObjects[m_numFreeObjects++] = (m_newObject ());
+				m_freeObjects[0].push (null);
+				m_freeObjects[1].push (null);
 			}
+			
+			for (i in 0 ... __numObjects) {
+				m_freeObjects[m_section][m_sectionSize + i] = m_newObject ();
+			}
+			
+			m_sectionSize += __numObjects;
+			
+			m_numFreeObjects += __numObjects;
 		}
 
 //------------------------------------------------------------------------------------------
 		public var freeObjects (get, set):Array<Dynamic>;
 		
 		public function get_freeObjects ():Array<Dynamic> /* <Dynamic> */ {
-			return m_freeObjects;
+			return m_freeObjects[m_section];
 		}
 
 		public function set_freeObjects (__val:Dynamic /* */): Array<Dynamic> {
@@ -102,7 +132,7 @@ package kx.pool;
 		
 //------------------------------------------------------------------------------------------
 		public function totalNumberOfObjects ():Int {
-			return m_freeObjects.length + m_numberOfBorrowedObjects;	
+			return m_sectionSize + m_otherSize + m_numberOfBorrowedObjects;	
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -116,7 +146,7 @@ package kx.pool;
 		}	
 
 //------------------------------------------------------------------------------------------
-		public function getObjects ():ObjectMap<Dynamic, Int> /* <Dynamic, Int> */ {
+		public function getObjects ():Map<{}, Int> /* <Dynamic, Int> */ {
 			return m_inuseObjects;
 		}
 
@@ -129,17 +159,18 @@ package kx.pool;
 		
 //------------------------------------------------------------------------------------------
 		public function returnAllObjects ():Void {
-			for (__key__ in m_inuseObjects.keys ()) {
+			XType.forEach (m_inuseObjects, 
 				function (__object:Dynamic /* */):Void {
 					returnObject (cast __object /* as Object */);
-				} (__key__);
-			}
+				}
+			);
 		}		
 		
 //------------------------------------------------------------------------------------------
 		public function returnObject (__object:Dynamic /* Object */):Void {
 			if (m_inuseObjects.exists (__object)) {
-				m_freeObjects[m_numFreeObjects++] = (__object);
+				m_freeObjects[m_otherSection][m_otherSize++] = __object;
+				m_numFreeObjects++;
 				
 				m_inuseObjects.remove (__object);
 				
@@ -150,7 +181,8 @@ package kx.pool;
 //------------------------------------------------------------------------------------------
 		public function returnObjectTo (__pool:XObjectPoolManager, __object:Dynamic /* Object */):Void {
 			if (m_inuseObjects.exists (__object)) {
-				__pool.m_freeObjects[__pool.m_numFreeObjects++] = (__object);
+				__pool.m_freeObjects[m_otherSection][m_otherSize++] = __object;
+				__pool.m_numFreeObjects++;
 				
 				m_inuseObjects.remove (__object);
 				
@@ -164,7 +196,16 @@ package kx.pool;
 				addMoreObjects (m_overflow);
 			}
 			
-			var __object:Dynamic /* Object */ = m_freeObjects.pop (); m_numFreeObjects--;
+			if (m_sectionIndex == m_sectionSize) {
+				m_sectionSize = m_otherSize;
+				m_otherSection = m_section;
+				m_section = (m_section + 1) & 1;
+				m_sectionIndex = 0;
+				m_otherSize = 0;
+			}
+			
+			var __object:Dynamic /* Object */ = m_freeObjects[m_section][m_sectionIndex++];
+			m_numFreeObjects--;
 				
 			m_inuseObjects.set (__object, 0);
 			

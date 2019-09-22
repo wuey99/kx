@@ -158,7 +158,7 @@ package kx.xmap;
 						1.0, 0,
 						[
 							// XMapView
-							m_XMapView
+							m_XMapView.getSubmapBitmapPoolManager ()
 						]
 					) /* as XSubmapViewCache */;
 			}
@@ -178,7 +178,7 @@ package kx.xmap;
 						1.0, 0,
 						[
 							// XMapView
-							m_XMapView
+							m_XMapView.getSubmapBitmapPoolManager (), 1.0
 						]
 					) /* as XSubmapViewCache */;
 			}
@@ -195,8 +195,7 @@ package kx.xmap;
 			
 			__logicObject.show ();
 		}
-		
-			
+				
 //------------------------------------------------------------------------------------------
 		public function removeXSubmap (__submap:XSubmapModel):Void {
 			if (m_XSubmapToXLogicObject.exists (__submap)) {		

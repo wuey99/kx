@@ -30,6 +30,7 @@ package kx.gamepad;
 	import kx.*;
 	import kx.collections.*;
 	import kx.gamepad.*;
+	import kx.type.*;
 	
 	//------------------------------------------------------------------------------------------	
 	class XGamepadSubManager {
@@ -99,23 +100,23 @@ package kx.gamepad;
 		
 		//------------------------------------------------------------------------------------------
 		public function removeAllListeners ():Void {	
-			for (__key__ in m_analogChangedSignalIDs.keys ()) {
+			XType.forEach (m_analogChangedSignalIDs, 
 				function (__id:Int):Void {
 					m_manager.removeAnalogChangedListener (m_analogChangedSignalIDs.get (__id), __id);	
-				} (__key__);
-			}
+				}
+			);
 			
-			for (__key__ in m_buttonUpSignalIDs.keys ()) {
+			XType.forEach (m_buttonUpSignalIDs, 
 				function (__id:Int):Void {
 					m_manager.removeButtonUpListener (m_buttonUpSignalIDs.get (__id), __id);	
-				} (__key__);
-			}
+				}
+			);
 			
-			for (__key__ in m_buttonDownSignalIDs.keys ()) {
+			XType.forEach (m_buttonDownSignalIDs, 
 				function (__id:Int):Void {
 					m_manager.removeButtonDownListener (m_buttonDownSignalIDs.get (__id), __id);	
-				} (__key__);
-			}
+				}
+			);
 		}
 		
 		//------------------------------------------------------------------------------------------

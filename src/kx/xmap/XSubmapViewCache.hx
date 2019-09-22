@@ -27,20 +27,21 @@
 //------------------------------------------------------------------------------------------
 package kx.xmap;
 
+	import openfl.display.*;
+	import openfl.geom.*;
+	import openfl.text.*;
+	import openfl.utils.*;
+	
 	import kx.*;
 	import kx.bitmap.XBitmapCacheManager;
 	import kx.collections.*;
 	import kx.geom.*;
+	import kx.pool.XObjectPoolManager;
 	import kx.world.*;
 	import kx.world.collision.*;
 	import kx.world.logic.*;
 	import kx.world.sprite.*;
 	import kx.xmap.*;
-	
-	import openfl.display.*;
-	import openfl.geom.*;
-	import openfl.text.*;
-	import openfl.utils.*;
 	
 //------------------------------------------------------------------------------------------	
 // instead of maintaining an XLogicObject for an XMapItemModel (for the view), maintain a 
@@ -61,7 +62,7 @@ package kx.xmap;
 // 3) possibly large set-up times (each Submap is 512 x 512 pixels by default)
 //------------------------------------------------------------------------------------------
 	class XSubmapViewCache extends XLogicObject {
-		private var m_XMapView:XMapView;
+		private var m_poolManager:XObjectPoolManager;
 		private var m_submapModel:XSubmapModel;
 		
 		private var x_sprite:XDepthSprite;
@@ -70,6 +71,8 @@ package kx.xmap;
 		private var tempPoint:XPoint;
 
 		private var m_delay:Int;
+		
+		private var m_scaleFactor:Float;
 		
 //------------------------------------------------------------------------------------------	
 		public function new () {
@@ -82,7 +85,9 @@ package kx.xmap;
 		public override function setup (__xxx:XWorld, args:Array<Dynamic> /* <Dynamic> */):Void {
 			super.setup (__xxx, args);
 			
-			m_XMapView = getArg (args, 0);
+			m_poolManager = getArg (args, 0);
+	
+			m_scaleFactor = getArg (args, 1);
 			
 			createSprites ();
 			
@@ -94,8 +99,8 @@ package kx.xmap;
 
 //------------------------------------------------------------------------------------------
 		public override function cleanup ():Void {
-			removeAll ();
-	
+			returnBorrowedObjects ();
+			
 			xxx.getXRectPoolManager ().returnObject (tempRect);
 			xxx.getXPointPoolManager ().returnObject (tempPoint);
 			
@@ -106,14 +111,18 @@ package kx.xmap;
 				
 				m_submapModel = null;
 			}
+			
+			removeAll ();
+			
+			if (m_poolClass != null) {
+				xxx.getXLogicObjectPoolManager ().returnObject (m_poolClass, this);
+			}
+			
+			isDead = true;
+			cleanedUp = true;
 		}
 
-//------------------------------------------------------------------------------------------
-		public function setXMapView (__XMapView:XMapView):Void {
-			m_XMapView = __XMapView;
-		}		
-		
-//------------------------------------------------------------------------------------------
+//x------------------------------------------------------------------------------------------
 		public function setModel (__model:XSubmapModel):Void {
 			m_submapModel = __model;
 			
@@ -148,6 +157,10 @@ package kx.xmap;
 		public function tileRefresh ():Void {
 		}
 		
+		//------------------------------------------------------------------------------------------
+		public function tileRefreshScaled ():Void {
+		}
+		
 //------------------------------------------------------------------------------------------
 // cull this object if it strays outside the current viewPort
 //------------------------------------------------------------------------------------------	
@@ -157,7 +170,7 @@ package kx.xmap;
 				
 				return;
 			}
-			
+
 // determine whether this object is outside the current viewPort
 			var v:XRect = xxx.getViewRect ();
 						
@@ -174,7 +187,7 @@ package kx.xmap;
 // yep, kill it
 //			trace (": ---------------------------------------: ");
 //			trace (": cull: ", this);
-			
+	
 			killLater ();
 		}
 
