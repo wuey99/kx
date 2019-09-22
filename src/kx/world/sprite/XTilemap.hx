@@ -42,7 +42,7 @@ package kx.world.sprite;
 	
 	
 	//------------------------------------------------------------------------------------------	
-	class XTilemap extends XImagemap {
+	class XTilemap extends XImageMap {
 		public static var g_XApp:XApp;
 		
 		public var m_tilemap:Tilemap;

@@ -41,7 +41,7 @@ package kx.world.sprite;
 	import openfl.utils.*;
 	
 	//------------------------------------------------------------------------------------------	
-	class XBitmap extends XImagemap {
+	class XBitmap extends XImageMap {
 		public static var g_XApp:XApp;
 		
 		public var m_bitmapDataAnimManager:XBitmapDataAnimManager;
