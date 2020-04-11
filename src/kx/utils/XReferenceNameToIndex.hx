@@ -28,6 +28,7 @@
 package kx.utils;
 	
 	import kx.xml.*;
+	import kx.type.*;
 	
 	//------------------------------------------------------------------------------------------
 	// this class maps a list of ReferenceNames to unique indexes
@@ -50,6 +51,32 @@ package kx.utils;
 		
 		//------------------------------------------------------------------------------------------
 		public function cleanup ():Void {
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function setReferenceNamesStrings (__value:Array<String> /* <String> */):Void {
+			m_referenceNamesStrings = __value;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function setReferenceNamesCounts (__value:Array<Int> /* <Int> */):Void {
+			m_referenceNamesCounts = __value;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function setFreeReferenceNameIndexes (__value:Array<Int> /* <Int> */):Void {
+			m_freeReferenceNameIndexes = __value;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function clone ():XReferenceNameToIndex {
+			var __dst:XReferenceNameToIndex = new XReferenceNameToIndex ();
+			
+			__dst.setReferenceNamesStrings (cast XType.copyArray (m_referenceNamesStrings));
+			__dst.setReferenceNamesCounts (cast XType.copyArray (m_referenceNamesCounts));
+			__dst.setFreeReferenceNameIndexes (cast XType.copyArray (m_freeReferenceNameIndexes));
+			
+			return __dst;
 		}
 		
 		//------------------------------------------------------------------------------------------

@@ -96,6 +96,11 @@ package kx.type;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public static function copyArray (__array:Array<Dynamic>):Array<Dynamic> {
+			return __array.copy();
+		}
+		
+		//------------------------------------------------------------------------------------------
 		public static function getNowDate ():Date {
 				return Date.now ();
 		}

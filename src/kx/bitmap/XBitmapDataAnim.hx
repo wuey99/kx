@@ -75,7 +75,7 @@ package kx.bitmap;
 		
 		//------------------------------------------------------------------------------------------
 		public function initWithScalingXY (__XApp:XApp, __movieClip:MovieClip, __scaleX:Float, __scaleY:Float):Void {
-			var i:Float;
+			var i:Int;
 			var __width:Float, __height:Float;
 			var __rect:Rectangle = null;
 			

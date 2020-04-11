@@ -868,12 +868,10 @@ package kx.xmap;
 					
 					var submapCol:Int = Std.int (col/col8);
 					
-					/* TODO *
 					m_XSubmaps[submapRow][submapCol].setTile (
-						CX_EMPTY,
+						[-1, 0],
 						col & colMask, row & rowMask
 					);
-					*/
 				}
 			}
 		}
@@ -1180,18 +1178,40 @@ package kx.xmap;
 		public function serializeImageClassNames ():XSimpleXMLNode {
 			var __imageClassNames:Map<String, Int> /* <String, Int> */ = new Map<String, Int> (); // <String, Int>
 			
-			var __row:Float, __col:Float;
+			var __submapRow:Int, __submapCol:Int;
 			
-			for (__row in 0 ... m_submapRows) {
-				for (__col in 0 ... m_submapCols) {
-					XType.forEach (m_XSubmaps[__row][__col].items (), 
-						function (__item:XMapItemModel):Void {
-							__imageClassNames.set (__item.imageClassName, 0);
+			if (m_grid) {
+				for (__submapRow in 0 ... m_submapRows) {
+					for (__submapCol in 0 ... m_submapCols) {
+						var __XSubmapModel:XSubmapModel = m_XSubmaps[__submapRow][__submapCol];
+						
+						for (__row in 0 ... __XSubmapModel.tileRows) {
+							for (__col in 0 ... __XSubmapModel.tileCols) {
+								var __tile:Array<Dynamic> /* <Dynamic> */ = __XSubmapModel.getTile (__col, __row);
+								
+								if (!(__tile[0] == -1 && __tile[1] == 0)) {
+									var __imageClassIndex:Int = __tile[0];
+									var __imageClassName = getClassNameFromIndex (__imageClassIndex);
+									if (!__imageClassNames.exists (__imageClassName) && __imageClassName.substr (0, 1) != "$") {
+										__imageClassNames.set (__imageClassName, 0);
+									}
+								}
+							}
 						}
-					);
+					}
+				}				
+			} else {
+				for (__submapRow in 0 ... m_submapRows) {
+					for (__submapCol in 0 ... m_submapCols) {
+						XType.forEach (m_XSubmaps[__submapRow][__submapCol].items (), 
+							function (__item:XMapItemModel):Void {
+								__imageClassNames.set (__item.imageClassName, 0);
+							}
+						);
+					}
 				}
 			}
-	
+			
 			var __xml:XSimpleXMLNode = new XSimpleXMLNode ();		
 			__xml.setupWithParams ("imageClassNames", "", []);
 					
@@ -1220,7 +1240,7 @@ package kx.xmap;
 				}
 			);
 			
-			return count > 0 || submap.hasCXTiles ();
+			return count > 0 || submap.hasTiles () || submap.hasCXTiles ();
 		}
 
 //------------------------------------------------------------------------------------------

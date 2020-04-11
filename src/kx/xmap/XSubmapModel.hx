@@ -267,6 +267,23 @@ package kx.xmap;
 		}
 		
 //------------------------------------------------------------------------------------------
+		public function hasTiles ():Bool {
+			var __row:Int, __col:Int;
+			
+			for (__row in 0 ... m_tileRows) {
+				for (__col in 0 ... m_tileCols) {
+					var __tile:Dynamic /* */ = m_tmap[__row * m_tileCols + __col];
+					
+					if (!(__tile[0] == -1 && __tile[1] == 0)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+		
+//------------------------------------------------------------------------------------------
 		public var tileCols (get, set):Int;
 		
 		public function get_tileCols ():Int {
@@ -605,7 +622,7 @@ package kx.xmap;
 				for (__col in 0 ... m_tileCols) {
 					var __tile:Dynamic /* */ = __tmap[__row * m_tileCols + __col];
 					
-					if (__tile[0] == 0 && __tile[1] == 0) {
+					if (__tile[0] == -1 && __tile[1] == 0) {
 						__tmapString += "XXXX";	
 					} else {
 						__tmapString += formatImageClassIndex (__tile[0]) + formatFrame (__tile[1]);			
