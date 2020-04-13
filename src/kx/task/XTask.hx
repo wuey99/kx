@@ -126,6 +126,8 @@ package kx.task;
 		public static inline var POP:Int = 14;
 		public static inline var WAITX:Int = 15;
 		
+		public static inline var XTask_OPCODES:Int = 16;
+		
 		public static inline var _FLAGS_EQ:Int = 1;
 		
 		private var m_XTaskSubManager:XTaskSubManager;
@@ -387,9 +389,23 @@ package kx.task;
 							i++;
 							
 							// break;
+						
+						default:
+							i = findMoreLabels (i);
+							
+							// break;
 					}
 				}
 			}
+		}
+
+		//------------------------------------------------------------------------------------------
+		// sub-classes of XTask override this to implement more op-codes
+		//
+		// find more labels 
+		//------------------------------------------------------------------------------------------
+		public function findMoreLabels (i:Int):Int {
+			return i;
 		}
 		
 		//------------------------------------------------------------------------------------------		
@@ -649,6 +665,16 @@ package kx.task;
 					// break;
 				
 				//------------------------------------------------------------------------------------------
+				// more op-codes
+				//------------------------------------------------------------------------------------------
+				default:
+					if (!evalMoreInstructions (cast(value, Int) )) {
+						return false;
+					}
+					
+					// break;
+				
+				//------------------------------------------------------------------------------------------
 				// end switch
 				//------------------------------------------------------------------------------------------
 			}
@@ -656,6 +682,16 @@ package kx.task;
 			//------------------------------------------------------------------------------------------
 			// end evalInstructions
 			//------------------------------------------------------------------------------------------
+			return true;
+		}
+		
+		
+		//------------------------------------------------------------------------------------------
+		// sub-classes of XTask override this to implement more op-codes
+		//
+		// evaluate more op-codes	
+		//------------------------------------------------------------------------------------------
+		public function evalMoreInstructions (value:Int):Bool {
 			return true;
 		}
 		
