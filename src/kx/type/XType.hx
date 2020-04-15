@@ -51,6 +51,11 @@ package kx.type;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public static function createInstanceByName (__className:String):Dynamic /* */ {
+			return Type.createInstance (Type.resolveClass (__className), []);
+		}
+		
+		//------------------------------------------------------------------------------------------
 		public static function createError (__message:String):String {
 			return __message;
 		}

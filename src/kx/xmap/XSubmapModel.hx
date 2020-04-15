@@ -221,6 +221,10 @@ package kx.xmap;
 		}	
 
 //------------------------------------------------------------------------------------------
+		public function cleanup ():Void {
+		}
+		
+//------------------------------------------------------------------------------------------
 		public var useArrayItems (get, set):Bool;
 		
 		public function get_useArrayItems ():Bool {
