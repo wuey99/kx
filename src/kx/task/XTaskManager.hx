@@ -49,20 +49,32 @@ package kx.task;
 			
 			m_paused = 0;
 			
-				m_poolManager = new XObjectPoolManager (
-					function ():Dynamic /* */ {
-						return new XTask ();
-					},
+			m_poolManager = createPoolManager ();
+		}
+		
+//------------------------------------------------------------------------------------------	
+		public function cleanup ():Void {
+			m_poolManager.returnAllObjects ();
+			
+			m_poolManager = null;
+		}
+		
+//------------------------------------------------------------------------------------------	
+		public function createPoolManager ():XObjectPoolManager {
+			return new XObjectPoolManager (
+				function ():Dynamic /* */ {
+					return new XTask ();
+				},
 					
-					function (__src:Dynamic /* */, __dst:Dynamic /* */):Dynamic /* */ {
-						return null;
-					},
+				function (__src:Dynamic /* */, __dst:Dynamic /* */):Dynamic /* */ {
+					return null;
+				},
 					
-					512, 256,
+				512, 256,
 					
-					function (x:Dynamic /* */):Void {
-					}
-				);
+				function (x:Dynamic /* */):Void {
+				}
+			);
 		}
 
 //------------------------------------------------------------------------------------------

@@ -47,8 +47,8 @@ package kx.xmap;
 		
 		private var m_XSubmaps:Array<Array<XSubmapModel>>;
 		
-		private var m_submapRows:Int;
-		private var m_submapCols:Int;
+		private var m_submapRows:Int = 0;
+		private var m_submapCols:Int = 0;
 		private var m_submapWidth:Int;
 		private var m_submapHeight:Int;
 		
@@ -78,8 +78,16 @@ package kx.xmap;
 		private var m_retrievedItems:Array<XMapItemModel>; // <XMapItemModel>
 		
 //------------------------------------------------------------------------------------------	
-		public function new () {
+		public function new (
+			__submapCols:Int = 32, __submapRows:Int = 32,
+			__submapWidth:Int = 512, __submapHeight:Int = 512
+		) {
 			super ();
+			
+			m_submapCols = __submapCols;
+			m_submapRows = __submapRows;
+			m_submapWidth = __submapWidth;
+			m_submapHeight = __submapHeight;
 		}	
 
 //------------------------------------------------------------------------------------------
@@ -140,6 +148,20 @@ package kx.xmap;
 
 //------------------------------------------------------------------------------------------
 		public function cleanup ():Void {
+			var __row:Int;
+			var __col:Int;
+			
+			for (__row in 0 ... m_submapRows) {
+				for (__col in 0 ... m_submapCols) {
+					var __submap:XSubmapModel = m_XSubmaps[__row][__col];
+					
+					if (__submap != null) {
+						__submap.cleanup ();
+						
+						m_XSubmaps[__row][__col] = null;
+					}
+				}
+			}
 		}
 
 //------------------------------------------------------------------------------------------
@@ -1245,7 +1267,7 @@ package kx.xmap;
 
 //------------------------------------------------------------------------------------------
 		public function deserialize (__xml:XSimpleXMLNode, __readOnly:Bool=false):Void {
-			trace (": [XMapLayer]: deserialize: ");
+			trace (": [XMapLayer]: deserialize: ", m_submapRows, m_submapCols);
 			
 			m_viewPort = m_startingViewPort = new XRect (
 				__xml.getAttributeFloat ("vx"),
@@ -1255,8 +1277,8 @@ package kx.xmap;
 			);
 			
 			m_layer = __xml.getAttributeInt ("layer");
-			m_submapRows = __xml.getAttributeInt ("submapRows");
-			m_submapCols = __xml.getAttributeInt ("submapCols");
+			m_submapRows = XType.max (m_submapRows, __xml.getAttributeInt ("submapRows"));
+			m_submapCols = XType.max (m_submapCols, __xml.getAttributeInt ("submapCols"));
 			m_submapWidth = __xml.getAttributeInt ("submapWidth");
 			m_submapHeight = __xml.getAttributeInt ("submapHeight");
 			m_currID = __xml.getAttribute ("currID");
@@ -1323,6 +1345,8 @@ package kx.xmap;
 			m_classNames.deserialize (__xml);
 			deserializeItems (__xml);
 			deserializeSubmaps (__xml, __readOnly);
+			
+			trace(": --------------------->: XMapLayerModel: deserialize: ", m_submapRows, m_submapCols);
 		}
 	
 //------------------------------------------------------------------------------------------
