@@ -641,7 +641,7 @@ package kx.task;
 				case EXEC:
 					if (m_subTask == null) {
 						// get new XTask Array run it immediately
-						m_subTask = m_XTaskSubManager.addTask ((cast(m_taskList[m_taskIndex], Array<Dynamic> /* <Dynamic> */) ), true);
+						m_subTask = addTask ((cast(m_taskList[m_taskIndex], Array<Dynamic> /* <Dynamic> */) ), true);
 						m_subTask.tag = tag;
 						m_subTask.setManager (m_manager);
 						m_subTask.setParent (self);
