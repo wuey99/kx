@@ -60,8 +60,6 @@ package gx;
 	import kx.xmap.*;
 	import kx.xml.*;
 	
-	import task.*;
-	
 	// begin include "..\\flash.h";
 	import openfl.display.*;
 	// end include "..\\flash.h";
@@ -140,7 +138,7 @@ package gx;
 			m_XApp = new XApp ();
 			m_XApp.setup (m_XApp.getDefaultPoolSettings ());
 			
-			xxx = new XWorld9 (__parent, m_XApp, __layers, __timerInterval);
+			xxx = createXWorld (__parent, m_XApp, __layers, __timerInterval);
 			addChild (xxx);
 			
 			m_states = new Map<String, Dynamic> (); // <String, Dynamic>
@@ -184,6 +182,11 @@ package gx;
 		//------------------------------------------------------------------------------------------
 		public function createViewRect ():Void {
 			xxx.setViewRect (704, 576);	
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function createXWorld (__parent:Dynamic /* */, __XApp:XApp, __layers:Int=8, __timerInterval:Float=32){
+			return new XWorld (__parent, __XApp, __layers, __timerInterval);	
 		}
 		
 		//------------------------------------------------------------------------------------------
