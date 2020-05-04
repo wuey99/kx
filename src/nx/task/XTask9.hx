@@ -12,7 +12,7 @@ package nx.task;
 	import kx.task.*;
 	import kx.world.logic.*;
 	
-	import objects.formations.*;
+	import nx.formations.*;
 	
 	//------------------------------------------------------------------------------------------
 	// test
