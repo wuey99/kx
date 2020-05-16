@@ -43,6 +43,7 @@ package nx.formations;
 		public var m_ctrlPos:XPoint; // -> targetPos
 		public var m_ctrlDelta:XPoint;
 		public var m_targetPos:XPoint;
+		public var m_formationAttackTime:Float;
 		
 		public var m_id:String;
 		
@@ -155,6 +156,26 @@ package nx.formations;
 			oDY = Math.sin (__radians) * m_speed;			
 		}
 
+//------------------------------------------------------------------------------------------
+		public function startFormationAttack (
+			__startX:Float, __startY:Float,
+			__targetX:Float, __targetY:Float,
+			__ctrlX:Float, __ctrlY:Float,
+			__ticks:Float
+			):Void {
+			
+			m_startPos.x = __startX;
+			m_startPos.y = __startY;
+			
+			m_targetPos.x = __targetX;
+			m_targetPos.y = __targetY;
+			
+			m_ctrlPos.x = __ctrlX;
+			m_ctrlPos.y = __ctrlY;
+			
+			m_formationAttackTime = __ticks;
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function calculateDelta (__target:XPoint, __start:XPoint, __delta:XPoint, __ticks:Float):Void {
 			__delta.x = (__target.x - __start.x) / ticksToSeconds (__ticks);

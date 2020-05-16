@@ -36,8 +36,8 @@ package nx.task;
 		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 14;
 		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 15;
 		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 16;
-		public static inline var LAUNCH_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 17;
-		public static inline var LAUNCH_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 18;
+		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 17;
+		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 18;
 			
 		public var m_object:FormationXLogicObject;
 		
@@ -126,12 +126,12 @@ package nx.task;
 				case SPAWN_ENEMY:
 					i += 5;
 					
-				// XTask9.LAUNCH_NEXT_ENEMY, <sequenceIndex>, ["01", "02", "03"]
-				case LAUNCH_NEXT_ENEMY:
+				// XTask9.GET_NEXT_ENEMY, <sequenceIndex>, ["01", "02", "03"]
+				case GET_NEXT_ENEMY:
 					i += 2;
 					
-				// XTask9.LAUNCH_RANDOM_ENEMY, ["01", "02", "03"]
-				case LAUNCH_RANDOM_ENEMY:
+				// XTask9.GET_RANDOM_ENEMY, ["01", "02", "03"]
+				case GET_RANDOM_ENEMY:
 					i += 1;
 			}
 			
@@ -306,9 +306,9 @@ package nx.task;
 					getObject ().spawnEnemy (__id, __class, __script, __x, __y);
 					
 				//------------------------------------------------------------------------------------------
-				// XTask9.LAUNCH_NEXT_ENEMY
+				// XTask9.GET_NEXT_ENEMY
 				//------------------------------------------------------------------------------------------
-				case LAUNCH_NEXT_ENEMY:
+				case GET_NEXT_ENEMY:
 					var __index:XNumber = cast m_taskList[m_taskIndex++];
 					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __id:String;
@@ -329,7 +329,7 @@ package nx.task;
 							__formationPosition = getObject ().getFormationPositionById (__id);
 								
 							if (__formationPosition.getPairedObject () != null) {
-								trace (": LAUNCH_NEXT_ENEMY: ", __id);
+								trace (": GET_NEXT_ENEMY: ", __id);
 								
 								__processed = true;
 							}
@@ -340,9 +340,9 @@ package nx.task;
 		
 										
 				//------------------------------------------------------------------------------------------
-				// XTask9.LAUNCH_RANDOM_ENEMY
+				// XTask9.GET_RANDOM_ENEMY
 				//------------------------------------------------------------------------------------------
-				case LAUNCH_RANDOM_ENEMY:
+				case GET_RANDOM_ENEMY:
 					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __id:String;
 					var __formationPosition:FormationPosition;
@@ -360,7 +360,7 @@ package nx.task;
 							__formationPosition = getObject ().getFormationPositionById (__id);
 								
 							if (__formationPosition.getPairedObject () != null) {
-								trace (": LAUNCH_RANDOM_ENEMY: ", __id);
+								trace (": GET_RANDOM_ENEMY: ", __id);
 								
 								__processed = true;
 							}
