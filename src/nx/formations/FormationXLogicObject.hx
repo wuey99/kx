@@ -38,6 +38,12 @@ package nx.formations;
 		public var m_rotationSpeed:Float;
 		public var m_autoRotation:Bool;
 
+		public var m_startPos:XPoint; // -> ctrlPos	
+		public var m_startDelta:XPoint;
+		public var m_ctrlPos:XPoint; // -> targetPos
+		public var m_ctrlDelta:XPoint;
+		public var m_targetPos:XPoint;
+		
 		public var m_id:String;
 		
 		public var movementPattern:XTask9;
@@ -69,6 +75,12 @@ package nx.formations;
 			m_autoSpeed = false;
 			m_autoRotation = false;
 				
+			m_startPos = cast xxx.getXPointPoolManager ().borrowObject ();
+			m_startDelta = cast xxx.getXPointPoolManager ().borrowObject ();	
+			m_ctrlPos = cast xxx.getXPointPoolManager ().borrowObject ();
+			m_ctrlDelta = cast xxx.getXPointPoolManager ().borrowObject ();
+			m_targetPos = cast xxx.getXPointPoolManager ().borrowObject ();
+			
 			m_XTaskSubManager9 = new XTaskSubManager (getXTaskManager ());
 			
 			movementPattern = cast addEmptyTask ();
@@ -96,6 +108,12 @@ package nx.formations;
 	//------------------------------------------------------------------------------------------
 		public override function cleanup ():Void {
 			super.cleanup ();
+			
+			xxx.getXPointPoolManager ().returnObject (m_startPos);
+			xxx.getXPointPoolManager ().returnObject (m_startDelta);
+			xxx.getXPointPoolManager ().returnObject (m_ctrlPos);
+			xxx.getXPointPoolManager ().returnObject (m_ctrlDelta);
+			xxx.getXPointPoolManager ().returnObject (m_targetPos);
 			
 			m_XTaskSubManager9.removeAllTasks ();
 		}
@@ -136,7 +154,21 @@ package nx.formations;
 			oDX = Math.cos (__radians) * m_speed;
 			oDY = Math.sin (__radians) * m_speed;			
 		}
-	
+
+//------------------------------------------------------------------------------------------
+		public function calculateDelta (__target:XPoint, __start:XPoint, __delta:XPoint, __ticks:Float):Void {
+			__delta.x = (__target.x - __start.x) / ticksToSeconds (__ticks);
+			__delta.y = (__target.y - __start.y) / ticksToSeconds (__ticks);
+		}
+
+//------------------------------------------------------------------------------------------
+		public function ticksToSeconds (__ticks:Float):Float {
+			var __seconds:Float = __ticks / 256;
+			var __frac:Float = (Std.int (__ticks) & 255) / 256;
+			
+			return __seconds + __frac;
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function setPattern (__pattern:Array<Dynamic>):Void {
 			movementPattern.gotoTask (__pattern);

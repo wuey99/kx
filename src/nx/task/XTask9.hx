@@ -237,9 +237,7 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 				case MOVE_TO:
 				//------------------------------------------------------------------------------------------
-					var __ticks:Float;
-					
-					moveTo (getObject ().oX, getObject ().oY, __evalNumber (), __evalNumber (), __ticks = __evalNumber ());
+					moveTo (getObject ().oX, getObject ().oY, __evalNumber (), __evalNumber (), __evalNumber ());
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.MOVE_TO_HOME_POS	
@@ -380,14 +378,19 @@ package nx.task;
 		//------------------------------------------------------------------------------------------
 		public function allEnemiesInuse (__enemyList:Array<Dynamic>):Bool {
 			for (__id in __enemyList) {
-				var __formationPosition:FormationPosition = getObject ().getFormationPositionById (__id);
-				
-				if (!__formationPosition.inuse ()) {
+				if (!isEnemyInUse (__id)) {
 					return false;
 				}
 			}
 			
 			return true;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function isEnemyInUse (__id:String):Bool {
+			var __formationPosition:FormationPosition = getObject ().getFormationPositionById (__id);
+				
+			return __formationPosition.inuse ();
 		}
 		
 		//------------------------------------------------------------------------------------------
