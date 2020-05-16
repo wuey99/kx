@@ -19,14 +19,11 @@ package nx.formations;
 	import openfl.utils.*;
 	
 	//------------------------------------------------------------------------------------------
-	class FormationPosition extends XLogicObjectCX {
+	class AttackPosition extends XLogicObjectCX {
 		public var m_sprite:XMovieClip;
 		public var x_sprite:XDepthSprite;
 		
 		public var script:XTask;
-		
-		public var m_pairedObject:FormationXLogicObject;
-		public var m_inuse:Bool;
 		
 		//------------------------------------------------------------------------------------------
 		public function new () {
@@ -46,8 +43,7 @@ package nx.formations;
 				
 			script = addEmptyTask ();
 			
-			setPairedObject (null);
-			setInuse (false);
+			oAlpha = 0.0;
 			
 			Idle_Script ();
 		}
@@ -61,27 +57,7 @@ package nx.formations;
 			
 			show ();
 		}
-
-		//------------------------------------------------------------------------------------------
-		public function setPairedObject (__object:FormationXLogicObject):Void {
-			m_pairedObject = __object;
-		}
-		
-		//------------------------------------------------------------------------------------------
-		public function getPairedObject ():FormationXLogicObject {
-			return m_pairedObject;
-		}
-
-		//------------------------------------------------------------------------------------------
-		public function inuse ():Bool {
-			return m_inuse;
-		}
-		
-		//------------------------------------------------------------------------------------------
-		public function setInuse (__flag:Bool):Void {
-			m_inuse = __flag;
-		}
-		
+	
 		//------------------------------------------------------------------------------------------
 		public function Idle_Script ():Void {
 			script.gotoTask ([

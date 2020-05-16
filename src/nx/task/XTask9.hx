@@ -36,6 +36,8 @@ package nx.task;
 		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 14;
 		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 15;
 		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 16;
+		public static inline var LAUNCH_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 17;
+		public static inline var LAUNCH_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 18;
 			
 		public var m_object:FormationXLogicObject;
 		
@@ -52,6 +54,11 @@ package nx.task;
 		//------------------------------------------------------------------------------------------
 		public function setObject (__value:FormationXLogicObject):Void {
 			m_object = __value;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getFormation ():Formation {
+			return m_object.getFormation ();
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -118,6 +125,14 @@ package nx.task;
 				// XTask9.SPAWN_ENEMY, <id>, <class>, <task>, <x>, <y>
 				case SPAWN_ENEMY:
 					i += 5;
+					
+				// XTask9.LAUNCH_NEXT_ENEMY, <sequenceIndex>, ["01", "02", "03"]
+				case LAUNCH_NEXT_ENEMY:
+					i += 2;
+					
+				// XTask9.LAUNCH_RANDOM_ENEMY, ["01", "02", "03"]
+				case LAUNCH_RANDOM_ENEMY:
+					i += 1;
 			}
 			
 			return i;
@@ -135,15 +150,15 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 				case SET_ROTATION:
 				//------------------------------------------------------------------------------------------
-					getObject ().oRotation = getObject ().m_targetRotation = cast m_taskList[m_taskIndex++];
+					getObject ().oRotation = getObject ().m_targetRotation = __evalNumber ();
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.SET_POS, <xpos>, <ypos>
 				//------------------------------------------------------------------------------------------
 				case SET_POS:
 				//------------------------------------------------------------------------------------------
-					getObject ().oX = cast m_taskList[m_taskIndex++];
-					getObject ().oY = cast m_taskList[m_taskIndex++];
+					getObject ().oX = __evalNumber ();
+					getObject ().oY = __evalNumber ();
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.SET_HOME_POS:
@@ -156,6 +171,8 @@ package nx.task;
 						getObject ().oY = __formationPosition.oY;
 						
 						getObject ().gotoHomeState ();
+						
+						getFormation ().incCompleteCount();
 					}
 					
 				//------------------------------------------------------------------------------------------
@@ -165,7 +182,7 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 				case SET_SPEED:
 				//------------------------------------------------------------------------------------------
-					getObject ().m_speed = cast m_taskList[m_taskIndex++];
+					getObject ().m_speed = __evalNumber ();
 					getObject ().applySpeed ();
 					
 				//------------------------------------------------------------------------------------------
@@ -173,8 +190,8 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 				case ROTATE:
 				//------------------------------------------------------------------------------------------
-					var __degrees:Float = cast m_taskList[m_taskIndex++];
-					var __ticks:Float = cast m_taskList[m_taskIndex++];
+					var __degrees:Float = __evalNumber ();
+					var __ticks:Float = __evalNumber ();
 					
 					getObject ().m_targetRotation = (getObject ().oRotation + __degrees) % 360;
 					getObject ().m_rotationSpeed = __degrees / ticksToSeconds (__ticks);
@@ -185,16 +202,16 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 				case ROTATE_TO:
 				//------------------------------------------------------------------------------------------
-					rotateTo (getObject ().oRotation, cast m_taskList[m_taskIndex++], cast m_taskList[m_taskIndex++]);
+					rotateTo (getObject ().oRotation, __evalNumber (), __evalNumber ());
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.ROTATE_TO_POS, <xpos>, <ypos>, <ticks>
 				//------------------------------------------------------------------------------------------
 				case ROTATE_TO_POS:
 				//------------------------------------------------------------------------------------------
-					var __targetX:Float = cast m_taskList[m_taskIndex++];
-					var __targetY:Float = cast m_taskList[m_taskIndex++];
-					var __ticks:Float =  cast m_taskList[m_taskIndex++];
+					var __targetX:Float = __evalNumber ();
+					var __targetY:Float = __evalNumber ();
+					var __ticks:Float =  __evalNumber ();
 					
 					var __targetRotation:Float = getAngleToTarget (__targetX, __targetY);
 									
@@ -205,7 +222,7 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 				case ROTATE_TO_HOME_POS:
 				//------------------------------------------------------------------------------------------		
-					var __ticks:Float = cast m_taskList[m_taskIndex++];
+					var __ticks:Float = __evalNumber ();
 					
 					var __formationPosition:FormationPosition = getObject ().getFormationPositionById (getObject ().m_id);
 
@@ -222,7 +239,7 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 					var __ticks:Float;
 					
-					moveTo (getObject ().oX, getObject ().oY, cast m_taskList[m_taskIndex++], cast m_taskList[m_taskIndex++], __ticks = cast m_taskList[m_taskIndex++]);
+					moveTo (getObject ().oX, getObject ().oY, __evalNumber (), __evalNumber (), __ticks = __evalNumber ());
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.MOVE_TO_HOME_POS	
@@ -232,7 +249,7 @@ package nx.task;
 					var __formationPosition:FormationPosition = getObject ().getFormationPositionById (getObject ().m_id);
 	
 					if (__formationPosition != null) {
-						moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, cast m_taskList[m_taskIndex++]);
+						moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
 					}
 					
 				//------------------------------------------------------------------------------------------
@@ -275,7 +292,6 @@ package nx.task;
 				// XTask9.DISABLE_AUTO_SPEED_AND_ROTATION
 				case DISABLE_AUTO_SPEED_AND_ROTATION:
 				//------------------------------------------------------------------------------------------
-				//------------------------------------------------------------------------------------------
 					getObject ().m_autoRotation = false;
 					getObject ().m_autoSpeed = false;
 					
@@ -286,17 +302,94 @@ package nx.task;
 					var __id:String = cast m_taskList[m_taskIndex++];
 					var __class:Class<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __script:Array<Dynamic> = cast m_taskList[m_taskIndex++];
-					var __x:Float = cast m_taskList[m_taskIndex++];
-					var __y:Float = cast m_taskList[m_taskIndex++];
+					var __x:Float = __evalNumber ();
+					var __y:Float = __evalNumber ();
 
 					getObject ().spawnEnemy (__id, __class, __script, __x, __y);
-				
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.LAUNCH_NEXT_ENEMY
+				//------------------------------------------------------------------------------------------
+				case LAUNCH_NEXT_ENEMY:
+					var __index:XNumber = cast m_taskList[m_taskIndex++];
+					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
+					var __id:String;
+					var __formationPosition:FormationPosition;
+									
+					setFlagsNE ();
+					
+					if (!allEnemiesInuse (__enemyList)) {
+						var __processed:Bool = false;
+						
+						while (!__processed) {
+							if (__index.value >= __enemyList.length) {
+								__index.value = 0;
+							}
+							
+							__id = cast __enemyList[Std.int (__index.value++)];
+								
+							__formationPosition = getObject ().getFormationPositionById (__id);
+								
+							if (__formationPosition.getPairedObject () != null) {
+								trace (": LAUNCH_NEXT_ENEMY: ", __id);
+								
+								__processed = true;
+							}
+						}
+					} else {
+						setFlagsEQ ();
+					}
+		
+										
+				//------------------------------------------------------------------------------------------
+				// XTask9.LAUNCH_RANDOM_ENEMY
+				//------------------------------------------------------------------------------------------
+				case LAUNCH_RANDOM_ENEMY:
+					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
+					var __id:String;
+					var __formationPosition:FormationPosition;
+					
+					setFlagsNE ();
+					
+					if (!allEnemiesInuse (__enemyList)) {
+						var __processed:Bool = false;
+						
+						while (!__processed) {
+							var __index:Int = Std.random (__enemyList.length);
+							
+							__id = cast __enemyList[Std.int (__index)];
+								
+							__formationPosition = getObject ().getFormationPositionById (__id);
+								
+							if (__formationPosition.getPairedObject () != null) {
+								trace (": LAUNCH_RANDOM_ENEMY: ", __id);
+								
+								__processed = true;
+							}
+						}						
+					} else {
+						setFlagsEQ ();
+					}
+					
 				//------------------------------------------------------------------------------------------	
 			}
 			
 			return true;
 		}
 
+		//------------------------------------------------------------------------------------------
+		public function allEnemiesInuse (__enemyList:Array<Dynamic>):Bool {
+			for (__id in __enemyList) {
+				var __formationPosition:FormationPosition = getObject ().getFormationPositionById (__id);
+				
+				if (!__formationPosition.inuse ()) {
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
 		//------------------------------------------------------------------------------------------
 		private function moveTo (__startX:Float, __startY:Float, __targetX:Float, __targetY:Float, __ticks:Float):Void {
 			getObject ().m_targetX = __targetX;

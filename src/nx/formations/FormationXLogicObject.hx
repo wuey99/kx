@@ -42,11 +42,12 @@ package nx.formations;
 		
 		public var movementPattern:XTask9;
 		
-		public var m_formation:FormationXLogicObject;
+		public var m_formation:Formation;
 		
 		public static inline var PATTERN_STATE:Int = 0;
 		public static inline var HOME_STATE:Int = 1;
-		public static inline var ATTACK_STATE:Int = 2;
+		public static inline var FORMATION_ATTACK_STATE:Int = 2;
+		public static inline var ATTACK_STATE:Int = 3;
 		
 		public var m_state:Int;
 		
@@ -105,12 +106,12 @@ package nx.formations;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function setFormation (__formation:FormationXLogicObject):Void {
+		public function setFormation (__formation:Formation):Void {
 			m_formation = __formation;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function getFormation ():FormationXLogicObject {
+		public function getFormation ():Formation {
 			return m_formation;
 		}
 		
@@ -180,10 +181,25 @@ package nx.formations;
 					
 				case HOME_STATE:
 					Home_Script ();
+	
+				case FORMATION_ATTACK_STATE:
+					Idle_Script ();
 					
 				case ATTACK_STATE:
 					Idle_Script ();
 			}
+		}
+
+//-----------------------------------------------------------------------------------------
+		public function getState ():Int {
+			return m_state;
+		}
+		
+//-----------------------------------------------------------------------------------------
+		public function gotoFormationAttackState ():Void {
+			m_state = FORMATION_ATTACK_STATE;
+			
+			Idle_Script ();
 		}
 		
 //-----------------------------------------------------------------------------------------

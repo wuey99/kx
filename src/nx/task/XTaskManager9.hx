@@ -22,7 +22,7 @@ package nx.task;
 					return null;
 				},
 					
-				512, 256,
+				1024, 256,
 					
 				function (x:Dynamic /* */):Void {
 				}
