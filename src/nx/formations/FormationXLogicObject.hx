@@ -43,7 +43,7 @@ package nx.formations;
 		public var m_ctrlPos:XPoint; // -> targetPos
 		public var m_ctrlDelta:XPoint;
 		public var m_targetPos:XPoint;
-		public var m_formationAttackTime:Float;
+		public var m_formationAttackTicks:Float;
 		
 		public var m_id:String;
 		
@@ -173,9 +173,16 @@ package nx.formations;
 			m_ctrlPos.x = __ctrlX;
 			m_ctrlPos.y = __ctrlY;
 			
-			m_formationAttackTime = __ticks;
+			m_formationAttackTicks = __ticks;
+			
+			calculateDelta (m_ctrlPos, m_startPos, m_startDelta, __ticks);
+			calculateDelta (m_targetPos, m_ctrlPos, m_ctrlDelta, __ticks);
+			
+			setInuse (true);
+			
+			FormationMovement_Script ();
 		}
-		
+
 //------------------------------------------------------------------------------------------
 		public function calculateDelta (__target:XPoint, __start:XPoint, __delta:XPoint, __ticks:Float):Void {
 			__delta.x = (__target.x - __start.x) / ticksToSeconds (__ticks);
@@ -188,6 +195,60 @@ package nx.formations;
 			var __frac:Float = (Std.int (__ticks) & 255) / 256;
 			
 			return __seconds + __frac;
+		}
+		
+//------------------------------------------------------------------------------------------
+// move startPos to ctrlPos
+// move ctrlPos to targetPos
+//------------------------------------------------------------------------------------------
+		public function interpolateAttackPosition ():Void {
+			m_startPos.x += m_startDelta.x;
+			m_startPos.y += m_startDelta.y;
+			
+			m_ctrlPos.x += m_ctrlDelta.x;
+			m_ctrlPos.y += m_ctrlDelta.y;	
+		}
+
+//------------------------------------------------------------------------------------------
+		public function FormationMovement_Script ():Void {
+			movementPattern.gotoTask ([
+				
+				//------------------------------------------------------------------------------------------
+				// control
+				//------------------------------------------------------------------------------------------
+				function ():Void {
+					script.addTask ([
+						XTask.LABEL, "loop",
+							XTask.WAIT, 0x0100,
+						
+							function ():Void {
+							},
+						
+						XTask.GOTO, "loop",
+						
+						XTask.RETN,
+					]);
+					
+				},
+				
+				//------------------------------------------------------------------------------------------
+				// animation
+				//------------------------------------------------------------------------------------------	
+				XTask.LABEL, "loop",
+					XTask.WAIT, 0x0100,
+					
+					function ():Void {
+						
+					},
+					
+					XTask.GOTO, "loop",
+				
+				XTask.RETN,
+				
+				//------------------------------------------------------------------------------------------			
+			]);
+			
+			//------------------------------------------------------------------------------------------			
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -223,6 +284,13 @@ package nx.formations;
 		}
 		
 //------------------------------------------------------------------------------------------
+		public function setInuse (__flag:Bool):Void {
+			var __formationPosition = m_formation.getFormationPositionById (m_id);
+			
+			__formationPosition.setInuse (__flag);
+		}
+		
+//------------------------------------------------------------------------------------------
 		public function spawnEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):Void {
 		}
 
@@ -236,7 +304,7 @@ package nx.formations;
 					Home_Script ();
 	
 				case FORMATION_ATTACK_STATE:
-					Idle_Script ();
+					FormationAttack_Script ();
 					
 				case ATTACK_STATE:
 					Idle_Script ();
@@ -252,7 +320,7 @@ package nx.formations;
 		public function gotoFormationAttackState ():Void {
 			m_state = FORMATION_ATTACK_STATE;
 			
-			Idle_Script ();
+			FormationAttack_Script ();
 		}
 		
 //-----------------------------------------------------------------------------------------
@@ -340,6 +408,48 @@ package nx.formations;
 						
 							function ():Void {
 								setToHomePos ();
+							},
+						
+						XTask.GOTO, "loop",
+						
+						XTask.RETN,
+					]);
+					
+				},
+				
+				//------------------------------------------------------------------------------------------
+				// animation
+				//------------------------------------------------------------------------------------------	
+				XTask.LABEL, "loop",
+					XTask.WAIT, 0x0100,
+					
+					function ():Void {
+						
+					},
+					
+					XTask.GOTO, "loop",
+				
+				XTask.RETN,
+				
+				//------------------------------------------------------------------------------------------			
+			]);
+			
+			//------------------------------------------------------------------------------------------
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function FormationAttack_Script ():Void {
+			script.gotoTask ([
+				
+				//------------------------------------------------------------------------------------------
+				// control
+				//------------------------------------------------------------------------------------------
+				function ():Void {
+					script.addTask ([
+						XTask.LABEL, "loop",
+							XTask.WAIT, 0x0100,
+						
+							function ():Void {
 							},
 						
 						XTask.GOTO, "loop",

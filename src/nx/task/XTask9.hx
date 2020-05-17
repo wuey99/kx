@@ -38,6 +38,7 @@ package nx.task;
 		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 16;
 		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 17;
 		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 18;
+		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 19;
 			
 		public var m_object:FormationXLogicObject;
 		
@@ -133,6 +134,9 @@ package nx.task;
 				// XTask9.GET_RANDOM_ENEMY, ["01", "02", "03"]
 				case GET_RANDOM_ENEMY:
 					i += 1;
+					
+				// XTask9.LAUNCH_ENEMY, <targetX>, <targetY>, <ctrlX>, <ctrlY>, <ticks>
+					i += 5;
 			}
 			
 			return i;
@@ -331,6 +335,8 @@ package nx.task;
 							if (__formationPosition.getPairedObject () != null) {
 								trace (": GET_NEXT_ENEMY: ", __id);
 								
+								m_object = __formationPosition.getPairedObject ();
+								
 								__processed = true;
 							}
 						}
@@ -362,12 +368,31 @@ package nx.task;
 							if (__formationPosition.getPairedObject () != null) {
 								trace (": GET_RANDOM_ENEMY: ", __id);
 								
+								m_object = __formationPosition.getPairedObject ();	
+							
 								__processed = true;
 							}
 						}						
 					} else {
 						setFlagsEQ ();
 					}
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.LAUNCH_ENEMY
+				//------------------------------------------------------------------------------------------
+				case LAUNCH_ENEMY:
+					var __targetX:Float = __evalNumber ();
+					var __targetY:Float = __evalNumber ();
+					var __ctrlX:Float = __evalNumber ();
+					var __ctrlY:Float = __evalNumber ();
+					var __ticks:Float = __evalNumber ();
+					
+					getObject ().startFormationAttack (
+						getObject ().oX, getObject ().oY,
+						__targetX, __targetY,
+						__ctrlX, __ctrlY,
+						__ticks
+					);
 					
 				//------------------------------------------------------------------------------------------	
 			}
