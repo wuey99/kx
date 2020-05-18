@@ -23,22 +23,24 @@ package nx.task;
 		public static inline var SET_POS:Int =  XTask.XTask_OPCODES + 1;
 		public static inline var SET_HOME_POS:Int =  XTask.XTask_OPCODES + 2;
 		public static inline var SET_SPEED:Int =  XTask.XTask_OPCODES + 3;
-		public static inline var ROTATE:Int =  XTask.XTask_OPCODES + 4;
-		public static inline var ROTATE_TO:Int =  XTask.XTask_OPCODES + 5;
-		public static inline var ROTATE_TO_POS:Int = XTask.XTask_OPCODES + 6;
-		public static inline var ROTATE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 7;		
-		public static inline var MOVE_TO:Int =  XTask.XTask_OPCODES + 8;
-		public static inline var MOVE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 9;
-		public static inline var ENABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 10;
-		public static inline var DISABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 11;
-		public static inline var ENABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 12;
-		public static inline var DISABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 13;
-		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 14;
-		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 15;
-		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 16;
-		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 17;
-		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 18;
-		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 19;
+		public static inline var SET_ACCEL_TO:Int = XTask.XTask_OPCODES + 4;
+		public static inline var ROTATE:Int =  XTask.XTask_OPCODES + 5;
+		public static inline var ROTATE_TO:Int =  XTask.XTask_OPCODES + 6;
+		public static inline var ROTATE_TO_POS:Int = XTask.XTask_OPCODES + 7;
+		public static inline var ROTATE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 8;		
+		public static inline var MOVE_TO:Int =  XTask.XTask_OPCODES + 9;
+		public static inline var SPLINE_TO:Int = XTask.XTask_OPCODES + 10;
+		public static inline var MOVE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 11;
+		public static inline var ENABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 12;
+		public static inline var DISABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 13;
+		public static inline var ENABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 14;
+		public static inline var DISABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 15;
+		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 16;
+		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 17;
+		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 18;
+		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 19;
+		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 20;
+		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 21;
 			
 		public var m_object:FormationXLogicObject;
 		
@@ -81,6 +83,10 @@ package nx.task;
 				case SET_SPEED:
 					i++;
 					
+				// XTask9.SET_ACCEL_TO, <targetSpeed>, <initalSpeed>, <accel>
+				case SET_ACCEL_TO:
+					i += 3;
+					
 				// XTask9.ROTATE, <degrees>, <ticks>
 				case ROTATE:
 					i += 2;
@@ -100,6 +106,9 @@ package nx.task;
 				// XTask9.MOVE_TO, <xpos>, <ypos>, <ticks>
 				case MOVE_TO:
 					i += 3;
+					
+				// XTask9.SPLINE_TO, <targetX>, <targetY>, <ctrlX>, <ctrlY>, <ticks>
+					i += 5;
 					
 				// XTask9.MOVE_TO_HOME_POS, <ticks>
 				case MOVE_TO_HOME_POS:
@@ -190,6 +199,16 @@ package nx.task;
 					getObject ().applySpeed ();
 					
 				//------------------------------------------------------------------------------------------
+				// XTask9.SET_ACCEL_TO, <targetSpeed>, <initalSpeed>, <accel>
+				//------------------------------------------------------------------------------------------
+				case SET_ACCEL_TO:
+				//------------------------------------------------------------------------------------------
+					getObject ().m_targetSpeed = __evalNumber ();
+					getObject ().m_speed = __evalNumber ();
+					getObject ().m_accel = __evalNumber ();
+					getObject ().applySpeed ();
+					
+				//------------------------------------------------------------------------------------------
 				// XTask9.ROTATE, <degrees>, <ticks>
 				//------------------------------------------------------------------------------------------
 				case ROTATE:
@@ -242,6 +261,23 @@ package nx.task;
 				case MOVE_TO:
 				//------------------------------------------------------------------------------------------
 					moveTo (getObject ().oX, getObject ().oY, __evalNumber (), __evalNumber (), __evalNumber ());
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.SPLINE_TO, <targetX>, <targetY>, <ctrlX>, <ctrlY>, <ticks>
+				//------------------------------------------------------------------------------------------
+				case SPLINE_TO:
+					var __targetX:Float = __evalNumber ();
+					var __targetY:Float = __evalNumber ();
+					var __ctrlX:Float = __evalNumber ();
+					var __ctrlY:Float = __evalNumber ();
+					var __ticks:Float = __evalNumber ();
+					
+					getObject ().startSplineMovement (
+						getObject ().oX, getObject ().oY,
+						__targetX, __targetY,
+						__ctrlX, __ctrlY,
+						__ticks
+					);
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.MOVE_TO_HOME_POS	
@@ -387,7 +423,7 @@ package nx.task;
 					var __ctrlY:Float = __evalNumber ();
 					var __ticks:Float = __evalNumber ();
 					
-					getObject ().startFormationAttack (
+					getObject ().startSplineMovement (
 						getObject ().oX, getObject ().oY,
 						__targetX, __targetY,
 						__ctrlX, __ctrlY,

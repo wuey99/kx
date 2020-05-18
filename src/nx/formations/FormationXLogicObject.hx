@@ -31,6 +31,8 @@ package nx.formations;
 		public var m_targetX:Float;
 		public var m_targetY:Float;
 		public var m_speed:Float;
+		public var m_accel:Float;
+		public var m_targetSpeed:Float;
 		public var m_autoSpeed:Bool;
 		
 		public var m_targetRotation:Float;
@@ -43,11 +45,12 @@ package nx.formations;
 		public var m_ctrlPos:XPoint; // -> targetPos
 		public var m_ctrlDelta:XPoint;
 		public var m_targetPos:XPoint;
-		public var m_formationAttackTicks:Float;
+		public var m_currentTicks:Float;
+		public var m_totalTicks:Float;
 		
 		public var m_id:String;
 		
-		public var movementPattern:XTask9;
+		public var patternMovement:XTask9;
 		
 		public var m_formation:Formation;
 		
@@ -84,7 +87,10 @@ package nx.formations;
 			
 			m_XTaskSubManager9 = new XTaskSubManager (getXTaskManager ());
 			
-			movementPattern = cast addEmptyTask ();
+			patternMovement = cast addEmptyTask ();
+			
+			m_currentTicks = 0;
+			m_totalTicks = 0;
 			
 			addTask ([				
 				XTask.LABEL, "loop",
@@ -98,6 +104,10 @@ package nx.formations;
 						if (m_autoSpeed) {
 							applySpeed ();
 						}
+						
+						applyAcceleration ();
+						
+						interpolateSplinePosition ();
 					},
 					
 					XTask.GOTO, "loop",
@@ -157,12 +167,25 @@ package nx.formations;
 		}
 
 //------------------------------------------------------------------------------------------
-		public function startFormationAttack (
+		public function applyAcceleration ():Void {
+			if (m_accel > 0) {
+				m_speed += m_accel;
+				
+				if (m_speed > m_targetSpeed) {
+					m_speed = m_targetSpeed;
+				}
+			}
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function startSplineMovement (
 			__startX:Float, __startY:Float,
 			__targetX:Float, __targetY:Float,
 			__ctrlX:Float, __ctrlY:Float,
 			__ticks:Float
 			):Void {
+			
+			trace (": startSplineMovement: ");
 			
 			m_startPos.x = __startX;
 			m_startPos.y = __startY;
@@ -173,14 +196,15 @@ package nx.formations;
 			m_ctrlPos.x = __ctrlX;
 			m_ctrlPos.y = __ctrlY;
 			
-			m_formationAttackTicks = __ticks;
+			m_currentTicks = 0;
+			m_totalTicks = __ticks;
 			
 			calculateDelta (m_ctrlPos, m_startPos, m_startDelta, __ticks);
 			calculateDelta (m_targetPos, m_ctrlPos, m_ctrlDelta, __ticks);
 			
 			setInuse (true);
 			
-			FormationMovement_Script ();
+			gotoFormationAttackState ();
 		}
 
 //------------------------------------------------------------------------------------------
@@ -201,59 +225,31 @@ package nx.formations;
 // move startPos to ctrlPos
 // move ctrlPos to targetPos
 //------------------------------------------------------------------------------------------
-		public function interpolateAttackPosition ():Void {
+		public function interpolateSplinePosition ():Void {
+			if (m_currentTicks == m_totalTicks) {
+				return;
+			}
+			
 			m_startPos.x += m_startDelta.x;
 			m_startPos.y += m_startDelta.y;
 			
 			m_ctrlPos.x += m_ctrlDelta.x;
 			m_ctrlPos.y += m_ctrlDelta.y;	
-		}
-
-//------------------------------------------------------------------------------------------
-		public function FormationMovement_Script ():Void {
-			movementPattern.gotoTask ([
-				
-				//------------------------------------------------------------------------------------------
-				// control
-				//------------------------------------------------------------------------------------------
-				function ():Void {
-					script.addTask ([
-						XTask.LABEL, "loop",
-							XTask.WAIT, 0x0100,
-						
-							function ():Void {
-							},
-						
-						XTask.GOTO, "loop",
-						
-						XTask.RETN,
-					]);
-					
-				},
-				
-				//------------------------------------------------------------------------------------------
-				// animation
-				//------------------------------------------------------------------------------------------	
-				XTask.LABEL, "loop",
-					XTask.WAIT, 0x0100,
-					
-					function ():Void {
-						
-					},
-					
-					XTask.GOTO, "loop",
-				
-				XTask.RETN,
-				
-				//------------------------------------------------------------------------------------------			
-			]);
 			
-			//------------------------------------------------------------------------------------------			
+			m_currentTicks = Math.min (m_totalTicks, m_currentTicks + 0x0100);
+			
+			var __time:Float =  ticksToSeconds (m_currentTicks) / ticksToSeconds (m_totalTicks);
+			
+			var __deltaX:Float = (m_ctrlPos.x - m_startPos.x) * __time;
+			var __deltaY:Float = (m_ctrlPos.y - m_startPos.y) * __time;
+			
+			oX = m_startPos.x + __deltaX;
+			oY = m_startPos.y + __deltaY;
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function setPattern (__pattern:Array<Dynamic>):Void {
-			movementPattern.gotoTask (__pattern);
+			patternMovement.gotoTask (__pattern);
 		}
 
 //------------------------------------------------------------------------------------------
