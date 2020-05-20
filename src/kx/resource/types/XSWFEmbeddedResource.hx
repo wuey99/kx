@@ -68,7 +68,7 @@ package kx.resource.types;
 //------------------------------------------------------------------------------------------
 		public override function getDefinition (__className:String):Class<Dynamic> /* <Dynamic> */ {
 			if (m_resourceManager.findEmbeddedResource (__className) != null) {
-				return m_resourceManager.findEmbeddedResource (__className);
+				return Type.resolveClass (__className);
 			} else {
 				return m_resourceManager.findEmbeddedResource (m_resourcePath);
 			}
