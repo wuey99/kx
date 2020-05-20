@@ -41,6 +41,7 @@ package kx.world;
 	import openfl.events.MouseEvent;
 	import openfl.events.TimerEvent;
 	import openfl.geom.Point;
+	import openfl.media.Sound;
 	import openfl.system.*;
 	import openfl.utils.Timer;
 	
