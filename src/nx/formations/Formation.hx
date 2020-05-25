@@ -124,6 +124,8 @@ package nx.formations;
 		
 		//------------------------------------------------------------------------------------------
 		public function addAttackPositions (attackDefs:Array<AttackDef>):Void {
+			return;
+			
 			if (m_attackPositions == null) {
 				m_attackPositions = new Map<String, AttackPosition> ();
 			}
