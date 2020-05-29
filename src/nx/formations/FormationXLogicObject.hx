@@ -54,6 +54,8 @@ package nx.formations;
 		
 		public var m_formation:Formation;
 		
+		public var m_completed:Bool;
+		
 		public static inline var PATTERN_STATE:Int = 0;
 		public static inline var HOME_STATE:Int = 1;
 		public static inline var FORMATION_ATTACK_STATE:Int = 2;
@@ -78,7 +80,7 @@ package nx.formations;
 			m_rotationSpeed = 0;
 			m_autoSpeed = false;
 			m_autoRotation = false;
-				
+			
 			m_startPos = cast xxx.getXPointPoolManager ().borrowObject ();
 			m_startDelta = cast xxx.getXPointPoolManager ().borrowObject ();	
 			m_ctrlPos = cast xxx.getXPointPoolManager ().borrowObject ();
@@ -91,6 +93,8 @@ package nx.formations;
 			
 			m_currentTicks = 0;
 			m_totalTicks = 0;
+			
+			m_completed = false;
 			
 			addTask ([				
 				XTask.LABEL, "loop",
@@ -127,8 +131,25 @@ package nx.formations;
 			xxx.getXPointPoolManager ().returnObject (m_targetPos);
 			
 			m_XTaskSubManager9.removeAllTasks ();
+			
+			setInuse (true);
+
+			setComplete ();
 		}
 
+//------------------------------------------------------------------------------------------
+		public function setComplete ():Void {
+			if (m_completed) {
+				return;
+			}
+			
+			m_completed = true;
+			
+			if (m_formation != null) {
+				m_formation.incCompleteCount ();
+			}
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function setID (__id:String):Void {
 			m_id = __id;
@@ -171,7 +192,13 @@ package nx.formations;
 			if (m_accel > 0) {
 				m_speed += m_accel;
 				
-				if (m_speed > m_targetSpeed) {
+				if (m_speed >= m_targetSpeed) {
+					m_speed = m_targetSpeed;
+				}
+			} else {
+				m_speed += m_accel;
+				
+				if (m_speed <= m_targetSpeed) {
 					m_speed = m_targetSpeed;
 				}
 			}
@@ -201,9 +228,7 @@ package nx.formations;
 			
 			calculateDelta (m_ctrlPos, m_startPos, m_startDelta, __ticks);
 			calculateDelta (m_targetPos, m_ctrlPos, m_ctrlDelta, __ticks);
-			
-			setInuse (true);
-			
+
 			gotoFormationAttackState ();
 		}
 
@@ -281,9 +306,13 @@ package nx.formations;
 		
 //------------------------------------------------------------------------------------------
 		public function setInuse (__flag:Bool):Void {
-			var __formationPosition = m_formation.getFormationPositionById (m_id);
-			
-			__formationPosition.setInuse (__flag);
+			if (m_formation != null) {
+				var __formationPosition = m_formation.getFormationPositionById (m_id);
+				
+				if (__formationPosition != null) {
+					__formationPosition.setInuse (__flag);
+				}
+			}
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -321,6 +350,8 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoAttackState ():Void {
+			setInuse (true);
+			
 			m_state = ATTACK_STATE;
 			
 			Idle_Script ();
@@ -328,6 +359,8 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoPatternState ():Void {
+			setInuse (true);
+			
 			m_state = PATTERN_STATE;
 			
 			Pattern_Script ();
@@ -335,6 +368,10 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoHomeState ():Void {
+			setInuse (false);
+						
+			setComplete ();
+			
 			m_state = HOME_STATE;
 			
 			Home_Script ();

@@ -144,8 +144,8 @@ package nx.task;
 				case GET_RANDOM_ENEMY:
 					i += 1;
 					
-				// XTask9.LAUNCH_ENEMY, <targetX>, <targetY>, <ctrlX>, <ctrlY>, <ticks>
-					i += 5;
+				// XTask9.LAUNCH_ENEMY, <task>
+					i += 1;
 			}
 			
 			return i;
@@ -184,8 +184,6 @@ package nx.task;
 						getObject ().oY = __formationPosition.oY;
 						
 						getObject ().gotoHomeState ();
-						
-						getFormation ().incCompleteCount();
 					}
 					
 				//------------------------------------------------------------------------------------------
@@ -356,6 +354,8 @@ package nx.task;
 									
 					setFlagsNE ();
 					
+					trace (": allEnemiesInUse: ", allEnemiesInuse (__enemyList));
+					
 					if (!allEnemiesInuse (__enemyList)) {
 						var __processed:Bool = false;
 						
@@ -417,18 +417,10 @@ package nx.task;
 				// XTask9.LAUNCH_ENEMY
 				//------------------------------------------------------------------------------------------
 				case LAUNCH_ENEMY:
-					var __targetX:Float = __evalNumber ();
-					var __targetY:Float = __evalNumber ();
-					var __ctrlX:Float = __evalNumber ();
-					var __ctrlY:Float = __evalNumber ();
-					var __ticks:Float = __evalNumber ();
+					var __pattern:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					
-					getObject ().startSplineMovement (
-						getObject ().oX, getObject ().oY,
-						__targetX, __targetY,
-						__ctrlX, __ctrlY,
-						__ticks
-					);
+					getObject ().setPattern (__pattern);
+					getObject ().gotoPatternState ();
 					
 				//------------------------------------------------------------------------------------------	
 			}

@@ -329,7 +329,19 @@ package nx.formations;
 			
 			//------------------------------------------------------------------------------------------
 		}
-			
+
+		//------------------------------------------------------------------------------------------
+		public function waitX ():Array<Dynamic> {
+			return [
+				XTask.LABEL, "wait",
+					XTask.WAIT, 0x0100,
+					
+					XTask.GOTO, "wait",		
+					
+				XTask.RETN,
+			];
+		}
+		
 		//------------------------------------------------------------------------------------------
 		public function moveToHomePositionX ():Array<Dynamic> {
 			return [
@@ -344,12 +356,25 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public function startAttackFromFromHomePosX ():Array<Dynamic> {
+			return [
+				XTask9.ENABLE_AUTO_SPEED_AND_ROTATION,
+				XTask9.SET_ACCEL_TO, 0.0, 12.0, -0.20,
+				XTask.WAIT, 0x2000,
+
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
 		public function waitForFormationCompletionX ():Array<Dynamic> {
 			return [
 				XTask.LABEL, "loop",
-					XTask.WAIT, 0x0100,
+					XTask.WAIT, 0x0800,
 							
 					XTask.FLAGS, function (__task:XTask):Void {
+						trace (": ", getCompleteCount (), getTotalEnemyCount ());
+						
 						__task.ifTrue (getCompleteCount () == getTotalEnemyCount ());
 					}, XTask.BNE, "loop",
 

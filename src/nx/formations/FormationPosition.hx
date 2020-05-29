@@ -47,7 +47,7 @@ package nx.formations;
 			script = addEmptyTask ();
 			
 			setPairedObject (null);
-			setInuse (false);
+			setInuse (true);
 			
 			Idle_Script ();
 		}
