@@ -228,8 +228,6 @@ package nx.formations;
 			
 			calculateDelta (m_ctrlPos, m_startPos, m_startDelta, __ticks);
 			calculateDelta (m_targetPos, m_ctrlPos, m_ctrlDelta, __ticks);
-
-			gotoFormationAttackState ();
 		}
 
 //------------------------------------------------------------------------------------------
@@ -343,6 +341,8 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoFormationAttackState ():Void {
+			setInuse (true);
+			
 			m_state = FORMATION_ATTACK_STATE;
 			
 			FormationAttack_Script ();
@@ -403,11 +403,7 @@ package nx.formations;
 				// animation
 				//------------------------------------------------------------------------------------------	
 				XTask.LABEL, "loop",
-					XTask.WAIT, 0x0100,
-					
-					function ():Void {
-						
-					},
+					XTask.EXEC, idleAnimationX (),
 					
 					XTask.GOTO, "loop",
 				
@@ -419,7 +415,7 @@ package nx.formations;
 			//------------------------------------------------------------------------------------------
 		}
 		
-//------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------
 		public function Pattern_Script ():Void {
 			
 			Idle_Script ();
@@ -454,11 +450,7 @@ package nx.formations;
 				// animation
 				//------------------------------------------------------------------------------------------	
 				XTask.LABEL, "loop",
-					XTask.WAIT, 0x0100,
-					
-					function ():Void {
-						
-					},
+					XTask.EXEC, homeAnimationX (),
 					
 					XTask.GOTO, "loop",
 				
@@ -496,11 +488,7 @@ package nx.formations;
 				// animation
 				//------------------------------------------------------------------------------------------	
 				XTask.LABEL, "loop",
-					XTask.WAIT, 0x0100,
-					
-					function ():Void {
-						
-					},
+					XTask.EXEC, formationAttackAnimationX (),
 					
 					XTask.GOTO, "loop",
 				
@@ -510,6 +498,51 @@ package nx.formations;
 			]);
 			
 			//------------------------------------------------------------------------------------------
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function idleAnimationX ():Array<Dynamic> {
+			return [
+				XTask.WAIT, 0x0100,
+				
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function patternAnimationX ():Array<Dynamic> {
+			return [
+				XTask.WAIT, 0x0100,
+				
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function homeAnimationX ():Array<Dynamic> {
+			return [
+				XTask.WAIT, 0x0100,
+				
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function attackAnimationX ():Array<Dynamic> {
+			return [
+				XTask.WAIT, 0x100,
+				
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function formationAttackAnimationX ():Array<Dynamic> {
+			return [
+				XTask.WAIT, 0x100,
+				
+				XTask.RETN,
+			];
 		}
 		
 //------------------------------------------------------------------------------------------

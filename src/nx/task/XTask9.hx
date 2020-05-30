@@ -420,7 +420,8 @@ package nx.task;
 					var __pattern:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					
 					getObject ().setPattern (__pattern);
-					getObject ().gotoPatternState ();
+					
+					getObject ().gotoFormationAttackState ();
 					
 				//------------------------------------------------------------------------------------------	
 			}
