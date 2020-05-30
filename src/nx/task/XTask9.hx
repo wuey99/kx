@@ -31,16 +31,17 @@ package nx.task;
 		public static inline var MOVE_TO:Int =  XTask.XTask_OPCODES + 9;
 		public static inline var SPLINE_TO:Int = XTask.XTask_OPCODES + 10;
 		public static inline var MOVE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 11;
-		public static inline var ENABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 12;
-		public static inline var DISABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 13;
-		public static inline var ENABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 14;
-		public static inline var DISABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 15;
-		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 16;
-		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 17;
-		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 18;
-		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 19;
-		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 20;
-		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 21;
+		public static inline var RETURN_TO_HOME_POS:Int = XTask.XTask_OPCODES + 12;
+		public static inline var ENABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 13;
+		public static inline var DISABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 14;
+		public static inline var ENABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 15;
+		public static inline var DISABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 16;
+		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 17;
+		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 18;
+		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 19;
+		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 20;
+		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 21;
+		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 22;
 			
 		public var m_object:FormationXLogicObject;
 		
@@ -112,6 +113,10 @@ package nx.task;
 					
 				// XTask9.MOVE_TO_HOME_POS, <ticks>
 				case MOVE_TO_HOME_POS:
+					i += 1;
+					
+				// XTask9.RETURN_TO_HOME_POS, <ticks>
+				case RETURN_TO_HOME_POS:
 					i += 1;
 					
 				// XTask9.ENABLE_AUTO_ROTATION
@@ -278,13 +283,26 @@ package nx.task;
 					);
 					
 				//------------------------------------------------------------------------------------------
-				// XTask9.MOVE_TO_HOME_POS	
+				// XTask9.MOVE_TO_HOME_POS, <ticks>	
 				//------------------------------------------------------------------------------------------		
 				case MOVE_TO_HOME_POS:
 				//------------------------------------------------------------------------------------------	
 					var __formationPosition:FormationPosition = getObject ().getFormationPositionById (getObject ().m_id);
 	
 					if (__formationPosition != null) {
+						moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
+					}
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.RETURN_TO_HOME_POS, <ticks>
+				//------------------------------------------------------------------------------------------		
+				case RETURN_TO_HOME_POS:
+					var __formationPosition:FormationPosition = getObject ().getFormationPositionById (getObject ().m_id);
+	
+					if (__formationPosition != null) {
+						getObject ().oX = __formationPosition.oX;
+						getObject ().oY = getObject ().get_offScreenTop ();
+						
 						moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
 					}
 					
@@ -352,7 +370,7 @@ package nx.task;
 					var __id:String;
 					var __formationPosition:FormationPosition;
 									
-					setFlagsNE ();
+					setFlagsEQ ();
 					
 					trace (": allEnemiesInUse: ", allEnemiesInuse (__enemyList));
 					
@@ -377,7 +395,7 @@ package nx.task;
 							}
 						}
 					} else {
-						setFlagsEQ ();
+						setFlagsNE ();
 					}
 		
 										
@@ -389,7 +407,7 @@ package nx.task;
 					var __id:String;
 					var __formationPosition:FormationPosition;
 					
-					setFlagsNE ();
+					setFlagsEQ ();
 					
 					if (!allEnemiesInuse (__enemyList)) {
 						var __processed:Bool = false;
@@ -410,7 +428,7 @@ package nx.task;
 							}
 						}						
 					} else {
-						setFlagsEQ ();
+						setFlagsNE ();
 					}
 					
 				//------------------------------------------------------------------------------------------

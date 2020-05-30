@@ -28,6 +28,9 @@ package nx.formations;
 		public var script:XTask;
 		public var gravity:XTask;
 		
+		public var skyRect(get, set):XRect;
+		public var m_skyRect:XRect;
+		
 		public var m_targetX:Float;
 		public var m_targetY:Float;
 		public var m_speed:Float;
@@ -135,6 +138,52 @@ package nx.formations;
 			setInuse (true);
 
 			setComplete ();
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function get_offScreenTop ():Float {
+			return skyRect.y - 128;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function get_offScreenBottom ():Float {
+			return skyRect.y + skyRect.height + 128;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function get_offScreenLeft ():Float {
+			return skyRect.x - 224;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function get_offScreenRight ():Float {
+			return skyRect.x + skyRect.width + 224;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function getScreenX (__percentage:Float):Float {
+			return skyRect.x + skyRect.width * __percentage;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getScreenY (__percentage:Float):Float {
+			return skyRect.y + skyRect.height * __percentage;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function get_skyRect ():XRect {
+			if (m_skyRect == null) {
+				m_skyRect = G.appX.getSkyRect ();
+			}
+			
+			return m_skyRect;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function set_skyRect (__rect:XRect):XRect {
+			m_skyRect = __rect;
+			
+			return m_skyRect;
 		}
 
 //------------------------------------------------------------------------------------------

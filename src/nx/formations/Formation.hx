@@ -40,8 +40,8 @@ package nx.formations;
 		public var m_formationPositions:Map<String, FormationPosition>;
 		public var m_attackPositions:Map<String, AttackPosition>;
 		
-		public var skyRect(get, set):XRect;
-		public var m_skyRect:XRect;
+		// public var skyRect(get, set):XRect;
+		// public var m_skyRect:XRect;
 		
 		public var offScreenLeft(get, null):Float;
 		public var offScreenRight(get, null):Float;
@@ -204,6 +204,7 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		#if false
 		public function get_offScreenTop ():Float {
 			return skyRect.y - 128;
 		}
@@ -248,7 +249,8 @@ package nx.formations;
 			
 			return m_skyRect;
 		}
-
+		#end
+		
 		//------------------------------------------------------------------------------------------
 		public function getCompleteCount ():Int {
 			return m_completeCount;
@@ -362,6 +364,19 @@ package nx.formations;
 				XTask9.SET_ACCEL_TO, 0.0, 12.0, -0.20,
 				XTask.WAIT, 0x2000,
 
+				XTask.RETN,
+			];
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function returnToHomePositionX ():Array<Dynamic> {
+			return [
+				XTask9.DISABLE_AUTO_SPEED_AND_ROTATION,
+				XTask9.SET_ROTATION, 0.0,
+				XTask9.RETURN_TO_HOME_POS, 0x4000,
+				XTask.WAIT, 0x4000,
+				XTask9.SET_HOME_POS,
+				
 				XTask.RETN,
 			];
 		}
