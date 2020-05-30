@@ -31,6 +31,11 @@ package nx.formations;
 		public var skyRect(get, set):XRect;
 		public var m_skyRect:XRect;
 		
+		public var offScreenLeft(get, null):Float;
+		public var offScreenRight(get, null):Float;
+		public var offScreenTop(get, null):Float;
+		public var offScreenBottom(get, null):Float;
+		
 		public var m_targetX:Float;
 		public var m_targetY:Float;
 		public var m_speed:Float;
@@ -135,7 +140,9 @@ package nx.formations;
 			
 			m_XTaskSubManager9.removeAllTasks ();
 			
-			setInuse (true);
+			setPairedObjectIsDead (true);
+			
+			setPairedObjectInuse (true);
 
 			setComplete ();
 		}
@@ -350,14 +357,25 @@ package nx.formations;
 			oX = __formationPosition.oX;
 			oY = __formationPosition.oY;
 		}
-		
+	
 //------------------------------------------------------------------------------------------
-		public function setInuse (__flag:Bool):Void {
+		public function setPairedObjectIsDead (__flag:Bool):Void {
 			if (m_formation != null) {
 				var __formationPosition = m_formation.getFormationPositionById (m_id);
 				
 				if (__formationPosition != null) {
-					__formationPosition.setInuse (__flag);
+					__formationPosition.setPairedObjectIsDead (__flag);
+				}
+			}
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function setPairedObjectInuse (__flag:Bool):Void {
+			if (m_formation != null) {
+				var __formationPosition = m_formation.getFormationPositionById (m_id);
+				
+				if (__formationPosition != null) {
+					__formationPosition.setPairedObjectInuse (__flag);
 				}
 			}
 		}
@@ -390,7 +408,7 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoFormationAttackState ():Void {
-			setInuse (true);
+			setPairedObjectInuse (true);
 			
 			m_state = FORMATION_ATTACK_STATE;
 			
@@ -399,7 +417,7 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoAttackState ():Void {
-			setInuse (true);
+			setPairedObjectInuse (true);
 			
 			m_state = ATTACK_STATE;
 			
@@ -408,7 +426,7 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoPatternState ():Void {
-			setInuse (true);
+			setPairedObjectInuse (true);
 			
 			m_state = PATTERN_STATE;
 			
@@ -417,7 +435,7 @@ package nx.formations;
 		
 //-----------------------------------------------------------------------------------------
 		public function gotoHomeState ():Void {
-			setInuse (false);
+			setPairedObjectInuse (false);
 						
 			setComplete ();
 			

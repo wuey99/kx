@@ -42,6 +42,7 @@ package nx.task;
 		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 20;
 		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 21;
 		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 22;
+		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 23;
 			
 		public var m_object:FormationXLogicObject;
 		
@@ -150,6 +151,10 @@ package nx.task;
 					i += 1;
 					
 				// XTask9.LAUNCH_ENEMY, <task>
+					i += 1;
+					
+				// XTask9.ALL_ENEMIES_DEAD, ["01", "02", "03"]
+				case ALL_ENEMIES_DEAD:
 					i += 1;
 			}
 			
@@ -301,7 +306,7 @@ package nx.task;
 	
 					if (__formationPosition != null) {
 						getObject ().oX = __formationPosition.oX;
-						getObject ().oY = getObject ().get_offScreenTop ();
+						getObject ().oY = getObject ().offScreenTop;
 						
 						moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
 					}
@@ -441,6 +446,16 @@ package nx.task;
 					
 					getObject ().gotoFormationAttackState ();
 					
+				//------------------------------------------------------------------------------------------
+				// XTask9.ALL_ENEMIES_DEAD
+				//------------------------------------------------------------------------------------------
+				case ALL_ENEMIES_DEAD:
+					if (allEnemiesDead (cast m_taskList[m_taskIndex++])) {
+						setFlagsEQ ();
+					} else {
+						setFlagsNE ();
+					}
+					
 				//------------------------------------------------------------------------------------------	
 			}
 			
@@ -462,7 +477,25 @@ package nx.task;
 		public function isEnemyInUse (__id:String):Bool {
 			var __formationPosition:FormationPosition = getObject ().getFormationPositionById (__id);
 				
-			return __formationPosition.inuse ();
+			return __formationPosition.getPairedObjectInuse ();
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function allEnemiesDead (__enemyList:Array<Dynamic>):Bool {
+			for (__id in __enemyList) {
+				if (!isEnemyDead (__id)) {
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function isEnemyDead (__id:String):Bool {
+			var __formationPosition:FormationPosition = getObject ().getFormationPositionById (__id);
+				
+			return __formationPosition.getPairedObjectIsDead ();
 		}
 		
 		//------------------------------------------------------------------------------------------

@@ -43,10 +43,10 @@ package nx.formations;
 		// public var skyRect(get, set):XRect;
 		// public var m_skyRect:XRect;
 		
-		public var offScreenLeft(get, null):Float;
-		public var offScreenRight(get, null):Float;
-		public var offScreenTop(get, null):Float;
-		public var offScreenBottom(get, null):Float;
+		// public var offScreenLeft(get, null):Float;
+		// public var offScreenRight(get, null):Float;
+		// public var offScreenTop(get, null):Float;
+		// public var offScreenBottom(get, null):Float;
 		
 		public var m_completeCount:Int;
 		public var m_totalEnemyCount:Int;

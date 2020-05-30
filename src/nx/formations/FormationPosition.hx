@@ -26,7 +26,8 @@ package nx.formations;
 		public var script:XTask;
 		
 		public var m_pairedObject:FormationXLogicObject;
-		public var m_inuse:Bool;
+		public var m_pairedObjectIsDead:Bool;
+		public var m_pairedObjectInuse:Bool;
 		
 		//------------------------------------------------------------------------------------------
 		public function new () {
@@ -47,7 +48,8 @@ package nx.formations;
 			script = addEmptyTask ();
 			
 			setPairedObject (null);
-			setInuse (true);
+			setPairedObjectIsDead (false);
+			setPairedObjectInuse (true);
 			
 			Idle_Script ();
 		}
@@ -71,15 +73,25 @@ package nx.formations;
 		public function getPairedObject ():FormationXLogicObject {
 			return m_pairedObject;
 		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getPairedObjectIsDead ():Bool {
+			return m_pairedObjectIsDead;
+		}
 
 		//------------------------------------------------------------------------------------------
-		public function inuse ():Bool {
-			return m_inuse;
+		public function setPairedObjectIsDead (__value:Bool):Void {
+			m_pairedObjectIsDead = __value;
 		}
 		
 		//------------------------------------------------------------------------------------------
-		public function setInuse (__flag:Bool):Void {
-			m_inuse = __flag;
+		public function getPairedObjectInuse ():Bool {
+			return m_pairedObjectInuse;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function setPairedObjectInuse (__flag:Bool):Void {
+			m_pairedObjectInuse = __flag;
 		}
 		
 		//------------------------------------------------------------------------------------------
