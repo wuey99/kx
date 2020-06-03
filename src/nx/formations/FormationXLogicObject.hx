@@ -2,7 +2,6 @@
 package nx.formations;
 	
 	import assets.*;
-	import js.html.ConstrainDOMStringParameters;
 	
 	import kx.*;
 	import kx.geom.*;
@@ -64,6 +63,8 @@ package nx.formations;
 		
 		public var m_completed:Bool;
 		
+		public var m_pauseAttacks:Bool;
+		
 		public static inline var PATTERN_STATE:Int = 0;
 		public static inline var HOME_STATE:Int = 1;
 		public static inline var FORMATION_ATTACK_STATE:Int = 2;
@@ -71,12 +72,12 @@ package nx.formations;
 		
 		public var m_state:Int;
 		
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function new (__xxx:XWorld = null) {
 			super ();
 		}
 		
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public override function setupX ():Void {
 			super.setupX ();
 						
@@ -103,6 +104,7 @@ package nx.formations;
 			m_totalTicks = 0;
 			
 			m_completed = false;
+			m_pauseAttacks = false;
 			
 			addTask ([				
 				XTask.LABEL, "loop",
@@ -128,7 +130,7 @@ package nx.formations;
 			]);
 		}
 		
-	//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public override function cleanup ():Void {
 			super.cleanup ();
 			
@@ -147,37 +149,37 @@ package nx.formations;
 			setComplete ();
 		}
 
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function get_offScreenTop ():Float {
 			return skyRect.y - 128;
 		}
 
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function get_offScreenBottom ():Float {
 			return skyRect.y + skyRect.height + 128;
 		}
 		
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function get_offScreenLeft ():Float {
 			return skyRect.x - 224;
 		}
 
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function get_offScreenRight ():Float {
 			return skyRect.x + skyRect.width + 224;
 		}
 
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function getScreenX (__percentage:Float):Float {
 			return skyRect.x + skyRect.width * __percentage;
 		}
 		
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function getScreenY (__percentage:Float):Float {
 			return skyRect.y + skyRect.height * __percentage;
 		}
 		
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function get_skyRect ():XRect {
 			if (m_skyRect == null) {
 				m_skyRect = G.appX.getSkyRect ();
@@ -193,6 +195,11 @@ package nx.formations;
 			return m_skyRect;
 		}
 
+//------------------------------------------------------------------------------------------
+		public function returnHome ():Void {
+			m_pauseAttacks = true;
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function setComplete ():Void {
 			if (m_completed) {
@@ -409,6 +416,8 @@ package nx.formations;
 //-----------------------------------------------------------------------------------------
 		public function gotoFormationAttackState ():Void {
 			setPairedObjectInuse (true);
+		
+			m_pauseAttacks = false;
 			
 			m_state = FORMATION_ATTACK_STATE;
 			
@@ -438,7 +447,7 @@ package nx.formations;
 			setPairedObjectInuse (false);
 						
 			setComplete ();
-			
+		
 			m_state = HOME_STATE;
 			
 			Home_Script ();

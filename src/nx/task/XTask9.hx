@@ -45,6 +45,7 @@ package nx.task;
 		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 23;
 			
 		public var m_object:FormationXLogicObject;
+		public var m_targetObject:FormationXLogicObject;
 		
 		//------------------------------------------------------------------------------------------
 		public function new () {
@@ -305,6 +306,8 @@ package nx.task;
 					var __formationPosition:FormationPosition = getObject ().getFormationPositionById (getObject ().m_id);
 	
 					if (__formationPosition != null) {
+						getObject ().returnHome ();
+
 						getObject ().oX = __formationPosition.oX;
 						getObject ().oY = getObject ().offScreenTop;
 						
@@ -391,10 +394,10 @@ package nx.task;
 								
 							__formationPosition = getObject ().getFormationPositionById (__id);
 								
-							if (__formationPosition.getPairedObject () != null) {
+							if (__formationPosition.getPairedObject () != null && !__formationPosition.getPairedObjectIsDead () && !__formationPosition.getPairedObjectInuse ()) {
 								trace (": GET_NEXT_ENEMY: ", __id);
 								
-								m_object = __formationPosition.getPairedObject ();
+								m_targetObject = __formationPosition.getPairedObject ();
 								
 								__processed = true;
 							}
@@ -424,10 +427,10 @@ package nx.task;
 								
 							__formationPosition = getObject ().getFormationPositionById (__id);
 								
-							if (__formationPosition.getPairedObject () != null) {
+							if (__formationPosition.getPairedObject () != null && !__formationPosition.getPairedObjectIsDead () && !__formationPosition.getPairedObjectInuse ()) {
 								trace (": GET_RANDOM_ENEMY: ", __id);
 								
-								m_object = __formationPosition.getPairedObject ();	
+								m_targetObject = __formationPosition.getPairedObject ();	
 							
 								__processed = true;
 							}
@@ -442,9 +445,9 @@ package nx.task;
 				case LAUNCH_ENEMY:
 					var __pattern:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					
-					getObject ().setPattern (__pattern);
+					m_targetObject.setPattern (__pattern);
 					
-					getObject ().gotoFormationAttackState ();
+					m_targetObject.gotoFormationAttackState ();
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.ALL_ENEMIES_DEAD
