@@ -148,8 +148,8 @@ package kx.texture;
 					function (x:Dynamic /* */):Void {
 						var __className:String = cast x; /* as String */
 						
-						trace (": ===================================================: ");
-						trace (": finishing: ", __className);
+						// trace (": ===================================================: ");
+						// trace (": finishing: ", __className);
 						
 						var __movieClipMetadata:MovieClipMetadata = m_movieClips.get (__className);
 						
@@ -157,10 +157,10 @@ package kx.texture;
 						__movieClip = __movieClipMetadata.getMovieClip ();
 						__realBounds = __movieClipMetadata.getRealBounds ();
 						
-						trace (": index: ", __index);
-						trace (": tileset: ", __tileset);
-						trace (": movieClip: ", __movieClip);
-						trace (": realBounds: ", __realBounds);
+						// trace (": index: ", __index);
+						// trace (": tileset: ", __tileset);
+						// trace (": movieClip: ", __movieClip);
+						// trace (": realBounds: ", __realBounds);
 						
 						if (__index == m_currentBitmapIndex) {
 							__movieClipMetadata.setMasterTileset (__tileset);
@@ -171,9 +171,9 @@ package kx.texture;
 								__movieClipMetadata.setTileId (i, __tileId);
 								__movieClipMetadata.setTileset (i, __tileset);
 								
-								trace (":    frame: ", i);
-								trace (":    tileId: ", __tileId);
-								trace (":    rect: ", __rect);
+								// trace (":    frame: ", i);
+								// trace (":    tileId: ", __tileId);
+								// trace (":    rect: ", __rect);
 							}
 						}
 					}
@@ -242,8 +242,8 @@ package kx.texture;
 					function (x:Dynamic /* */):Void {
 						var __className:String = cast x; /* as String */
 						
-						trace (": ===================================================: ");
-						trace (": finishing: ", __className);
+						// trace (": ===================================================: ");
+						// trace (": finishing: ", __className);
 						
 						var __movieClipMetadata:MovieClipMetadata = m_movieClips.get (__className);
 						
@@ -251,10 +251,10 @@ package kx.texture;
 						__movieClip = __movieClipMetadata.getMovieClip ();
 						__realBounds = __movieClipMetadata.getRealBounds ();
 						
-						trace (": index: ", __index);
-						trace (": tileset: ", __tileset);
-						trace (": movieClip: ", __movieClip);
-						trace (": realBounds: ", __realBounds);
+						// trace (": index: ", __index);
+						// trace (": tileset: ", __tileset);
+						// trace (": movieClip: ", __movieClip);
+						// trace (": realBounds: ", __realBounds);
 						
 						for (i in 0 ... __movieClip.totalFrames) {
 							__index = __movieClipMetadata.getTilesetIndex (i);
@@ -265,9 +265,9 @@ package kx.texture;
 								__movieClipMetadata.setTileId (i, __tileId);
 								__movieClipMetadata.setTileset (i, __tileset);
 									
-								trace (":    frame: ", i);
-								trace (":    tileId: ", __tileId);
-								trace (":    rect: ", __rect);
+								// trace (":    frame: ", i);
+								// trace (":    tileId: ", __tileId);
+								// trace (":    rect: ", __rect);
 							}
 						}
 					}
@@ -435,7 +435,7 @@ package kx.texture;
 
 			var i:Int;
 			
-			trace (": XTileSubTextureManager: totalFrames: ", __className, __movieClip.totalFrames);
+			// trace (": XTileSubTextureManager: totalFrames: ", __className, __movieClip.totalFrames);
 			
 			var __index:Int = findFreeTexture (__movieClip);
 			
@@ -453,7 +453,7 @@ package kx.texture;
 			for (i in 0 ... __movieClip.totalFrames) {
 				__movieClip.gotoAndStop (i+1);
 				
-				trace (": getBounds: ", __className, __getRealBounds (__movieClip));
+				// trace (": getBounds: ", __className, __getRealBounds (__movieClip));
 				
 				__realBounds = __getRealBounds (__movieClip);
 				
@@ -466,7 +466,7 @@ package kx.texture;
 				__rect.width -= __padding * 2;
 				__rect.height -= __padding * 2;
 				
-				trace (": rect: ", __rect);
+				// trace (": rect: ", __rect);
 				
 				__movieClipMetadata.addTile (0, __index, __rect);
 			}
@@ -488,7 +488,7 @@ package kx.texture;
 			
 			var i:Int;
 			
-			trace (": XTileSubTextureManager: totalFrames: ", __className, __movieClip.totalFrames);
+			// trace (": XTileSubTextureManager: totalFrames: ", __className, __movieClip.totalFrames);
 			
 			var __index:Int = m_count - 1;
 			
@@ -506,7 +506,7 @@ package kx.texture;
 			for (i in 0 ... __movieClip.totalFrames) {
 				__movieClip.gotoAndStop (i+1);
 				
-				trace (": getBounds: ", __className, __getRealBounds (__movieClip));
+				// trace (": getBounds: ", __className, __getRealBounds (__movieClip));
 				
 				__realBounds = __getRealBounds (__movieClip);
 				
@@ -515,7 +515,7 @@ package kx.texture;
 				);
 				
 				if (__rect == null) {
-					trace (": split @: ", m_count, __className, i);
+					// trace (": split @: ", m_count, __className, i);
 					
 					__end (); __begin ();
 					
@@ -533,7 +533,7 @@ package kx.texture;
 				__rect.width -= __padding * 2;
 				__rect.height -= __padding * 2;
 				
-				trace (": rect: ", __rect);
+				// trace (": rect: ", __rect);
 				
 				__movieClipMetadata.addTile (0, __index, __rect);
 			}
@@ -553,7 +553,7 @@ package kx.texture;
 			
 			m_count++;
 			
-			trace (": XTileSubTextureManager: count: ", m_count);
+			// trace (": XTileSubTextureManager: count: ", m_count);
 		}
 		
 		//------------------------------------------------------------------------------------------

@@ -169,7 +169,7 @@ package kx.world.ui;
 		}
 
 //------------------------------------------------------------------------------------------
-		public function __onMouseOver ():Void {
+		public function __onMouseOver ():Void {	
 			if (m_disabledFlag) {
 				return;
 			}
@@ -224,8 +224,6 @@ package kx.world.ui;
 		
 //------------------------------------------------------------------------------------------
 		public function onMouseOver (e:MouseEvent):Void {
-			trace (": onMouseOver: ", e);
-			
 			__onMouseOver ();
 		}			
 

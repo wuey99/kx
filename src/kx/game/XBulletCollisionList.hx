@@ -74,7 +74,7 @@ package kx.game;
 			var i:Int;
 
 			for (i in 0 ... xxx.getMaxLayers ()) {
-				for (__key__ in m_rects[i].keys ()) { m_rects[i].remove (__key__); } // removeAllKeys
+				XType.removeAllKeys (m_rects[i]);
 			}
 			
 			m_XSubRectPoolManager.returnAllObjects ();

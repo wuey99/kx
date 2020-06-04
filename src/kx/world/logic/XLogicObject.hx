@@ -562,7 +562,7 @@ package kx.world.logic;
 				}
 			);
 			
-			for (__key__ in m_bitmaps.keys ()) { m_bitmaps.remove (__key__); } // removeAllKeys
+			XType.removeAllKeys (m_bitmaps);
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -581,7 +581,7 @@ package kx.world.logic;
 				}
 			);
 			
-			for (__key__ in m_movieClips.keys ()) { m_movieClips.remove (__key__); } // removeAllKeys
+			XType.removeAllKeys (m_movieClips);
 		}
 
 //------------------------------------------------------------------------------------------
@@ -603,7 +603,7 @@ package kx.world.logic;
 				}
 			);
 			
-			for (__key__ in m_textSprites.keys ()) { m_textSprites.remove (__key__); } // removeAllKeys
+			XType.removeAllKeys (m_textSprites);
 		}
 		
 //------------------------------------------------------------------------------------------
