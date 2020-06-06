@@ -40,16 +40,9 @@ package nx.formations;
 		public var m_formationPositions:Map<String, FormationPosition>;
 		public var m_attackPositions:Map<String, AttackPosition>;
 		
-		// public var skyRect(get, set):XRect;
-		// public var m_skyRect:XRect;
-		
-		// public var offScreenLeft(get, null):Float;
-		// public var offScreenRight(get, null):Float;
-		// public var offScreenTop(get, null):Float;
-		// public var offScreenBottom(get, null):Float;
-		
 		public var m_completeCount:Int;
 		public var m_totalEnemyCount:Int;
+		public var m_totalInuseCount:Int;
 		
 		//------------------------------------------------------------------------------------------
 		public function new () {
@@ -74,6 +67,7 @@ package nx.formations;
 			
 			m_completeCount = 0;
 			m_totalEnemyCount = 0;
+			m_totalInuseCount = 0;
 			
 			Idle_Script ();	
 		}
@@ -199,58 +193,11 @@ package nx.formations;
 			__enemyObject.gotoPatternState ();
 			
 			incTotalEnemyCount ();
+			incTotalInuseCount ();
 			
 			G.appX.getLevelObject ().addXLogicObject (__enemyObject);
 		}
-		
-		//------------------------------------------------------------------------------------------
-		#if false
-		public function get_offScreenTop ():Float {
-			return skyRect.y - 128;
-		}
 
-		//------------------------------------------------------------------------------------------
-		public function get_offScreenBottom ():Float {
-			return skyRect.y + skyRect.height + 128;
-		}
-		
-		//------------------------------------------------------------------------------------------
-		public function get_offScreenLeft ():Float {
-			return skyRect.x - 224;
-		}
-
-		//------------------------------------------------------------------------------------------
-		public function get_offScreenRight ():Float {
-			return skyRect.x + skyRect.width + 224;
-		}
-
-		//------------------------------------------------------------------------------------------
-		public function getScreenX (__percentage:Float):Float {
-			return skyRect.x + skyRect.width * __percentage;
-		}
-		
-		//------------------------------------------------------------------------------------------
-		public function getScreenY (__percentage:Float):Float {
-			return skyRect.y + skyRect.height * __percentage;
-		}
-		
-		//------------------------------------------------------------------------------------------
-		public function get_skyRect ():XRect {
-			if (m_skyRect == null) {
-				m_skyRect = G.appX.getSkyRect ();
-			}
-			
-			return m_skyRect;
-		}
-		
-		//------------------------------------------------------------------------------------------
-		public function set_skyRect (__rect:XRect):XRect {
-			m_skyRect = __rect;
-			
-			return m_skyRect;
-		}
-		#end
-		
 		//------------------------------------------------------------------------------------------
 		public function getCompleteCount ():Int {
 			return m_completeCount;
@@ -283,6 +230,21 @@ package nx.formations;
 			m_totalEnemyCount++;
 			
 			return m_totalEnemyCount;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getTotalInuseCount ():Int {
+			return m_totalInuseCount;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public override function incTotalInuseCount ():Void {
+			m_totalInuseCount++;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public override function decTotalInuseCount ():Void {
+			m_totalInuseCount--;
 		}
 		
 		//------------------------------------------------------------------------------------------

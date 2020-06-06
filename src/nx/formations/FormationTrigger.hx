@@ -97,7 +97,7 @@ package nx.formations;
 		
 		//------------------------------------------------------------------------------------------
 		// <params
-		//		formationName			= String
+		//		formationClassName		= String
 		//		m_formationTriggerY		= Float
 		// />
 		//------------------------------------------------------------------------------------------
@@ -120,8 +120,8 @@ package nx.formations;
 							function ():Void {
 								var __point:XPoint = cast xxx.getXPointPoolManager ().borrowObject ();	
 								
-								__point.x = x;
-								__point.y = y;
+								__point.x = oX;
+								__point.y = oY;
 								
 								G.appX.getLevelObjectX ().translateGroundToSky (__point);
 								

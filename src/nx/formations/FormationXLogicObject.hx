@@ -142,6 +142,10 @@ package nx.formations;
 			
 			m_XTaskSubManager9.removeAllTasks ();
 			
+			if (getPairedObjectInuse ()) {
+				decTotalInuseCount ();
+			}
+			
 			setPairedObjectIsDead (true);
 			
 			setPairedObjectInuse (true);
@@ -377,6 +381,19 @@ package nx.formations;
 		}
 		
 //------------------------------------------------------------------------------------------
+		public function getPairedObjectInuse ():Bool {
+			if (m_formation != null) {
+				var __formationPosition = m_formation.getFormationPositionById (m_id);
+				
+				if (__formationPosition != null) {
+					return __formationPosition.getPairedObjectInuse ();
+				}
+			}
+			
+			return false;
+		}
+				
+//------------------------------------------------------------------------------------------
 		public function setPairedObjectInuse (__flag:Bool):Void {
 			if (m_formation != null) {
 				var __formationPosition = m_formation.getFormationPositionById (m_id);
@@ -384,6 +401,20 @@ package nx.formations;
 				if (__formationPosition != null) {
 					__formationPosition.setPairedObjectInuse (__flag);
 				}
+			}
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function incTotalInuseCount ():Void {
+			if (m_formation != null) {
+				m_formation.incTotalInuseCount ();
+			}
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function decTotalInuseCount ():Void {
+			if (m_formation != null) {
+				m_formation.decTotalInuseCount ();
 			}
 		}
 		
@@ -421,6 +452,8 @@ package nx.formations;
 			
 			m_state = FORMATION_ATTACK_STATE;
 			
+			incTotalInuseCount ();
+			
 			FormationAttack_Script ();
 		}
 		
@@ -448,6 +481,8 @@ package nx.formations;
 						
 			setComplete ();
 		
+			decTotalInuseCount ();
+			
 			m_state = HOME_STATE;
 			
 			Home_Script ();

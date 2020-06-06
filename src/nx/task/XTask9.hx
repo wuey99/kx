@@ -193,7 +193,11 @@ package nx.task;
 					if (__formationPosition != null) {
 						getObject ().oX = __formationPosition.oX;
 						getObject ().oY = __formationPosition.oY;
-						
+						getObject ().oDX = 0;
+						getObject ().oDY = 0;
+						getObject ().m_autoRotation = false;
+						getObject ().m_autoSpeed = false;
+					
 						getObject ().gotoHomeState ();
 					}
 					
