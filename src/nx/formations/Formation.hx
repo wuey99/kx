@@ -44,6 +44,9 @@ package nx.formations;
 		public var m_totalEnemyCount:Int;
 		public var m_totalInuseCount:Int;
 		
+		public var m_triggerID:Int;
+		public var m_buggedOut:Bool;
+		
 		//------------------------------------------------------------------------------------------
 		public function new () {
 			super ();
@@ -70,6 +73,30 @@ package nx.formations;
 			m_totalInuseCount = 0;
 			
 			Idle_Script ();	
+			
+			m_buggedOut = false;
+			
+			m_triggerID = G.appX.addTriggerXListener (onTriggerSignal);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public override function cleanup():Void 
+		{
+			 super.cleanup();
+			 
+			 G.appX.removeTriggerXListener (m_triggerID);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function onTriggerSignal (__trigger:String):Void {
+			trace (": bugged out: ", __trigger);
+			
+			m_buggedOut = true;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function buggedOut ():Bool {
+			return m_buggedOut;
 		}
 		
 		//------------------------------------------------------------------------------------------

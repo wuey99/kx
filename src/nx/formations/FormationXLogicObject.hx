@@ -339,7 +339,7 @@ package nx.formations;
 		
 //------------------------------------------------------------------------------------------
 		public function setPattern (__pattern:Array<Dynamic>):Void {
-			patternMovement.gotoTask (__pattern);
+			patternMovement.gotoTask (__pattern, true);
 		}
 
 //------------------------------------------------------------------------------------------

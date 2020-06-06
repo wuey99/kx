@@ -29,6 +29,7 @@ package nx.formations;
 		public var m_formation:Formation;
 		
 		// params
+		public var m_id:String;
 		public var m_formationClassName:String;
 		public var m_formationTriggerY:Float;
 		
@@ -67,6 +68,14 @@ package nx.formations;
 		
 		//------------------------------------------------------------------------------------------
 		public function createFormation ():Void {
+			if (m_formationClassName == "kill") {
+				G.appX.fireTriggerXSignal ("kill, " + m_id);
+				
+				nukeLater ();
+				
+				return;
+			}
+			
 			if (m_formation == null) {
 				m_formation = cast xxx.getXLogicManager ().initXLogicObject (
 					// parent
@@ -97,8 +106,9 @@ package nx.formations;
 		
 		//------------------------------------------------------------------------------------------
 		// <params
+		//		id						= String
 		//		formationClassName		= String
-		//		m_formationTriggerY		= Float
+		//		triggerY				= Float
 		// />
 		//------------------------------------------------------------------------------------------
 		private function __setupItemParamsXML ():Void {
