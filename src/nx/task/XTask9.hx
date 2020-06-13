@@ -43,6 +43,7 @@ package nx.task;
 		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 21;
 		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 22;
 		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 23;
+		public static inline var NUKE:Int = XTask.XTask_OPCODES + 24;
 			
 		public var m_object:FormationXLogicObject;
 		public var m_targetObject:FormationXLogicObject;
@@ -157,6 +158,9 @@ package nx.task;
 				// XTask9.ALL_ENEMIES_DEAD, ["01", "02", "03"]
 				case ALL_ENEMIES_DEAD:
 					i += 1;
+					
+				// XTask9.NUKE
+				case NUKE:
 			}
 			
 			return i;
@@ -462,6 +466,12 @@ package nx.task;
 					} else {
 						setFlagsNE ();
 					}
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.NUKE	
+				//------------------------------------------------------------------------------------------
+				case NUKE:
+					getObject ().nukeLater ();
 					
 				//------------------------------------------------------------------------------------------	
 			}

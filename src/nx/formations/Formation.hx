@@ -386,6 +386,28 @@ package nx.formations;
 			];
 		}
 		
+		//------------------------------------------------------------------------------------------
+		public function isTotalInuseCountLessThan (__count:Int):Array<Dynamic> {
+			return [
+				XTask.FLAGS, function (__task:XTask):Void {
+					__task.getParent ().ifTrue (getTotalInuseCount () < __count);
+				},
+							
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function percentChanceX (__percentage:Float):Array<Dynamic> {
+			return [
+				XTask.FLAGS, function (__task:XTask):Void {
+					__task.getParent ().ifTrue (getTotalInuseCount () <= __percentage);
+				},
+							
+				XTask.RETN,
+			];
+		}
+		
 	//------------------------------------------------------------------------------------------
 	}
 	

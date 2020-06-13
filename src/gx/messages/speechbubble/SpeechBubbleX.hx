@@ -27,6 +27,11 @@
 //------------------------------------------------------------------------------------------
 package gx.messages.speechbubble;
 	
+	import openfl.display.*;
+	import openfl.geom.*;
+	import openfl.text.*;
+	import openfl.utils.*;
+	
 	import gx.messages.level.*;
 	
 	import kx.*;
@@ -38,11 +43,6 @@ package gx.messages.speechbubble;
 	import kx.world.sprite.*;
 	import kx.xml.*;
 	
-	import openfl.display.*;
-	import openfl.geom.*;
-	import openfl.text.*;
-	import openfl.utils.*;
-	
 	//------------------------------------------------------------------------------------------
 	class SpeechBubbleX extends XLogicObjectCX {
 		public var m_sprite:MovieClip;
@@ -52,6 +52,18 @@ package gx.messages.speechbubble;
 		
 		public var m_bubbleWidth:Float;
 		public var m_bubbleHeight:Float;
+		
+		public var m_bubblePointX:Float;
+		public var m_bubblePointY:Float;
+		
+		public var m_left:Float;
+		public var m_right:Float;
+		
+		public var m_cornerRadius:Float;
+		
+		public var m_fontName:String;
+		public var m_fontSize:Int;
+		public var m_padding:Int;
 		
 		public var m_bubbleMessageObject:LevelMessageX;
 		
@@ -66,6 +78,29 @@ package gx.messages.speechbubble;
 			
 			m_bubbleWidth = getArg (args, 0);
 			m_bubbleHeight = getArg (args, 1);
+			
+			m_bubblePointX = 20;
+			m_bubblePointY = -160;
+			
+			m_left = 0;
+			m_right = 0;
+			
+			m_cornerRadius = 20;
+			
+			m_fontName = "Aller";
+			m_fontSize = 20;
+			m_padding = 8;
+			
+			if (args.length > 3) {
+				m_bubblePointX = getArg (args, 2);
+				m_bubblePointY = getArg (args, 3);
+				m_left = getArg (args, 4);
+				m_right = getArg (args, 5);
+				m_cornerRadius = getArg (args, 6);
+				m_padding = getArg (args, 7);
+				m_fontName = getArg (args, 8);
+				m_fontSize = getArg (args, 9);
+			}
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -101,7 +136,7 @@ package gx.messages.speechbubble;
 				g.clear();
 				g.lineStyle (2, 0x888888, 1, true);
 				g.beginGradientFill (GradientType.LINEAR, [0xe0e0e0, 0xffffff], [1,1], [1,0xff],m);
-				SpeechBubble.drawSpeechBubble (m_sprite, new Rectangle (20, -160, m_bubbleWidth, m_bubbleHeight), 20, new Point (0, 0));
+				SpeechBubble.drawSpeechBubble (m_sprite, new Rectangle (m_bubblePointX, m_bubblePointY, m_bubbleWidth, m_bubbleHeight), m_cornerRadius, new Point (0, 0), m_left, m_right);
 				g.endFill();
 			
 				var self:Dynamic /* */ = this;
@@ -118,7 +153,7 @@ package gx.messages.speechbubble;
 							// item, layer, depth
 							null, getLayer (), getDepth () + 100,
 							// x, y, z
-							20 + 8, -160 + 8, 0,
+							m_bubblePointX + m_padding, m_bubblePointY + m_padding, 0,
 							// scale, rotation
 							1.0, 0
 						) /* as LevelMessageX */;
@@ -143,7 +178,7 @@ package gx.messages.speechbubble;
 					//						__message:String,
 					__message,
 					//						__size:Number,
-					20,
+					m_fontSize,
 					//						__color:Number,
 					0x404040,
 					//						__width:Number,
@@ -157,7 +192,7 @@ package gx.messages.speechbubble;
 					//						__leading:Number,
 					0,
 					//						__fontName:String,
-					"Aller"
+					m_fontName
 				);		
 			}
 		}

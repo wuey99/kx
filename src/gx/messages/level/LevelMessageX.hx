@@ -128,7 +128,7 @@ package gx.messages.level;
 			m_text.selectable = false;
 			m_text.multiline = true;
 			m_text.wordWrap = true;
-//			m_text.embedFonts = true;
+			m_text.embedFonts = true;
 			
 //			var __font:Font = new XAssets.ArialFontClass ();	
 //			m_text.font = __font.fontName;
