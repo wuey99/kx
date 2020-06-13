@@ -84,9 +84,12 @@ package nx.touch;
 		public function onTouchMove (e:TouchEvent):Void {
 			if (m_touchTrackers.exists (e.touchPointID)) {
 				var __touchTracker:XTouchTracker = m_touchTrackers.get (e.touchPointID);
-				__touchTracker.updatePos (e);
 				
-				m_touchMoveSignal.fireSignal (e);
+				if (__touchTracker != null) {
+					__touchTracker.updatePos (e);
+					
+					m_touchMoveSignal.fireSignal (e);
+				}
 			}
 		}
 		
@@ -94,13 +97,16 @@ package nx.touch;
 		public function onTouchEnd (e:TouchEvent):Void {
 			if (m_touchTrackers.exists (e.touchPointID)) {
 				var __touchTracker:XTouchTracker = m_touchTrackers.get (e.touchPointID);
-				__touchTracker.updatePos (e);
 				
-				m_touchEndSignal.fireSignal (e);
-				
-				__touchTracker.cleanup ();
-				
-				removeTouchTracker (e.touchPointID);
+				if (__touchTracker != null) {
+					__touchTracker.updatePos (e);
+					
+					m_touchEndSignal.fireSignal (e);
+					
+					__touchTracker.cleanup ();
+					
+					removeTouchTracker (e.touchPointID);
+				}
 			}
 		}
 		
@@ -163,6 +169,26 @@ package nx.touch;
 			return __touchTracker;
 		}
 
+		//------------------------------------------------------------------------------------------
+		public function getTouchTracker (e:TouchEvent, __type:String, __params:Array<Dynamic>):XTouchTracker {
+			var __touchTracker:XTouchTracker;
+			
+			if (!m_touchTrackers.exists (e.touchPointID)) {
+				__touchTracker = createTouchTracker ();
+				__touchTracker.setup (m_XApp, __type, __params);
+
+				m_touchTrackers.set (e.touchPointID, __touchTracker);
+			
+				__touchTracker.initPos (e);
+						
+				m_trackerCount++;
+			} else {
+				__touchTracker = m_touchTrackers.get (e.touchPointID);
+			}
+			
+			return __touchTracker;
+		}
+		
 		//------------------------------------------------------------------------------------------
 		public function removeTouchTracker (__touchPointID):Void {
 			m_touchTrackers.remove (__touchPointID);
