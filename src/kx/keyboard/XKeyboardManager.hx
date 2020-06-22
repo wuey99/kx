@@ -27,15 +27,16 @@
 //------------------------------------------------------------------------------------------
 package kx.keyboard;
 	
-	import kx.world.*;
-	import kx.geom.*;
-	import kx.task.*;
-	import kx.collections.*;
-	
 	import openfl.display.*;
+	import openfl.events.*;
 	import openfl.text.*;
 	import openfl.utils.*;
-	import openfl.events.*;
+	
+	import kx.collections.*;
+	import kx.geom.*;
+	import kx.signals.*;
+	import kx.task.*;
+	import kx.world.*;
 	
 //------------------------------------------------------------------------------------------	
 	class XKeyboardManager {
@@ -45,6 +46,8 @@ package kx.keyboard;
 		private var m_keyCodes:Map<Int, Int>; // <Int, Int>
 		private var m_parent:Sprite;
 		private var m_mouseDownListenerID:Int;
+		private var m_keyDownSignal:XSignal;
+		private var m_keyUpSignal:XSignal;
 		
 //------------------------------------------------------------------------------------------
 		public function new (__xxx:XWorld) {
@@ -56,6 +59,9 @@ package kx.keyboard;
 			m_keyCodes = new Map<Int, Int> (); // <Int, Int>
 			
 			createSprites ();
+			
+			m_keyDownSignal = new XSignal ();
+			m_keyUpSignal = new XSignal ();
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -144,6 +150,36 @@ package kx.keyboard;
 			if (m_keyCodes.exists (__c)) {
 				m_keyCodes.set (__c, 0);
 			}
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function addKeyDownListener (__listener:Dynamic /* Function */):Int {
+			return m_keyDownSignal.addListener (__listener);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function removeKeyDownListener (__id:Int):Void {
+			m_keyDownSignal.removeListener (__id);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function removeAllKeyDownListeners ():Void {
+			m_keyDownSignal.removeAllListeners ();
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function addKeyUpListener (__listener:Dynamic /* Function */):Int {	
+			return m_keyUpSignal.addListener (__listener);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function removeKeyUpListener (__id:Int):Void {
+			m_keyUpSignal.removeListener (__id);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function removeAllKeyUpnListeners ():Void {
+			m_keyUpSignal.removeAllListeners ();
 		}
 		
 		//------------------------------------------------------------------------------------------
