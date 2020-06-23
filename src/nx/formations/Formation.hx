@@ -401,7 +401,7 @@ package nx.formations;
 		public function percentChanceX (__percentage:Float):Array<Dynamic> {
 			return [
 				XTask.FLAGS, function (__task:XTask):Void {
-					__task.getParent ().ifTrue (getTotalInuseCount () <= __percentage);
+					__task.getParent ().ifTrue (Math.random () * 100 <= __percentage);
 				},
 							
 				XTask.RETN,
