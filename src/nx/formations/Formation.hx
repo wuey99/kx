@@ -192,6 +192,7 @@ package nx.formations;
 		
 		//------------------------------------------------------------------------------------------
 		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):Void {
+			#if true
 			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObjectFromPool (
 				// parent
 				G.appX.getLevelObject (),
@@ -204,6 +205,20 @@ package nx.formations;
 				// scale, rotation
 				1.0, 0
 			);
+			#else
+			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObject (
+				// parent
+				G.appX.getLevelObject (),
+				// logicObject
+				XType.createInstance (__class),
+				// item, layer, depth
+				null, G.appX.SKY_LAYER, getDepth (),
+				// x, y, z
+				__x, __y, 0,
+				// scale, rotation
+				1.0, 0
+			);
+			#end
 			
 			__enemyObject.setID (__id);
 			__enemyObject.setFormation (this);

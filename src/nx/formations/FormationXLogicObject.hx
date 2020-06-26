@@ -84,6 +84,7 @@ package nx.formations;
 			m_targetX = 0;
 			m_targetY = 0;
 			m_speed = 0;
+			m_accel = 0;
 			m_targetRotation = 180;
 			m_rotationTicks = 0x0000;
 			m_rotationSpeed = 0;
