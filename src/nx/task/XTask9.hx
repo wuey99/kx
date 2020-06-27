@@ -304,7 +304,8 @@ package nx.task;
 					var __formationPosition:FormationPosition = getObject ().getFormationPositionById (getObject ().m_id);
 	
 					if (__formationPosition != null) {
-						moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
+						// moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
+						moveToObject (getObject ().oX, getObject ().oY, __formationPosition, __evalNumber ());
 					}
 					
 				//------------------------------------------------------------------------------------------
@@ -319,7 +320,8 @@ package nx.task;
 						getObject ().oX = __formationPosition.oX;
 						getObject ().oY = getObject ().offScreenTop;
 						
-						moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
+						// moveTo (getObject ().oX, getObject ().oY, __formationPosition.oX, __formationPosition.oY, __evalNumber ());
+						moveToObject (getObject ().oX, getObject ().oY, __formationPosition, __evalNumber ());
 					}
 					
 				//------------------------------------------------------------------------------------------
@@ -517,13 +519,12 @@ package nx.task;
 		
 		//------------------------------------------------------------------------------------------
 		private function moveTo (__startX:Float, __startY:Float, __targetX:Float, __targetY:Float, __ticks:Float):Void {
-			getObject ().m_targetX = __targetX;
-			getObject ().m_targetY = __targetY;
-			
-			getObject ().oDX = (__targetX - __startX) / ticksToSeconds (__ticks);
-			getObject ().oDY = (__targetY - __startY) / ticksToSeconds (__ticks);
-					
-			getObject ().m_autoSpeed = false;			
+			getObject ().moveTo (__startX, __startY, __targetX, __targetY, __ticks);		
+		}
+		
+		//------------------------------------------------------------------------------------------
+		private function moveToObject (__startX:Float, __startY:Float, __logicObject:XLogicObject, __ticks:Float):Void {
+			getObject ().moveToObject (__startX, __startY, __logicObject, __ticks);
 		}
 		
 		//------------------------------------------------------------------------------------------

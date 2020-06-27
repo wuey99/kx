@@ -42,6 +42,10 @@ package nx.formations;
 		public var m_targetSpeed:Float;
 		public var m_autoSpeed:Bool;
 		
+		public var m_targetObject:XLogicObject;
+		public var m_currentTicks0:Float;
+		public var m_totalTicks0:Float;
+		
 		public var m_targetRotation:Float;
 		public var m_rotationTicks:Float;
 		public var m_rotationSpeed:Float;
@@ -90,6 +94,7 @@ package nx.formations;
 			m_rotationSpeed = 0;
 			m_autoSpeed = false;
 			m_autoRotation = false;
+			m_targetObject = null;
 			
 			m_startPos = cast xxx.getXPointPoolManager ().borrowObject ();
 			m_startDelta = cast xxx.getXPointPoolManager ().borrowObject ();	
@@ -123,6 +128,8 @@ package nx.formations;
 						applyAcceleration ();
 						
 						interpolateSplinePosition ();
+						
+						moveToObjectHandler ();
 					},
 					
 					XTask.GOTO, "loop",
@@ -193,11 +200,58 @@ package nx.formations;
 			return m_skyRect;
 		}
 		
-		//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 		public function set_skyRect (__rect:XRect):XRect {
 			m_skyRect = __rect;
 			
 			return m_skyRect;
+		}
+
+//------------------------------------------------------------------------------------------
+		public function moveTo (__startX:Float, __startY:Float, __targetX:Float, __targetY:Float, __ticks:Float):Void {
+			m_targetX = __targetX;
+			m_targetY = __targetY;
+			
+			oDX = (__targetX - __startX) / ticksToSeconds (__ticks);
+			oDY = (__targetY - __startY) / ticksToSeconds (__ticks);
+					
+			m_autoSpeed = false;			
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function moveToObject (__startX:Float, __startY:Float, __logicObject:XLogicObject, __ticks:Float):Void {
+			m_targetObject = __logicObject;
+			
+			var __time:Float = ticksToSeconds (__ticks);
+			
+			oDX = (m_targetObject.oX - __startX) / __time;
+			oDY = (m_targetObject.oY - __startY) / __time;
+			
+			m_currentTicks0 = 0;
+			m_totalTicks0 = __ticks;
+			
+			m_autoSpeed = false;
+		}
+
+//------------------------------------------------------------------------------------------
+		public function moveToObjectHandler ():Void {
+			if (m_targetObject != null) {
+				m_currentTicks0 = Math.min (m_totalTicks0, m_currentTicks0 + 0x0100);
+			
+				var __time:Float = ticksToSeconds (m_totalTicks0 - m_currentTicks0);
+				
+				if (__time > 0) {
+					oDX = (m_targetObject.oX - oX) / __time;
+					oDY = (m_targetObject.oY - oY) / __time;
+				}
+				
+				if (m_currentTicks0 >= m_totalTicks0) {
+					oX = m_targetObject.oX;
+					oY = m_targetObject.oY;
+					
+					m_targetObject = null;
+				}
+			}
 		}
 
 //------------------------------------------------------------------------------------------

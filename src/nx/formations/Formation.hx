@@ -39,6 +39,7 @@ package nx.formations;
 	class Formation extends FormationXLogicObject {
 		public var m_formationPositions:Map<String, FormationPosition>;
 		public var m_attackPositions:Map<String, AttackPosition>;
+		public var m_formationDefs:Array<FormationDef>;
 		
 		public var m_completeCount:Int;
 		public var m_totalEnemyCount:Int;
@@ -100,11 +101,28 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public function getDefaultAlpha ():Float {
+			return 0.0;
+		}
+		
+		//------------------------------------------------------------------------------------------
 		public function addFormationPositions (formationDefs:Array<FormationDef>):Void {
 			if (m_formationPositions == null) {
 				m_formationPositions = new Map<String, FormationPosition> ();
 			}
+			
+			m_formationDefs = formationDefs;
+			
+			addFormationPositionsFrom (formationDefs);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function addFormationPositionsFrom (formationDefs:Array<FormationDef>):Void {
+			addFormationPositionsFromTrigger (formationDefs);
+		}
 
+		//------------------------------------------------------------------------------------------
+		public function addFormationPositionsFromTrigger (formationDefs:Array<FormationDef>):Void {
 			var __skyRect:XRect = G.appX.getLevelObjectX ().getSkyRect ();
 			var __groundRect:XRect = G.appX.getLevelObjectX ().getGroundRect ();
 			var __skyPos:XPoint = xxx.getXPointPoolManager ().borrowObject ();
@@ -133,7 +151,7 @@ package nx.formations;
 					1.0, 0
 				);
 				
-				__formationPosition.oAlpha = 0.0;
+				__formationPosition.oAlpha = getDefaultAlpha ();
 				
 				m_formationPositions.set (formationDef.id, __formationPosition);
 				
@@ -141,6 +159,45 @@ package nx.formations;
 			}
 			
 			xxx.getXPointPoolManager ().returnObject (__skyPos);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function addFormationPositionsFromXLogicObject (formationDefs:Array<FormationDef>):Void {
+			var __x:Float = oX;
+			var __y:Float = oY;
+			
+			var __formationPosition:FormationPosition;
+			
+			for (formationDef in formationDefs) {
+				__formationPosition = cast xxx.getXLogicManager ().initXLogicObject (
+					// parent
+					G.appX.getLevelObject (),
+					// logicObject
+					new FormationPosition (),
+					// item, layer, depth
+					null, G.appX.SKY_LAYER, getDepth (),
+					// x, y, z
+					__x + formationDef.x, __y + formationDef.y, 0,
+					// scale, rotation
+					1.0, 0
+				);
+				
+				__formationPosition.oAlpha = getDefaultAlpha ();
+				
+				m_formationPositions.set (formationDef.id, __formationPosition);
+				
+				G.appX.getLevelObject ().addXLogicObject (__formationPosition);
+			}
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function updateFormationPositions ():Void {			
+			for (formationDef in m_formationDefs) {
+				var __formationPosition:FormationPosition = m_formationPositions.get (formationDef.id);
+				
+				__formationPosition.oX = oX + formationDef.x;
+				__formationPosition.oY = oY + formationDef.y;
+			}
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -192,7 +249,6 @@ package nx.formations;
 		
 		//------------------------------------------------------------------------------------------
 		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):Void {
-			#if true
 			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObjectFromPool (
 				// parent
 				G.appX.getLevelObject (),
@@ -205,20 +261,6 @@ package nx.formations;
 				// scale, rotation
 				1.0, 0
 			);
-			#else
-			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObject (
-				// parent
-				G.appX.getLevelObject (),
-				// logicObject
-				XType.createInstance (__class),
-				// item, layer, depth
-				null, G.appX.SKY_LAYER, getDepth (),
-				// x, y, z
-				__x, __y, 0,
-				// scale, rotation
-				1.0, 0
-			);
-			#end
 			
 			__enemyObject.setID (__id);
 			__enemyObject.setFormation (this);
