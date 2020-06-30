@@ -38,12 +38,13 @@ package nx.task;
 		public static inline var DISABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 16;
 		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 17;
 		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 18;
-		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 19;
-		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 20;
-		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 21;
-		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 22;
-		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 23;
-		public static inline var NUKE:Int = XTask.XTask_OPCODES + 24;
+		public static inline var SPAWN_FORMATION_ENEMY:Int = XTask.XTask_OPCODES + 19;
+		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 20;		
+		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 21;
+		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 22;
+		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 23;
+		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 24;
+		public static inline var NUKE:Int = XTask.XTask_OPCODES + 25;
 			
 		public var m_object:FormationXLogicObject;
 		public var m_targetObject:FormationXLogicObject;
@@ -139,6 +140,10 @@ package nx.task;
 				
 				// XTask9.DISABLE_AUTO_SPEED_AND_ROTATION
 				case DISABLE_AUTO_SPEED_AND_ROTATION:
+					
+				// XTask9.SPAWN_FORMATION_ENEMY, <id>, <class>, <task>, <x>, <y>
+				case SPAWN_FORMATION_ENEMY:
+					i += 5;
 					
 				// XTask9.SPAWN_ENEMY, <id>, <class>, <task>, <x>, <y>
 				case SPAWN_ENEMY:
@@ -366,6 +371,18 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 					getObject ().m_autoRotation = false;
 					getObject ().m_autoSpeed = false;
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.SPAWN_FORMATION_ENEMY
+				//------------------------------------------------------------------------------------------
+				case SPAWN_FORMATION_ENEMY:
+					var __id:String = cast m_taskList[m_taskIndex++];
+					var __class:Class<Dynamic> = cast m_taskList[m_taskIndex++];
+					var __script:Array<Dynamic> = cast m_taskList[m_taskIndex++];
+					var __x:Float = __evalNumber ();
+					var __y:Float = __evalNumber ();
+
+					getObject ().spawnFormationEnemy (__id, __class, __script, __x, __y);
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.SPAWN_ENEMY

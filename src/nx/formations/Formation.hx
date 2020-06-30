@@ -248,7 +248,7 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
-		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):Void {
+		public override function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):Void {
 			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObjectFromPool (
 				// parent
 				G.appX.getLevelObject (),
@@ -278,6 +278,41 @@ package nx.formations;
 			
 			incTotalEnemyCount ();
 			incTotalInuseCount ();
+			
+			G.appX.getLevelObject ().addXLogicObject (__enemyObject);
+		}
+
+		//------------------------------------------------------------------------------------------
+		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):Void {
+			var __formationPosition:FormationPosition = getFormationPositionById (__id);
+			
+			if (__formationPosition != null) {
+				__x = __formationPosition.oX;
+				__y = __formationPosition.oY;
+			}
+			
+			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObjectFromPool (
+				// parent
+				G.appX.getLevelObject (),
+				// logicObject
+				__class,
+				// item, layer, depth
+				null, G.appX.SKY_LAYER, getDepth (),
+				// x, y, z
+				__x, __y, 0,
+				// scale, rotation
+				1.0, 0
+			);
+			
+			__enemyObject.setID (__id);
+			
+			__enemyObject.setXMapModel (
+				G.appX.SKY_LAYER,
+				getXMapModel ()
+			);
+
+			__enemyObject.setPattern (__pattern);
+			__enemyObject.gotoPatternState ();
 			
 			G.appX.getLevelObject ().addXLogicObject (__enemyObject);
 		}
@@ -378,6 +413,38 @@ package nx.formations;
 			//------------------------------------------------------------------------------------------
 		}
 
+		//------------------------------------------------------------------------------------------
+		public function Formation_Script ():Void {
+			script.gotoTask ([
+				
+				//------------------------------------------------------------------------------------------
+				// control
+				//------------------------------------------------------------------------------------------
+				function ():Void {
+					script.addTask ([						
+						XTask.RETN,
+					]);
+					
+				},
+				
+				//------------------------------------------------------------------------------------------
+				// animation
+				//------------------------------------------------------------------------------------------	
+				XTask.LABEL, "loop",
+					function ():Void {
+	
+					}, XTask.WAIT, 0x0200,
+						
+					XTask.GOTO, "loop",
+				
+				XTask.RETN,
+				
+				//------------------------------------------------------------------------------------------			
+			]);
+			
+			//------------------------------------------------------------------------------------------
+		}
+		
 		//------------------------------------------------------------------------------------------
 		public function waitX ():Array<Dynamic> {
 			return [

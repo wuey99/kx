@@ -12,8 +12,6 @@ package nx.formations;
 	import kx.world.sprite.*;
 	import kx.world.objects.enemy.*;
 	
-	import gx.mickey.*;
-	
 	import openfl.geom.*;
 	import openfl.text.*;
 	import openfl.utils.*;

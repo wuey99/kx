@@ -418,10 +418,14 @@ package nx.formations;
 
 //------------------------------------------------------------------------------------------
 		public function setToHomePos ():Void {
-			var __formationPosition = m_formation.getFormationPositionById (m_id);
-			
-			oX = __formationPosition.oX;
-			oY = __formationPosition.oY;
+			if (m_state == HOME_STATE) {
+				var __formationPosition = m_formation.getFormationPositionById (m_id);
+				
+				if (__formationPosition != null) {
+					oX = __formationPosition.oX;
+					oY = __formationPosition.oY;
+				}
+			}
 		}
 	
 //------------------------------------------------------------------------------------------
@@ -471,6 +475,10 @@ package nx.formations;
 			if (m_formation != null) {
 				m_formation.decTotalInuseCount ();
 			}
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):Void {
 		}
 		
 //------------------------------------------------------------------------------------------
