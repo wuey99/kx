@@ -48,6 +48,8 @@ package nx.formations;
 		public var m_triggerID:Int;
 		public var m_buggedOut:Bool;
 		
+		public var m_defaultDepth:Float;
+		
 		//------------------------------------------------------------------------------------------
 		public function new () {
 			super ();
@@ -78,6 +80,8 @@ package nx.formations;
 			m_buggedOut = false;
 			
 			m_triggerID = G.appX.addTriggerXListener (onTriggerSignal);
+			
+			setDefaultDepth (getDepth ());
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -103,6 +107,16 @@ package nx.formations;
 		//------------------------------------------------------------------------------------------
 		public function getDefaultAlpha ():Float {
 			return 0.0;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function getDefaultDepth ():Float {
+			return m_defaultDepth;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function setDefaultDepth (__value:Float):Void {
+			m_defaultDepth = __value;
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -144,7 +158,7 @@ package nx.formations;
 					// logicObject
 					new FormationPosition (),
 					// item, layer, depth
-					null, G.appX.SKY_LAYER, getDepth (),
+					null, G.appX.SKY_LAYER, getDefaultDepth (),
 					// x, y, z
 					__x + formationDef.x, __y + formationDef.y, 0,
 					// scale, rotation
@@ -162,6 +176,32 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public function addFormationPositionsFromTriggerAbsolute (formationDefs:Array<FormationDef>):Void {			
+			var __formationPosition:FormationPosition;
+			
+			for (formationDef in formationDefs) {
+				__formationPosition = cast xxx.getXLogicManager ().initXLogicObject (
+					// parent
+					G.appX.getLevelObject (),
+					// logicObject
+					new FormationPosition (),
+					// item, layer, depth
+					null, G.appX.SKY_LAYER, getDefaultDepth (),
+					// x, y, z
+					formationDef.x, formationDef.y, 0,
+					// scale, rotation
+					1.0, 0
+				);
+				
+				__formationPosition.oAlpha = getDefaultAlpha ();
+				
+				m_formationPositions.set (formationDef.id, __formationPosition);
+				
+				G.appX.getLevelObject ().addXLogicObject (__formationPosition);
+			}
+		}
+		
+		//------------------------------------------------------------------------------------------
 		public function addFormationPositionsFromXLogicObject (formationDefs:Array<FormationDef>):Void {
 			var __x:Float = oX;
 			var __y:Float = oY;
@@ -175,7 +215,7 @@ package nx.formations;
 					// logicObject
 					new FormationPosition (),
 					// item, layer, depth
-					null, G.appX.SKY_LAYER, getDepth (),
+					null, G.appX.SKY_LAYER, getDefaultDepth (),
 					// x, y, z
 					__x + formationDef.x, __y + formationDef.y, 0,
 					// scale, rotation
@@ -221,7 +261,7 @@ package nx.formations;
 					// logicObject
 					new FormationPosition (),
 					// item, layer, depth
-					null, G.appX.SKY_LAYER, getDepth (),
+					null, G.appX.SKY_LAYER, getDefaultDepth (),
 					// x, y, z
 					__x + attackDef.percentageX * __skyRect.width, __y + attackDef.percentageY * __skyRect.height, 0,
 					// scale, rotation
@@ -248,14 +288,14 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
-		public override function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):Void {
+		public override function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
 			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObjectFromPool (
 				// parent
 				G.appX.getLevelObject (),
 				// logicObject
 				__class,
 				// item, layer, depth
-				null, G.appX.SKY_LAYER, getDepth (),
+				null, G.appX.SKY_LAYER, getDefaultDepth (),
 				// x, y, z
 				__x, __y, 0,
 				// scale, rotation
@@ -270,6 +310,8 @@ package nx.formations;
 				getXMapModel ()
 			);
 			
+			__enemyObject.setDisableCulling (true);
+			
 			var __formationPosition:FormationPosition = getFormationPositionById (__id);
 			__formationPosition.setPairedObject (__enemyObject);
 
@@ -280,13 +322,19 @@ package nx.formations;
 			incTotalInuseCount ();
 			
 			G.appX.getLevelObject ().addXLogicObject (__enemyObject);
+			
+			return __enemyObject;
 		}
 
 		//------------------------------------------------------------------------------------------
-		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):Void {
+		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
 			var __formationPosition:FormationPosition = getFormationPositionById (__id);
 			
+			trace (": spawnEnemy: ", __formationPosition);
+			
 			if (__formationPosition != null) {
+				trace (": formationPosition: ", __formationPosition.oX, __formationPosition.oY);
+				
 				__x = __formationPosition.oX;
 				__y = __formationPosition.oY;
 			}
@@ -297,7 +345,7 @@ package nx.formations;
 				// logicObject
 				__class,
 				// item, layer, depth
-				null, G.appX.SKY_LAYER, getDepth (),
+				null, G.appX.SKY_LAYER, getDefaultDepth (),
 				// x, y, z
 				__x, __y, 0,
 				// scale, rotation
@@ -311,10 +359,18 @@ package nx.formations;
 				getXMapModel ()
 			);
 
-			__enemyObject.setPattern (__pattern);
-			__enemyObject.gotoPatternState ();
+			__enemyObject.setItem (null);
 			
+			if (__pattern != null) {
+				__enemyObject.setPattern (__pattern);
+				__enemyObject.gotoPatternState ();
+			} else {
+				__enemyObject.gotoIdleState ();
+			}
+				
 			G.appX.getLevelObject ().addXLogicObject (__enemyObject);
+			
+			return __enemyObject;
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -511,6 +567,17 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public function formationDoneX ():Array<Dynamic> {
+			return [
+				XTask.FLAGS, function (__task:XTask9):Void {
+					__task.getObject ().nukeLater ();
+				},
+				
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
 		public function isTotalInuseCountLessThan (__count:Int):Array<Dynamic> {
 			return [
 				XTask.FLAGS, function (__task:XTask):Void {
@@ -528,6 +595,66 @@ package nx.formations;
 					__task.getParent ().ifTrue (Math.random () * 100 <= __percentage);
 				},
 							
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function scaleToX (__start:Float, __target:Float, __ticks:Float):Array<Dynamic> {
+			var __step:Float = (__target - __start) / ticksToSeconds (__ticks);
+			
+			trace (": step: ", __step);
+					
+			var __count:XNumber = new XNumber (0);
+			__count.value = Std.int (__ticks) >> 8;
+			
+			return [
+				XTask.FLAGS, function (__task:XTask9):Void {			
+					__task.getObject ().oScale = __start;
+					
+					addTask ([
+						XTask.LOOP, __count,
+							XTask.WAIT, 0x0100,
+							
+							function ():Void {
+								__task.getObject ().oScale += __step;
+							},
+							
+						XTask.NEXT,
+						
+						XTask.RETN,
+					]);
+				},
+				
+				XTask.RETN,
+			];
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function fadeInX (__start:Float, __target:Float, __ticks:Float):Array<Dynamic> {
+			var __step:Float = (__target - __start) / ticksToSeconds (__ticks);
+			
+			var __count:XNumber = new XNumber (0);
+			__count.value = Std.int (__ticks) >> 8;
+			
+			return [
+				XTask.FLAGS, function (__task:XTask9):Void {
+					__task.getObject ().oAlpha = __start;
+					
+					addTask ([
+						XTask.LOOP, __count,
+							XTask.WAIT, 0x0100,
+							
+							function ():Void {
+								__task.getObject ().oAlpha += __step;
+							},
+							
+						XTask.NEXT,
+						
+						XTask.RETN,
+					]);
+				},
+				
 				XTask.RETN,
 			];
 		}

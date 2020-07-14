@@ -36,11 +36,11 @@ package kx.world.logic;
 	import kx.mvc.*;
 	import kx.signals.XSignal;
 	import kx.task.*;
+	import kx.type.*;
 	import kx.world.*;
 	import kx.world.sprite.*;
 	import kx.xmap.*;
 	import kx.xml.*;
-	import kx.type.*;
 
 	// begin include "..\\..\\flash.h";
 	import openfl.display.*;
@@ -118,6 +118,7 @@ package kx.world.logic;
 		public var m_selfRect:XRect;
 		public var m_itemRect:XRect;
 		public var m_itemPos:XPoint;
+		public var m_disableCulling:Bool;
 		
 		public var m_iX:Float;
 		public var m_iY:Float;
@@ -144,6 +145,7 @@ package kx.world.logic;
 			m_isDead = false;
 			m_cleanedUp = false;
 			m_autoCulling = false;
+			m_disableCulling = false;
 		
 			m_GUID = g_GUID++;
 					
@@ -358,6 +360,10 @@ package kx.world.logic;
 // cull this object if it strays outside the current viewPort
 //------------------------------------------------------------------------------------------	
 		public function cullObject ():Void {
+			if (m_disableCulling) {
+				return;
+			}
+			
 			if (autoCulling) {
 				autoCullObject ();
 				
@@ -392,6 +398,11 @@ package kx.world.logic;
 			killLater ();
 		}
 
+		//------------------------------------------------------------------------------------------
+		public function setDisableCulling (__flag:Bool):Void {
+			m_disableCulling = __flag;
+		}
+		
 		//------------------------------------------------------------------------------------------
 		// auto-cull this object if it strays outside the current viewPort
 		//

@@ -95,7 +95,9 @@ package nx.formations;
 					getXMapModel ()
 				);
 				
-				G.appX.getLevelObject ().addXLogicObject (m_formation);								
+				G.appX.getLevelObject ().addXLogicObject (m_formation);	
+				
+				m_formation.Formation_Script ();
 			}			
 		}
 		

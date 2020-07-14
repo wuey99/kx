@@ -21,30 +21,33 @@ package nx.task;
 		
 		public static inline var SET_ROTATION:Int = XTask.XTask_OPCODES + 0;
 		public static inline var SET_POS:Int =  XTask.XTask_OPCODES + 1;
-		public static inline var SET_HOME_POS:Int =  XTask.XTask_OPCODES + 2;
-		public static inline var SET_SPEED:Int =  XTask.XTask_OPCODES + 3;
-		public static inline var SET_ACCEL_TO:Int = XTask.XTask_OPCODES + 4;
-		public static inline var ROTATE:Int =  XTask.XTask_OPCODES + 5;
-		public static inline var ROTATE_TO:Int =  XTask.XTask_OPCODES + 6;
-		public static inline var ROTATE_TO_POS:Int = XTask.XTask_OPCODES + 7;
-		public static inline var ROTATE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 8;		
-		public static inline var MOVE_TO:Int =  XTask.XTask_OPCODES + 9;
-		public static inline var SPLINE_TO:Int = XTask.XTask_OPCODES + 10;
-		public static inline var MOVE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 11;
-		public static inline var RETURN_TO_HOME_POS:Int = XTask.XTask_OPCODES + 12;
-		public static inline var ENABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 13;
-		public static inline var DISABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 14;
-		public static inline var ENABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 15;
-		public static inline var DISABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 16;
-		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 17;
-		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 18;
-		public static inline var SPAWN_FORMATION_ENEMY:Int = XTask.XTask_OPCODES + 19;
-		public static inline var SPAWN_ENEMY:Int = XTask.XTask_OPCODES + 20;		
-		public static inline var GET_NEXT_ENEMY:Int = XTask.XTask_OPCODES + 21;
-		public static inline var GET_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 22;
-		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 23;
-		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 24;
-		public static inline var NUKE:Int = XTask.XTask_OPCODES + 25;
+		public static inline var SET_SCALE:Int = XTask.XTask_OPCODES + 2;
+		public static inline var SET_ALPHA:Int = XTask.XTask_OPCODES + 3;
+		public static inline var SET_HOME_POS:Int =  XTask.XTask_OPCODES + 4;
+		public static inline var SET_SPEED:Int =  XTask.XTask_OPCODES + 5;
+		public static inline var SET_ACCEL_TO:Int = XTask.XTask_OPCODES + 6;
+		public static inline var ROTATE:Int =  XTask.XTask_OPCODES + 7;
+		public static inline var ROTATE_TO:Int =  XTask.XTask_OPCODES + 8;
+		public static inline var ROTATE_TO_POS:Int = XTask.XTask_OPCODES + 9;
+		public static inline var ROTATE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 10;		
+		public static inline var MOVE_TO:Int =  XTask.XTask_OPCODES + 11;
+		public static inline var SPLINE_TO:Int = XTask.XTask_OPCODES + 12;
+		public static inline var MOVE_TO_HOME_POS:Int = XTask.XTask_OPCODES + 13;
+		public static inline var RETURN_TO_HOME_POS:Int = XTask.XTask_OPCODES + 14;
+		public static inline var ENABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 15;
+		public static inline var DISABLE_AUTO_ROTATION:Int = XTask.XTask_OPCODES + 16;
+		public static inline var ENABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 17;
+		public static inline var DISABLE_AUTO_SPEED:Int = XTask.XTask_OPCODES + 18;
+		public static inline var ENABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 19;
+		public static inline var DISABLE_AUTO_SPEED_AND_ROTATION:Int = XTask.XTask_OPCODES + 20;
+		public static inline var SPAWN_FORMATION_ENEMY:Int = XTask.XTask_OPCODES + 21;
+		public static inline var SPAWN_ENEMY_AT_INDEX:Int = XTask.XTask_OPCODES + 22;		
+		public static inline var SPAWN_RANDOM_ENEMY:Int = XTask.XTask_OPCODES + 23;
+		public static inline var GET_NEXT_ENEMY_FROM_FORMATION:Int = XTask.XTask_OPCODES + 24;
+		public static inline var GET_RANDOM_ENEMY_FROM_FORMATION:Int = XTask.XTask_OPCODES + 25;
+		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 26;
+		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 27;
+		public static inline var NUKE:Int = XTask.XTask_OPCODES + 28;
 			
 		public var m_object:FormationXLogicObject;
 		public var m_targetObject:FormationXLogicObject;
@@ -57,6 +60,11 @@ package nx.task;
 		//------------------------------------------------------------------------------------------
 		public function getObject ():FormationXLogicObject {
 			return m_object;
+		}
+
+		//------------------------------------------------------------------------------------------
+		public function getTargetObject ():FormationXLogicObject {
+			return m_targetObject;
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -80,6 +88,14 @@ package nx.task;
 				// XTask9.SET_POS, <xpos>, <ypos>
 				case SET_POS:
 					i += 2;
+					
+				// XTask9.SET_ALPHA, <value>
+				case SET_ALPHA:
+					i++;
+					
+				// XTask9.SET_SCALE, <value>
+				case SET_SCALE:
+					i++;
 					
 				// XTask9.SET_HOME_POS
 				case SET_HOME_POS:
@@ -145,19 +161,24 @@ package nx.task;
 				case SPAWN_FORMATION_ENEMY:
 					i += 5;
 					
-				// XTask9.SPAWN_ENEMY, <id>, <class>, <task>, <x>, <y>
-				case SPAWN_ENEMY:
+				// XTask9.SPAWN_ENEMY_AT_INDEX, <index>, <id>, <class>, <task>, <x>, <y>
+				case SPAWN_ENEMY_AT_INDEX:
+					i += 6;
+					
+				// XTask9.SPAWN_RANDOM_ENEMY, <id>, <class>, <task>, <x>, <y>
+				case SPAWN_RANDOM_ENEMY:
 					i += 5;
 					
-				// XTask9.GET_NEXT_ENEMY, <sequenceIndex>, ["01", "02", "03"]
-				case GET_NEXT_ENEMY:
+				// XTask9.GET_NEXT_ENEMY_FROM_FORMATION, <sequenceIndex>, ["01", "02", "03"]
+				case GET_NEXT_ENEMY_FROM_FORMATION:
 					i += 2;
 					
-				// XTask9.GET_RANDOM_ENEMY, ["01", "02", "03"]
-				case GET_RANDOM_ENEMY:
+				// XTask9.GET_RANDOM_ENEMY_FROM_FORMATION, ["01", "02", "03"]
+				case GET_RANDOM_ENEMY_FROM_FORMATION:
 					i += 1;
 					
 				// XTask9.LAUNCH_ENEMY, <task>
+				case LAUNCH_ENEMY:
 					i += 1;
 					
 				// XTask9.ALL_ENEMIES_DEAD, ["01", "02", "03"]
@@ -192,6 +213,20 @@ package nx.task;
 				//------------------------------------------------------------------------------------------
 					getObject ().oX = __evalNumber ();
 					getObject ().oY = __evalNumber ();
+				
+				//------------------------------------------------------------------------------------------
+				// XTask9.SET_ALPHA, <value>
+				//------------------------------------------------------------------------------------------
+				case SET_ALPHA:
+				//------------------------------------------------------------------------------------------
+					getObject ().oAlpha = __evalNumber ();
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.SET_SCALE, <value>
+				//------------------------------------------------------------------------------------------
+				case SET_SCALE:
+				//------------------------------------------------------------------------------------------
+					getObject ().oScale = __evalNumber ();
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.SET_HOME_POS:
@@ -385,21 +420,38 @@ package nx.task;
 					getObject ().spawnFormationEnemy (__id, __class, __script, __x, __y);
 					
 				//------------------------------------------------------------------------------------------
-				// XTask9.SPAWN_ENEMY
+				// XTask9.SPAWN_ENEMY_AT_INDEX
 				//------------------------------------------------------------------------------------------
-				case SPAWN_ENEMY:
-					var __id:String = cast m_taskList[m_taskIndex++];
+				case SPAWN_ENEMY_AT_INDEX:
+					var __index:XNumber = cast m_taskList[m_taskIndex++];
+					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __class:Class<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __script:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __x:Float = __evalNumber ();
 					var __y:Float = __evalNumber ();
 
-					getObject ().spawnEnemy (__id, __class, __script, __x, __y);
+					var __id:String = __enemyList[Std.int (__index.value)];
+					
+					m_targetObject = getObject ().spawnEnemy (__id, __class, __script, __x, __y);
 					
 				//------------------------------------------------------------------------------------------
-				// XTask9.GET_NEXT_ENEMY
+				// XTask9.SPAWN_RANDOM_ENEMY
 				//------------------------------------------------------------------------------------------
-				case GET_NEXT_ENEMY:
+				case SPAWN_RANDOM_ENEMY:
+					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
+					var __class:Class<Dynamic> = cast m_taskList[m_taskIndex++];
+					var __script:Array<Dynamic> = cast m_taskList[m_taskIndex++];
+					var __x:Float = __evalNumber ();
+					var __y:Float = __evalNumber ();
+
+					var __id:String = __enemyList[Std.random (__enemyList.length)];
+					
+					m_targetObject = getObject ().spawnEnemy (__id, __class, __script, __x, __y);
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.GET_NEXT_ENEMY_FROM_FORMATION
+				//------------------------------------------------------------------------------------------
+				case GET_NEXT_ENEMY_FROM_FORMATION:
 					var __index:XNumber = cast m_taskList[m_taskIndex++];
 					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __id:String;
@@ -435,9 +487,9 @@ package nx.task;
 		
 										
 				//------------------------------------------------------------------------------------------
-				// XTask9.GET_RANDOM_ENEMY
+				// XTask9.GET_RANDOM_ENEMY_FROM_FORMATION
 				//------------------------------------------------------------------------------------------
-				case GET_RANDOM_ENEMY:
+				case GET_RANDOM_ENEMY_FROM_FORMATION:
 					var __enemyList:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __id:String;
 					var __formationPosition:FormationPosition;
@@ -611,6 +663,35 @@ package nx.task;
 			__task.setObject (m_object);
 			
 			return __task;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public override function execTask ():Bool {
+			if (m_subTask == null) {
+				// get new XTask Array run it immediately
+				m_subTask = addTask ((cast(m_taskList[m_taskIndex], Array<Dynamic>) ), true);
+				m_subTask.tag = tag;
+				m_subTask.setManager (m_manager);
+				m_subTask.setParent (self);
+				cast (m_subTask, XTask9).setObject (m_object);
+				m_subTask.run ();
+				m_taskIndex--;
+			}
+				
+			// if the sub-task is still active, wait another tick and check again
+			else if (m_XTaskSubManager.isTask (m_subTask)) {
+				m_ticks += 0x0100;
+				m_taskIndex--;
+				return false;
+			}
+				// move along
+			else
+			{
+				m_subTask = null;
+				m_taskIndex++;
+			}
+			
+			return true;
 		}
 	}
 	

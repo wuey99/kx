@@ -73,8 +73,13 @@ package nx.formations;
 		public static inline var HOME_STATE:Int = 1;
 		public static inline var FORMATION_ATTACK_STATE:Int = 2;
 		public static inline var ATTACK_STATE:Int = 3;
+		public static inline var IDLE_STATE:Int = 4;
+		
+		public static inline var NUM_STATES:Int = 5;
 		
 		public var m_state:Int;
+		
+		public var m_isDone:Bool;
 		
 //------------------------------------------------------------------------------------------
 		public function new (__xxx:XWorld = null) {
@@ -111,6 +116,8 @@ package nx.formations;
 			
 			m_completed = false;
 			m_pauseAttacks = false;
+			
+			m_isDone = false;
 			
 			addTask ([				
 				XTask.LABEL, "loop",
@@ -257,6 +264,11 @@ package nx.formations;
 //------------------------------------------------------------------------------------------
 		public function returnHome ():Void {
 			m_pauseAttacks = true;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function setPauseAttacks (__flag:Bool):Void {
+			m_pauseAttacks = __flag;
 		}
 		
 //------------------------------------------------------------------------------------------
@@ -413,7 +425,11 @@ package nx.formations;
 		
 //------------------------------------------------------------------------------------------
 		public function getFormationPositionById (__id:String):FormationPosition {
-			return m_formation.getFormationPositionById (__id);
+			if (m_formation != null) {
+				return m_formation.getFormationPositionById (__id);
+			} else {
+				return null;
+			}
 		}
 
 //------------------------------------------------------------------------------------------
@@ -478,11 +494,13 @@ package nx.formations;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):Void {
+		public function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
+			return null;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function spawnEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):Void {
+		public function spawnEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
+			return null;
 		}
 
 //------------------------------------------------------------------------------------------
@@ -499,9 +517,16 @@ package nx.formations;
 					
 				case ATTACK_STATE:
 					Idle_Script ();
+					
+				default:
+					returnFromHitScriptX ();
 			}
 		}
 
+//-----------------------------------------------------------------------------------------
+		public function returnFromHitScriptX ():Void {	
+		}
+		
 //-----------------------------------------------------------------------------------------
 		public function getState ():Int {
 			return m_state;
@@ -551,6 +576,16 @@ package nx.formations;
 			Home_Script ();
 		}
 		
+		
+//-----------------------------------------------------------------------------------------
+		public function gotoIdleState ():Void {
+			setPairedObjectInuse (true);
+			
+			m_state = IDLE_STATE;
+			
+			Idle_Script ();
+		}
+		
 		//------------------------------------------------------------------------------------------
 		public function Idle_Script ():Void {
 			script.gotoTask ([
@@ -591,8 +626,38 @@ package nx.formations;
 		
 		//------------------------------------------------------------------------------------------
 		public function Pattern_Script ():Void {
-			
-			Idle_Script ();
+			script.gotoTask ([
+				
+				//------------------------------------------------------------------------------------------
+				// control
+				//------------------------------------------------------------------------------------------
+				function ():Void {
+					script.addTask ([
+						XTask.LABEL, "loop",
+							XTask.WAIT, 0x0100,
+						
+							function ():Void {
+							},
+						
+						XTask.GOTO, "loop",
+						
+						XTask.RETN,
+					]);
+					
+				},
+				
+				//------------------------------------------------------------------------------------------
+				// animation
+				//------------------------------------------------------------------------------------------	
+				XTask.LABEL, "loop",
+					XTask.EXEC, idleAnimationX (),
+					
+					XTask.GOTO, "loop",
+				
+				XTask.RETN,
+				
+				//------------------------------------------------------------------------------------------			
+			]);
 			
 			//------------------------------------------------------------------------------------------
 		}
