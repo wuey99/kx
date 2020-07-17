@@ -82,6 +82,8 @@ package nx.formations;
 			m_triggerID = G.appX.addTriggerXListener (onTriggerSignal);
 			
 			setDefaultDepth (getDepth ());
+			
+			G.appX.getMickeyObject ().setGroundSpeed (1.0);
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -288,7 +290,9 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
-		public override function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
+		public override function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float, __params:Array<Dynamic> = null):FormationXLogicObject {
+			var __params2:Array<Dynamic> = ["", 0];
+			
 			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObjectFromPool (
 				// parent
 				G.appX.getLevelObject (),
@@ -299,7 +303,8 @@ package nx.formations;
 				// x, y, z
 				__x, __y, 0,
 				// scale, rotation
-				1.0, 0
+				1.0, 0,
+				__params2.concat (__params)
 			);
 			
 			__enemyObject.setID (__id);
@@ -327,8 +332,14 @@ package nx.formations;
 		}
 
 		//------------------------------------------------------------------------------------------
-		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
-			var __formationPosition:FormationPosition = getFormationPositionById (__id);
+		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float, __params:Array<Dynamic> = null):FormationXLogicObject {
+			var __params2:Array<Dynamic> = ["", 0];
+		
+			var __formationPosition:FormationPosition = null;
+			
+			if (__id != null && __id != "") {
+				__formationPosition = getFormationPositionById (__id);
+			}
 			
 			trace (": spawnEnemy: ", __formationPosition);
 			
@@ -349,7 +360,8 @@ package nx.formations;
 				// x, y, z
 				__x, __y, 0,
 				// scale, rotation
-				1.0, 0
+				1.0, 0,
+				__params2.concat (__params)
 			);
 			
 			__enemyObject.setID (__id);
@@ -359,8 +371,6 @@ package nx.formations;
 				getXMapModel ()
 			);
 
-			__enemyObject.setItem (null);
-			
 			if (__pattern != null) {
 				__enemyObject.setPattern (__pattern);
 				__enemyObject.gotoPatternState ();

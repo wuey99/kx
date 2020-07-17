@@ -21,7 +21,7 @@ package nx.formations;
 	import openfl.utils.*;
 	
 	//------------------------------------------------------------------------------------------
-	class FormationXLogicObject extends XLogicObjectCX {
+	class FormationXLogicObject extends EnemyCollidableX {
 		public var m_XTaskSubManager9:XTaskSubManager;
 		
 		public var script:XTask;
@@ -363,7 +363,13 @@ package nx.formations;
 			calculateDelta (m_ctrlPos, m_startPos, m_startDelta, __ticks);
 			calculateDelta (m_targetPos, m_ctrlPos, m_ctrlDelta, __ticks);
 		}
-
+			
+//------------------------------------------------------------------------------------------
+		public function stopSplineMovement ():Void {
+			m_currentTicks = 0;
+			m_totalTicks = 0;			
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function calculateDelta (__target:XPoint, __start:XPoint, __delta:XPoint, __ticks:Float):Void {
 			__delta.x = (__target.x - __start.x) / ticksToSeconds (__ticks);
@@ -494,12 +500,12 @@ package nx.formations;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
+		public function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float, __params:Array<Dynamic> = null):FormationXLogicObject {
 			return null;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function spawnEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float):FormationXLogicObject {
+		public function spawnEnemy (__id:String, __class:Class<Dynamic>, __script:Array<Dynamic>, __x:Float, __y:Float, __params:Array<Dynamic> = null):FormationXLogicObject {
 			return null;
 		}
 

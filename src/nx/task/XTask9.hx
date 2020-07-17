@@ -402,6 +402,7 @@ package nx.task;
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.DISABLE_AUTO_SPEED_AND_ROTATION
+				//------------------------------------------------------------------------------------------
 				case DISABLE_AUTO_SPEED_AND_ROTATION:
 				//------------------------------------------------------------------------------------------
 					getObject ().m_autoRotation = false;
@@ -416,8 +417,9 @@ package nx.task;
 					var __script:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __x:Float = __evalNumber ();
 					var __y:Float = __evalNumber ();
-
-					getObject ().spawnFormationEnemy (__id, __class, __script, __x, __y);
+					var __params:Array<Dynamic> = cast m_taskList[m_taskIndex++];
+					
+					getObject ().spawnFormationEnemy (__id, __class, __script, __x, __y, __params);
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.SPAWN_ENEMY_AT_INDEX
@@ -429,10 +431,11 @@ package nx.task;
 					var __script:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __x:Float = __evalNumber ();
 					var __y:Float = __evalNumber ();
+					var __params:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 
 					var __id:String = __enemyList[Std.int (__index.value)];
 					
-					m_targetObject = getObject ().spawnEnemy (__id, __class, __script, __x, __y);
+					m_targetObject = getObject ().spawnEnemy (__id, __class, __script, __x, __y, __params);
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.SPAWN_RANDOM_ENEMY
@@ -443,10 +446,15 @@ package nx.task;
 					var __script:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					var __x:Float = __evalNumber ();
 					var __y:Float = __evalNumber ();
-
-					var __id:String = __enemyList[Std.random (__enemyList.length)];
+					var __params:Array<Dynamic> = cast m_taskList[m_taskIndex++];
 					
-					m_targetObject = getObject ().spawnEnemy (__id, __class, __script, __x, __y);
+					var __id:String = null;
+					
+					if (__enemyList != null) {
+						__id = __enemyList[Std.random (__enemyList.length)];
+					}
+					
+					m_targetObject = getObject ().spawnEnemy (__id, __class, __script, __x, __y, __params);
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.GET_NEXT_ENEMY_FROM_FORMATION
