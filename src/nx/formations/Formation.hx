@@ -67,7 +67,6 @@ package nx.formations;
 			super.setupX ();
 			
 			createFormationPositions ();
-			createAttackPositions ();
 			
 			script = addEmptyTask ();
 			
@@ -82,8 +81,6 @@ package nx.formations;
 			m_triggerID = G.appX.addTriggerXListener (onTriggerSignal);
 			
 			setDefaultDepth (getDepth ());
-			
-			G.appX.getMickeyObject ().setGroundSpeed (1.0);
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -120,7 +117,7 @@ package nx.formations;
 		public function setDefaultDepth (__value:Float):Void {
 			m_defaultDepth = __value;
 		}
-		
+
 		//------------------------------------------------------------------------------------------
 		public function addFormationPositions (formationDefs:Array<FormationDef>):Void {
 			if (m_formationPositions == null) {
@@ -139,17 +136,9 @@ package nx.formations;
 
 		//------------------------------------------------------------------------------------------
 		public function addFormationPositionsFromTrigger (formationDefs:Array<FormationDef>):Void {
-			var __skyRect:XRect = G.appX.getLevelObjectX ().getSkyRect ();
-			var __groundRect:XRect = G.appX.getLevelObjectX ().getGroundRect ();
-			var __skyPos:XPoint = xxx.getXPointPoolManager ().borrowObject ();
-									
-			__skyPos.x = oX;
-			__skyPos.y = oY;
+			var __point:XPoint = xxx.getXPointPoolManager ().borrowObject ();
 			
-			__skyPos = G.appX.getLevelObjectX ().translateGroundToSky (__skyPos);
-			
-			var __x:Float = __skyRect.x + __skyRect.width / 2;
-			var __y:Float = __skyPos.y;
+			calculateFormationPosition (__point);
 			
 			var __formationPosition:FormationPosition;
 			
@@ -160,9 +149,9 @@ package nx.formations;
 					// logicObject
 					new FormationPosition (),
 					// item, layer, depth
-					null, G.appX.SKY_LAYER, getDefaultDepth (),
+					null, getSpawnLayer (), getDefaultDepth (),
 					// x, y, z
-					__x + formationDef.x, __y + formationDef.y, 0,
+					__point.x + formationDef.x, __point.y + formationDef.y, 0,
 					// scale, rotation
 					1.0, 0
 				);
@@ -174,7 +163,13 @@ package nx.formations;
 				G.appX.getLevelObject ().addXLogicObject (__formationPosition);
 			}
 			
-			xxx.getXPointPoolManager ().returnObject (__skyPos);
+			xxx.getXPointPoolManager ().returnObject (__point);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function calculateFormationPosition (__point:XPoint):Void {	
+			__point.x = oX;
+			__point.y = oY;
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -188,7 +183,7 @@ package nx.formations;
 					// logicObject
 					new FormationPosition (),
 					// item, layer, depth
-					null, G.appX.SKY_LAYER, getDefaultDepth (),
+					null, getSpawnLayer (), getDefaultDepth (),
 					// x, y, z
 					formationDef.x, formationDef.y, 0,
 					// scale, rotation
@@ -217,7 +212,7 @@ package nx.formations;
 					// logicObject
 					new FormationPosition (),
 					// item, layer, depth
-					null, G.appX.SKY_LAYER, getDefaultDepth (),
+					null, getSpawnLayer (), getDefaultDepth (),
 					// x, y, z
 					__x + formationDef.x, __y + formationDef.y, 0,
 					// scale, rotation
@@ -241,52 +236,19 @@ package nx.formations;
 				__formationPosition.oY = oY + formationDef.y;
 			}
 		}
-		
-		//------------------------------------------------------------------------------------------
-		public function addAttackPositions (attackDefs:Array<AttackDef>):Void {
-			return;
-			
-			if (m_attackPositions == null) {
-				m_attackPositions = new Map<String, AttackPosition> ();
-			}
 
-			var __skyRect:XRect = G.appX.getLevelObjectX ().getSkyRect ();
-			var __x:Float = __skyRect.x;
-			var __y:Float = __skyRect.y;
-			
-			var __attackPosition:AttackPosition;
-			
-			for (attackDef in attackDefs) {
-				__attackPosition = cast xxx.getXLogicManager ().initXLogicObject (
-					// parent
-					G.appX.getLevelObject (),
-					// logicObject
-					new FormationPosition (),
-					// item, layer, depth
-					null, G.appX.SKY_LAYER, getDefaultDepth (),
-					// x, y, z
-					__x + attackDef.percentageX * __skyRect.width, __y + attackDef.percentageY * __skyRect.height, 0,
-					// scale, rotation
-					1.0, 0
-				);
-				
-				m_attackPositions.set (attackDef.id, __attackPosition);
-				
-				G.appX.getLevelObject ().addXLogicObject (__attackPosition);
-			}
-		}
-		
 		//------------------------------------------------------------------------------------------
 		public function createFormationPositions ():Void {
 		}
 
 		//------------------------------------------------------------------------------------------
-		public function createAttackPositions ():Void {
+		public override function getFormationPositionById (__id:String):FormationPosition {
+			return m_formationPositions.get (__id);
 		}
 		
 		//------------------------------------------------------------------------------------------
-		public override function getFormationPositionById (__id:String):FormationPosition {
-			return m_formationPositions.get (__id);
+		public function getSpawnLayer ():Int {
+			return 0;
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -299,7 +261,7 @@ package nx.formations;
 				// logicObject
 				__class,
 				// item, layer, depth
-				null, G.appX.SKY_LAYER, getDefaultDepth (),
+				null, getSpawnLayer (), getDefaultDepth (),
 				// x, y, z
 				__x, __y, 0,
 				// scale, rotation
@@ -311,7 +273,7 @@ package nx.formations;
 			__enemyObject.setFormation (this);
 			
 			__enemyObject.setXMapModel (
-				G.appX.SKY_LAYER,
+				getSpawnLayer (),
 				getXMapModel ()
 			);
 			
@@ -356,7 +318,7 @@ package nx.formations;
 				// logicObject
 				__class,
 				// item, layer, depth
-				null, G.appX.SKY_LAYER, getDefaultDepth (),
+				null, getSpawnLayer (), getDefaultDepth (),
 				// x, y, z
 				__x, __y, 0,
 				// scale, rotation
@@ -367,7 +329,7 @@ package nx.formations;
 			__enemyObject.setID (__id);
 			
 			__enemyObject.setXMapModel (
-				G.appX.SKY_LAYER,
+				getSpawnLayer (),
 				getXMapModel ()
 			);
 

@@ -27,8 +27,8 @@ package nx.formations;
 		public var script:XTask;
 		public var gravity:XTask;
 		
-		public var skyRect(get, set):XRect;
-		public var m_skyRect:XRect;
+		public var screenRect(get, set):XRect;
+		public var m_screenRect:XRect;
 		
 		public var offScreenLeft(get, null):Float;
 		public var offScreenRight(get, null):Float;
@@ -170,50 +170,55 @@ package nx.formations;
 
 //------------------------------------------------------------------------------------------
 		public function get_offScreenTop ():Float {
-			return skyRect.y - 128;
+			return screenRect.y - 128;
 		}
 
 //------------------------------------------------------------------------------------------
 		public function get_offScreenBottom ():Float {
-			return skyRect.y + skyRect.height + 128;
+			return screenRect.y + screenRect.height + 128;
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function get_offScreenLeft ():Float {
-			return skyRect.x - 224;
+			return screenRect.x - 224;
 		}
 
 //------------------------------------------------------------------------------------------
 		public function get_offScreenRight ():Float {
-			return skyRect.x + skyRect.width + 224;
+			return screenRect.x + screenRect.width + 224;
 		}
 
 //------------------------------------------------------------------------------------------
 		public function getScreenX (__percentage:Float):Float {
-			return skyRect.x + skyRect.width * __percentage;
+			return screenRect.x + screenRect.width * __percentage;
 		}
 		
 //------------------------------------------------------------------------------------------
 		public function getScreenY (__percentage:Float):Float {
-			return skyRect.y + skyRect.height * __percentage;
+			return screenRect.y + screenRect.height * __percentage;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function get_skyRect ():XRect {
-			if (m_skyRect == null) {
-				m_skyRect = G.appX.getSkyRect ();
+		public function get_screenRect ():XRect {
+			if (m_screenRect == null) {
+				m_screenRect = getScreenRect ();
 			}
 			
-			return m_skyRect;
+			return m_screenRect;
 		}
 		
 //------------------------------------------------------------------------------------------
-		public function set_skyRect (__rect:XRect):XRect {
-			m_skyRect = __rect;
+		public function set_screenRect (__rect:XRect):XRect {
+			m_screenRect = __rect;
 			
-			return m_skyRect;
+			return m_screenRect;
 		}
 
+//------------------------------------------------------------------------------------------
+		public function getScreenRect ():XRect {
+			return null;
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function moveTo (__startX:Float, __startY:Float, __targetX:Float, __targetY:Float, __ticks:Float):Void {
 			m_targetX = __targetX;
