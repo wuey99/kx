@@ -523,6 +523,19 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
+		public function returnToHomePositionFacingForwardX ():Array<Dynamic> {
+			return [
+				XTask9.DISABLE_AUTO_SPEED_AND_ROTATION,
+				XTask9.SET_ROTATION, 180.0,
+				XTask9.RETURN_TO_HOME_POS, 0x4000,
+				XTask.WAIT, 0x4000,
+				XTask9.SET_HOME_POS,
+				
+				XTask.RETN,
+			];
+		}
+
+		//------------------------------------------------------------------------------------------
 		public function waitForFormationCompletionX ():Array<Dynamic> {
 			return [
 				XTask.LABEL, "loop",
