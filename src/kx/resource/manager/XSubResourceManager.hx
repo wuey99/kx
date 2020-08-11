@@ -338,6 +338,12 @@ package kx.resource.manager;
 				trace (": getClassByName: loaded: ", __XClass.count, __r.count, __class);
 			}
 			
+			if (__class == null) {
+				var s:Array<String> = __className.split (":");
+			
+				return Type.resolveClass (s[1]);
+			}
+			
 			return __class;
 		}
 		
