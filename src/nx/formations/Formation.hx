@@ -97,6 +97,11 @@ package nx.formations;
 			
 			m_buggedOut = true;
 		}
+	
+		//------------------------------------------------------------------------------------------
+		public function setBuggedOut ():Void {
+			m_buggedOut = true;
+		}
 		
 		//------------------------------------------------------------------------------------------
 		public function buggedOut ():Bool {
@@ -241,6 +246,25 @@ package nx.formations;
 		public function createFormationPositions ():Void {
 		}
 
+		//------------------------------------------------------------------------------------------
+		public function allEnemiesDead ():Bool {
+			var __allDead:Bool = true;
+			
+			XType.forEach (m_formationPositions,
+				function (x:Dynamic):Void {
+					var __name:String = cast x;
+					
+					var __formationPosition:FormationPosition = getFormationPositionById (__name);
+					
+					if (!__formationPosition.getPairedObjectIsDead ()) {
+						__allDead = false;
+					}
+				}
+			);
+			
+			return __allDead;
+		}
+		
 		//------------------------------------------------------------------------------------------
 		public override function getFormationPositionById (__id:String):FormationPosition {
 			return m_formationPositions.get (__id);

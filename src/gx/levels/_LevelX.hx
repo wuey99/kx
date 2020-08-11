@@ -60,6 +60,7 @@ package gx.levels;
 		
 		private var m_levelSelectSignal:XSignal;
 		private var m_gameStateChangedSignal:XSignal;
+		private var m_levelCompleteSignal:XSignal;
 		
 		private var m_levelData:Dynamic /* */;
 		private var m_levelProps:Dynamic /* */;
@@ -106,6 +107,7 @@ package gx.levels;
 
 			m_levelSelectSignal = createXSignal ();
 			m_gameStateChangedSignal = createXSignal ();
+			m_levelCompleteSignal = createXSignal ();
 		}
 
 //------------------------------------------------------------------------------------------
@@ -490,6 +492,16 @@ package gx.levels;
 		//------------------------------------------------------------------------------------------
 		public function fireGameStateChangedSignal (__gameState:Int):Void {
 			m_gameStateChangedSignal.fireSignal (__gameState);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function addLeveCompleteListener (__listener:Dynamic /* Function */):Int {
+			return m_levelCompleteSignal.addListener (__listener);
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function fireLevelCompleteSignal ():Void {
+			m_levelCompleteSignal.fireSignal ();
 		}
 		
 	//------------------------------------------------------------------------------------------

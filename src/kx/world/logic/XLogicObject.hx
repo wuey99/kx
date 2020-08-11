@@ -93,6 +93,7 @@ package kx.world.logic;
 		public var m_masterRotation:Float;
 		public var m_delayed:Int;
 		public var m_XLogicObjects:Map<XLogicObject, Int>; // <XLogicObject, Int>
+		public var m_HudXLogicObjects:Map<XLogicObject, Int>; // <XLogicObject, Int>
 		public var m_worldSprites:Map<XDepthSprite, Int>; // <XDepthSprite, Int>
 		public var m_hudSprites:Map<XDepthSprite, Int>; // <XDepthSprite, Int>
 		public var m_childSprites:Map<Sprite, Sprite>; // <Sprite, Sprite>
@@ -163,6 +164,7 @@ package kx.world.logic;
 				xxx = __xxx;
 				
 				m_XLogicObjects = new Map<XLogicObject, Int> (); // <XLogicObject, Int>
+				m_HudXLogicObjects = new Map<XLogicObject, Int> (); // <XLogicObject, Int>
 				m_worldSprites = new Map<XDepthSprite, Int> ();  // <XDepthSprite, Int>
 				m_hudSprites = new Map<XDepthSprite, Int> (); // <XDepthSprite, Int>
 				m_childSprites = new Map<Sprite, Sprite> (); // <Sprite, Sprite>
@@ -198,6 +200,7 @@ package kx.world.logic;
 				xxx = __xxx;
 		
 				m_XLogicObjects = new Map<XLogicObject, Int> (); // <XLogicObject, Int>
+				m_HudXLogicObjects = new Map<XLogicObject, Int> (); // <XLogicObject, Int>
 				m_worldSprites = new Map<XDepthSprite, Int> ();  // <XDepthSprite, Int>
 				m_hudSprites = new Map<XDepthSprite, Int> (); // <XDepthSprite, Int>
 				m_childSprites = new Map<Sprite, Sprite> (); // <Sprite, Sprite>
@@ -758,11 +761,27 @@ package kx.world.logic;
 			return __XLogicObject;
 		}
 		
+		public function addHudXLogicObject (__XLogicObject:XLogicObject):XLogicObject {
+			m_HudXLogicObjects.set (__XLogicObject, 0);
+			
+			return __XLogicObject;
+		}
+		
 //------------------------------------------------------------------------------------------
 // remove an XLogicObject from the World
 //------------------------------------------------------------------------------------------	
 		public function removeXLogicObject (__XLogicObject:XLogicObject):Void {
 			if (m_XLogicObjects.exists (__XLogicObject)) {
+				m_XLogicObjects.remove (__XLogicObject);
+				
+				if (!__XLogicObject.cleanedUp) {
+					__XLogicObject.cleanup ();
+				}
+			}
+		}
+		
+		public function removeHudXLogicObject (__XLogicObject:XLogicObject):Void {
+			if (m_HudXLogicObjects.exists (__XLogicObject)) {
 				m_XLogicObjects.remove (__XLogicObject);
 				
 				if (!__XLogicObject.cleanedUp) {
@@ -785,6 +804,12 @@ package kx.world.logic;
 			XType.forEach (m_XLogicObjects, 
 				function (x:Dynamic /* */):Void {
 					removeXLogicObject (x);
+				}
+			);
+			
+			XType.forEach (m_HudXLogicObjects, 
+				function (x:Dynamic /* */):Void {
+					removeHudXLogicObject (x);
 				}
 			);
 		}

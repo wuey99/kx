@@ -130,7 +130,7 @@ package gx.messages.level;
 			m_text.wordWrap = true;
 			m_text.embedFonts = true;
 			
-//			var __font:Font = new _Assets.ArialFontClass ();	
+//			var __font:Font = new XAssets.ArialFontClass ();	
 //			m_text.font = __font.fontName;
 			
 			m_text.font = __fontName;

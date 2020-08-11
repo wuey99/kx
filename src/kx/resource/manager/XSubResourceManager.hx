@@ -306,7 +306,6 @@ package kx.resource.manager;
 			var __resourceXML:XSimpleXMLNode = findResourceXMLFromName (__resourceName);
 			
 			return __getXResourceFromPath (
-				"",
 				__resourceXML.attribute ("path") + "\\" +__resourceXML.attribute ("dst"),
 				__resourceXML
 			);
@@ -658,32 +657,29 @@ package kx.resource.manager;
 		private function __resolveClass (__XClass:XClass):Class<Dynamic> /* <Dynamic> */ {
 			var	__resourcePath:String = __XClass.getResourcePath ();
 			var __resourceXML:XSimpleXMLNode = __XClass.getResourceXML ();
-			var __className:String = __XClass.getClassName ();
 			
-			var __r:XResource = __getXResourceFromPath (__className, __resourcePath, __resourceXML);
+			var __r:XResource = __getXResourceFromPath (__resourcePath, __resourceXML);
 			
 			if (__XClass.getClass () == null) {
-				__XClass.setClass (__r.getClassByName (__className));
+				__XClass.setClass (__r.getClassByName (__XClass.getClassName ()));
 			}
 			
 			return __XClass.getClass ();
 		}		
 		
 		//------------------------------------------------------------------------------------------
-		private function __getXResourceFromPath (__className:String, __resourcePath:String, __resourceXML:XSimpleXMLNode):XResource {
+		private function __getXResourceFromPath (__resourcePath:String, __resourceXML:XSimpleXMLNode):XResource {
 			var __r:XResource = cast m_resourceMap.get (__resourcePath); /* as XResource */
 			
 			if (__r == null) {
 				var	__XResource:XResource;
 				
-				if (__className != null && __className != "" && m_projectManager.findEmbeddedResource (__className.split (":")[1]) != null) {
-					__XResource = new XSWFEmbeddedResource ();
-					__XResource.setup (__resourcePath, __resourceXML, m_parent, this);
-				}
-				else if (m_projectManager.findEmbeddedResource (__resourcePath) == null) {
+				if (m_projectManager.findEmbeddedResource (__resourcePath) == null) {
 					__XResource = new XSWFURLResource ();
 					__XResource.setup (m_rootPath + "\\" + __resourcePath, __resourceXML, m_parent, this);
-				} else {
+				}
+				else
+				{
 					__XResource = new XSWFEmbeddedResource ();
 					__XResource.setup (__resourcePath, __resourceXML, m_parent, this);					
 				}
