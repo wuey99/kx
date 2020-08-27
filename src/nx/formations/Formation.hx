@@ -84,8 +84,7 @@ package nx.formations;
 		}
 		
 		//------------------------------------------------------------------------------------------
-		public override function cleanup():Void 
-		{
+		public override function cleanup():Void {
 			 super.cleanup();
 			 
 			 G.appX.removeTriggerXListener (m_triggerID);

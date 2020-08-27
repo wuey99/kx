@@ -70,7 +70,7 @@ package kx.task;
 					return null;
 				},
 					
-				1024, 256,
+				8192, 256,
 					
 				function (x:Dynamic /* */):Void {
 				}

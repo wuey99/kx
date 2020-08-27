@@ -415,6 +415,46 @@ package nx.formations;
 			oY = m_startPos.y + __deltaY;
 		}
 		
+//------------------------------------------------------------------------------------------	
+		public function getAngleToTarget (__targetX:Float, __targetY:Float):Float {
+			var __dx:Float = __targetX - oX;
+			var __dy:Float = __targetY - oY;
+			
+			var __radians:Float = Math.atan2 (__dy, __dx);
+			
+			var __angle:Float = -__radians*180/Math.PI;					
+			__angle = __angle > 0 ? __angle : __angle + 360;
+			
+			__angle = 360 - __angle + 90;  if (__angle >= 360) __angle -= 360;
+			
+			return __angle % 360;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function getDelta (__currentRotation:Float, __targetRotation:Float):Float {
+			 var __delta1:Float = Std.int (__targetRotation - __currentRotation) % 360;
+			
+			if (__delta1 < -180) {
+				__delta1 += 360;
+			}
+				
+			var __delta2:Float = -Std.int ((__currentRotation + 360) - __targetRotation) % 360;
+
+			if (__delta2 < -180) {
+				__delta2 += 360;
+			}
+				 
+			var __delta:Float;
+			
+			if (Math.abs (__delta1) < Math.abs (__delta2)) {
+				__delta = __delta1;
+			} else {
+				__delta = __delta2;
+			}
+			
+			return __delta;
+		}
+
 //------------------------------------------------------------------------------------------
 		public function setPattern (__pattern:Array<Dynamic>):Void {
 			patternMovement.gotoTask (__pattern, true);

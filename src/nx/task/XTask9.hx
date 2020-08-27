@@ -46,8 +46,9 @@ package nx.task;
 		public static inline var GET_NEXT_ENEMY_FROM_FORMATION:Int = XTask.XTask_OPCODES + 24;
 		public static inline var GET_RANDOM_ENEMY_FROM_FORMATION:Int = XTask.XTask_OPCODES + 25;
 		public static inline var LAUNCH_ENEMY:Int =  XTask.XTask_OPCODES + 26;
-		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 27;
-		public static inline var NUKE:Int = XTask.XTask_OPCODES + 28;
+		public static inline var LAUNCH_ATTACK:Int = XTask.XTask_OPCODES + 27;
+		public static inline var ALL_ENEMIES_DEAD:Int =  XTask.XTask_OPCODES + 28;
+		public static inline var NUKE:Int = XTask.XTask_OPCODES + 29;
 			
 		public var m_object:FormationXLogicObject;
 		public var m_targetObject:FormationXLogicObject;
@@ -181,6 +182,9 @@ package nx.task;
 				case LAUNCH_ENEMY:
 					i += 1;
 					
+				// XTask9.LAUNCH_ATTACK
+				case LAUNCH_ATTACK:
+		
 				// XTask9.ALL_ENEMIES_DEAD, ["01", "02", "03"]
 				case ALL_ENEMIES_DEAD:
 					i += 1;
@@ -535,6 +539,12 @@ package nx.task;
 					m_targetObject.setPattern (__pattern);
 					
 					m_targetObject.gotoFormationAttackState ();
+					
+				//------------------------------------------------------------------------------------------
+				// XTask9.LAUNCH_ATTACK
+				//------------------------------------------------------------------------------------------
+				case LAUNCH_ATTACK:
+					m_targetObject.gotoAttackState ();
 					
 				//------------------------------------------------------------------------------------------
 				// XTask9.ALL_ENEMIES_DEAD
