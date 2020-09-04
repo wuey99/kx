@@ -263,7 +263,7 @@ package gx;
 							// logicObject
 							cast XType.createInstance (__class) /* as XLogicObject */,
 							// item, layer, depth
-							null, 0, 0,
+							null, 0, __depth,
 							// x, y, z
 							0, 0, 0,
 							// scale, rotation
@@ -271,6 +271,10 @@ package gx;
 							// args
 							__params
 						) /* as Gamestate */;
+						
+						m_gameStateObject.addKillListener (function ():Void {
+							m_gameStateObject = null;
+						});
 					},
 					
 					XTask.RETN,

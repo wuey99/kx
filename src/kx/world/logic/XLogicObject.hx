@@ -782,7 +782,7 @@ package kx.world.logic;
 		
 		public function removeHudXLogicObject (__XLogicObject:XLogicObject):Void {
 			if (m_HudXLogicObjects.exists (__XLogicObject)) {
-				m_XLogicObjects.remove (__XLogicObject);
+				m_HudXLogicObjects.remove (__XLogicObject);
 				
 				if (!__XLogicObject.cleanedUp) {
 					__XLogicObject.cleanup ();

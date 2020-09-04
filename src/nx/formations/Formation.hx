@@ -26,19 +26,12 @@ package nx.formations;
 		id:String,
 		x:Float,
 		y:Float,
-	}
-	
-	//------------------------------------------------------------------------------------------
-	typedef AttackDef = {
-		id:String,
-		percentageX:Float,
-		percentageY:Float,
+		?rotation:Float
 	}
 	
 	//------------------------------------------------------------------------------------------
 	class Formation extends FormationXLogicObject {
 		public var m_formationPositions:Map<String, FormationPosition>;
-		public var m_attackPositions:Map<String, AttackPosition>;
 		public var m_formationDefs:Array<FormationDef>;
 		
 		public var m_completeCount:Int;
@@ -157,7 +150,7 @@ package nx.formations;
 					// x, y, z
 					__point.x + formationDef.x, __point.y + formationDef.y, 0,
 					// scale, rotation
-					1.0, 0
+					1.0, formationDef.rotation == null ? 0.0 : formationDef.rotation
 				);
 				
 				__formationPosition.oAlpha = getDefaultAlpha ();
@@ -191,7 +184,7 @@ package nx.formations;
 					// x, y, z
 					formationDef.x, formationDef.y, 0,
 					// scale, rotation
-					1.0, 0
+					1.0, formationDef.rotation == null ? 0.0 : formationDef.rotation
 				);
 				
 				__formationPosition.oAlpha = getDefaultAlpha ();
@@ -220,7 +213,7 @@ package nx.formations;
 					// x, y, z
 					__x + formationDef.x, __y + formationDef.y, 0,
 					// scale, rotation
-					1.0, 0
+					1.0, formationDef.rotation == null ? 0.0 : formationDef.rotation
 				);
 				
 				__formationPosition.oAlpha = getDefaultAlpha ();
@@ -238,6 +231,7 @@ package nx.formations;
 				
 				__formationPosition.oX = oX + formationDef.x;
 				__formationPosition.oY = oY + formationDef.y;
+				__formationPosition.oRotation = formationDef.rotation == null ? 0.0 : formationDef.rotation;
 			}
 		}
 

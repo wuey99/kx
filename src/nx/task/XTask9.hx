@@ -243,6 +243,7 @@ package nx.task;
 						getObject ().oY = __formationPosition.oY;
 						getObject ().oDX = 0;
 						getObject ().oDY = 0;
+						getObject ().oRotation = __formationPosition.oRotation;
 						getObject ().m_autoRotation = false;
 						getObject ().m_autoSpeed = false;
 					
