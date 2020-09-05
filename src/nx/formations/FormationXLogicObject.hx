@@ -491,6 +491,7 @@ package nx.formations;
 				if (__formationPosition != null) {
 					oX = __formationPosition.oX;
 					oY = __formationPosition.oY;
+					oRotation = __formationPosition.oRotation;
 				}
 			}
 		}
