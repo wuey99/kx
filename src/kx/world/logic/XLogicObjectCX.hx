@@ -608,6 +608,10 @@ package kx.world.logic;
 						
 				// trace (": Ck_Collide_DN: ", r, __x, submapRow);
 				
+				if (r > 63) {
+					return false;
+				}
+				
 				switch (m_XSubmaps[r][__x >> 9].cmap[submapRow + ((__x & 511) >> 4)]) {
 				// ([
 					case XSubmapModel.CX_EMPTY:
@@ -1741,6 +1745,10 @@ package kx.world.logic;
 				c = x1 >> 9;
 				r = y2 >> 9;
 				i = ( ((y2 & m_submapHeightMask) >> 4) * m_cols) + ((x1 & m_submapWidthMask) >> 4);
+				
+				if (r > 63) {
+					return false;
+				}
 				
 				switch (m_XSubmaps[r][c].cmap[i]) {
 					// ([

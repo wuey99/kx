@@ -2,6 +2,7 @@
 package nx.formations;
 	
 	import assets.*;
+	import kx.signals.XSignal;
 	
 	import kx.*;
 	import kx.geom.*;
@@ -43,6 +44,8 @@ package nx.formations;
 		
 		public var m_defaultDepth:Float;
 		
+		public var m_formationCompleteSignal:XSignal;
+		
 		//------------------------------------------------------------------------------------------
 		public function new () {
 			super ();
@@ -70,6 +73,8 @@ package nx.formations;
 			Idle_Script ();	
 			
 			m_buggedOut = false;
+			
+			m_formationCompleteSignal = createXSignal ();
 			
 			m_triggerID = G.appX.addTriggerXListener (onTriggerSignal);
 			
@@ -239,6 +244,11 @@ package nx.formations;
 		public function createFormationPositions ():Void {
 		}
 
+		//------------------------------------------------------------------------------------------
+		public function addFormationCompleteListener (__listener:Function):Void {
+			m_formationCompleteSignal.addListener (__listener);
+		}
+		
 		//------------------------------------------------------------------------------------------
 		public function allEnemiesDead ():Bool {
 			var __allDead:Bool = true;
@@ -564,6 +574,10 @@ package nx.formations;
 						__task.ifTrue (getCompleteCount () == getTotalEnemyCount ());
 					}, XTask.BNE, "loop",
 
+					function ():Void {
+						m_formationCompleteSignal.fireSignal ();
+					},
+					
 				XTask.RETN,
 			];
 		}
