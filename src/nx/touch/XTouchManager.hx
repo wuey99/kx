@@ -47,14 +47,20 @@ package nx.touch;
 		private var m_touchMoveSignal:XSignal;
 		private var m_touchEndSignal:XSignal;
 		
+		private var m_scaleXRatio:Float;
+		private var m_scaleYRatio:Float;
+		
 		//------------------------------------------------------------------------------------------
 		public function new () {
 		}
 
 		//------------------------------------------------------------------------------------------
-		public function setup (__XApp:XApp, __world:XWorld):Void {
+		public function setup (__XApp:XApp, __world:XWorld, __scaleXRatio:Float = 1.0, __scaleYRatio:Float = 1.0):Void {
 			m_XApp = __XApp;
 			m_world = __world;
+			
+			m_scaleXRatio = __scaleXRatio;
+			m_scaleYRatio = __scaleYRatio;
 			
 			m_touchTrackers = new Map <Int, XTouchTracker> ();
 			m_trackerCount = 0;
@@ -152,7 +158,7 @@ package nx.touch;
 
 		//------------------------------------------------------------------------------------------
 		public function createTouchTracker ():XTouchTracker {
-			return new XTouchTracker ();
+			return new XTouchTracker (m_scaleXRatio, m_scaleYRatio);
 		}
 		
 		//------------------------------------------------------------------------------------------

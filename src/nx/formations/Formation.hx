@@ -282,6 +282,10 @@ package nx.formations;
 		public override function spawnFormationEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float, __params:Array<Dynamic> = null):FormationXLogicObject {
 			var __params2:Array<Dynamic> = ["", 0];
 			
+			if (__params == null) {
+				__params = [];
+			}
+			
 			var __enemyObject:FormationXLogicObject = cast xxx.getXLogicManager ().initXLogicObjectFromPool (
 				// parent
 				G.appX.getLevelObject (),
@@ -303,7 +307,7 @@ package nx.formations;
 				getSpawnLayer (),
 				getXMapModel ()
 			);
-			
+
 			__enemyObject.setDisableCulling (true);
 			
 			var __formationPosition:FormationPosition = getFormationPositionById (__id);
@@ -314,7 +318,7 @@ package nx.formations;
 			
 			incTotalEnemyCount ();
 			incTotalInuseCount ();
-			
+
 			G.appX.getLevelObject ().addXLogicObject (__enemyObject);
 			
 			return __enemyObject;

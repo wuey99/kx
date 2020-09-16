@@ -158,17 +158,17 @@ package nx.task;
 				// XTask9.DISABLE_AUTO_SPEED_AND_ROTATION
 				case DISABLE_AUTO_SPEED_AND_ROTATION:
 					
-				// XTask9.SPAWN_FORMATION_ENEMY, <id>, <class>, <task>, <x>, <y>
+				// XTask9.SPAWN_FORMATION_ENEMY, <id>, <class>, <task>, <x>, <y>, <params>
 				case SPAWN_FORMATION_ENEMY:
-					i += 5;
-					
-				// XTask9.SPAWN_ENEMY_AT_INDEX, <index>, <id>, <class>, <task>, <x>, <y>
-				case SPAWN_ENEMY_AT_INDEX:
 					i += 6;
 					
-				// XTask9.SPAWN_RANDOM_ENEMY, <id>, <class>, <task>, <x>, <y>
+				// XTask9.SPAWN_ENEMY_AT_INDEX, <index>, <id>, <class>, <task>, <x>, <y>, <params>
+				case SPAWN_ENEMY_AT_INDEX:
+					i += 7;
+					
+				// XTask9.SPAWN_RANDOM_ENEMY, <id>, <class>, <task>, <x>, <y>, <params>
 				case SPAWN_RANDOM_ENEMY:
-					i += 5;
+					i += 6;
 					
 				// XTask9.GET_NEXT_ENEMY_FROM_FORMATION, <sequenceIndex>, ["01", "02", "03"]
 				case GET_NEXT_ENEMY_FROM_FORMATION:
