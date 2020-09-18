@@ -30,19 +30,19 @@ package nx.touch;
 	import kx.*;
 	import kx.collections.*;
 	import kx.signals.*;
+	import kx.geom.XPoint;
 	
 	import openfl.events.*;
 	import openfl.ui.*;
 
+	import nx.utils.*;
+	
 	//------------------------------------------------------------------------------------------	
 	class XTouchTracker {
 		private var m_XApp:XApp;
 		
 		private var m_type:String;
 
-		private var m_scaleXRatio:Float;
-		private var m_scaleYRatio:Float;
-		
 		private var m_startLocalX:Float;
 		private var m_startLocalY:Float;
 		private var m_startStageX:Float;
@@ -56,10 +56,10 @@ package nx.touch;
 		private var m_touchMoveSignal:XSignal;
 		private var m_touchEndSignal:XSignal;
 		
+		private var m_stagePoint:XPoint;
+		
 		//------------------------------------------------------------------------------------------
-		public function new (__scaleXRatio:Float = 1.0, __scaleYRatio:Float = 1.0) {
-			m_scaleXRatio = __scaleXRatio;
-			m_scaleYRatio = __scaleYRatio;
+		public function new () {
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -69,6 +69,8 @@ package nx.touch;
 			
 			m_touchMoveSignal = m_XApp.createXSignal ();
 			m_touchEndSignal = m_XApp.createXSignal ();
+			
+			m_stagePoint = new XPoint ();
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -138,22 +140,22 @@ package nx.touch;
 		public function initPos (e:TouchEvent):Void {
 			m_startLocalX = e.localX;
 			m_startLocalY = e.localY;
-			m_startStageX = e.stageX * m_scaleXRatio;
-			m_startStageY = e.stageY * m_scaleYRatio;
+			m_startStageX = e.stageX;
+			m_startStageY = e.stageY;
 			
 			m_currentLocalX = e.localX;
 			m_currentLocalY = e.localY;
-			m_currentStageX = e.stageX * m_scaleXRatio;
-			m_currentStageY = e.stageY * m_scaleYRatio;
+			m_currentStageX = e.stageX;
+			m_currentStageY = e.stageY;
 		}
 		
 		//------------------------------------------------------------------------------------------
 		public function updatePos (e:TouchEvent):Void {
 			m_currentLocalX = e.localX;
 			m_currentLocalY = e.localY;
-			m_currentStageX = e.stageX * m_scaleXRatio;
-			m_currentStageY = e.stageY * m_scaleYRatio;
-			
+			m_currentStageX = e.stageX;
+			m_currentStageY = e.stageY;
+
 			m_touchMoveSignal.fireSignal (this);
 		}
 		

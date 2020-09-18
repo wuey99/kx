@@ -605,9 +605,7 @@ package kx.world.logic;
 //				r = y2/m_submapHeight;
 //				i = (int ((y2 & m_submapHeightMask)/XSubmapModel.CX_TILE_HEIGHT) * m_cols) + int ((__x & m_submapWidthMask)/XSubmapModel.CX_TILE_WIDTH);
 //				switch (m_XSubmaps[r][c].cmap[i]) {
-						
-				// trace (": Ck_Collide_DN: ", r, __x, submapRow);
-				
+					
 				if (r > 63) {
 					return false;
 				}

@@ -49,7 +49,6 @@ package kx;
 	import kx.world.sprite.*;
 	import kx.xmap.*;
 	import kx.xml.*;
-
 	
 //------------------------------------------------------------------------------------------
 	class XApp {
@@ -60,6 +59,7 @@ package kx;
 		private var m_XDebug:XDebug;
 		private var m_useTilemaps:Bool;
 		private var m_useBGTilemaps:Bool;
+		
 		private var m_projectManager:XProjectManager;
 		private var m_XSignalManager:XSignalManager;
 		private var m_XSoundManager:XSoundManager;
@@ -80,6 +80,13 @@ package kx;
 		private var m_allClassNames:Map<String, Int>; // <String, Int>
 		private var m_frameRateScale:Float;
 		private var m_XGamepadManager:XGamepadManager;
+		
+		private var m_deviceWidth:Float;
+		private var m_deviceHeight:Float;
+		private var m_screenWidth:Float;
+		private var m_screenHeight:Float;
+		private var m_scaleXRatio:Float;
+		private var m_scaleYRatio:Float;
 		
 //------------------------------------------------------------------------------------------
 		public function new () {
@@ -368,6 +375,47 @@ package kx;
 //------------------------------------------------------------------------------------------
 		public function setFrameRateScale (__val:Float):Void {
 			m_frameRateScale = __val;
+		}
+
+//------------------------------------------------------------------------------------------
+		public function setDeviceSize (__width:Float, __height:Float):Void {
+			m_deviceWidth = __width;
+			m_deviceHeight = __height;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function getDeviceWidth ():Float {
+			return m_deviceWidth;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function getDeviceHeight ():Float {
+			return m_deviceHeight;
+		}
+
+//------------------------------------------------------------------------------------------
+		public function setScreenSize (__width:Float, __height:Float):Void {
+			m_screenWidth = __width;
+			m_screenHeight = __height;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function getScreenWidth ():Float {
+			return m_screenWidth;
+		}
+		
+//------------------------------------------------------------------------------------------
+		public function getScreenHeight ():Float {
+			return m_screenHeight;
+		}
+
+//------------------------------------------------------------------------------------------
+		public function setupSize (__deviceWidth:Float, __deviceHeight:Float, __screenWidth:Float, __screenHeight:Float):Void {
+			setDeviceSize (__deviceWidth, __deviceHeight);
+			setScreenSize (__screenWidth, __screenHeight);
+			
+			m_scaleXRatio = m_screenWidth / m_deviceWidth;
+			m_scaleYRatio = m_screenHeight / m_deviceHeight;
 		}
 		
 //------------------------------------------------------------------------------------------
