@@ -31,17 +31,20 @@ package nx.utils;
 	import kx.collections.*;
 	import kx.signals.*;
 	import kx.geom.*;
+	import kx.world.XWorld;
 	
 	import openfl.events.*;
-	import openfl.ui.*;
 
 	//------------------------------------------------------------------------------------------	
 	class Utils {
+		private var xxx:XWorld;
 		private var m_XApp:XApp;
 
 		private var m_scaleRatio:Float;
 		private var m_xoffset:Float;
 		private var m_yoffset:Float;
+		
+		private var m_debugConsole:DebugConsole;
 		
 		private static var g_instance:Utils;
 		
@@ -50,7 +53,8 @@ package nx.utils;
 		}
 
 		//------------------------------------------------------------------------------------------
-		public function setup (__XApp:XApp, __params:Array<Dynamic> = null):Void {
+		public function setup (__xxx:XWorld, __XApp:XApp, __params:Array<Dynamic> = null):Void {
+			xxx = __xxx;
 			m_XApp = __XApp;
 			g_instance = this;
 		}
@@ -95,14 +99,34 @@ package nx.utils;
 			var __x:Float = __point.x - m_xoffset;
 			var __y:Float = __point.y - m_yoffset;
 			
-			__x = Math.max (m_xoffset, __x);
-			__y = Math.max (m_yoffset, __y);
+			__x = Math.max (0, __x);
+			__y = Math.max (0, __y);
 			
-			__x = Math.min (m_xoffset + m_XApp.getScreenWidth (), __x);
-			__y = Math.min (m_yoffset + m_XApp.getScreenHeight (), __y);
+			__x = Math.min (m_XApp.getScreenWidth (), __x);
+			__y = Math.min (m_XApp.getScreenHeight (), __y);
 			
-			__point.x = __x;
-			__point.y = __y;
+			__point.x = __x / m_scaleRatio;
+			__point.y = __y / m_scaleRatio;
+		}
+		
+		//------------------------------------------------------------------------------------------
+		public function getDebugConsole ():DebugConsole {
+			if (m_debugConsole == null) {
+				m_debugConsole = cast xxx.getXLogicManager ().initXLogicObject (
+					// parent
+					null,
+					// logicObject
+					new DebugConsole (),
+					// item, layer, depth
+					null, -1, 9999999999.0,
+					// x, y, z
+					0, 0, 0,
+					// scale, rotation
+					1.0, 0
+				);
+			}
+			
+			return m_debugConsole;
 		}
 		
 	//------------------------------------------------------------------------------------------

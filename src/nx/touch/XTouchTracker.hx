@@ -56,6 +56,7 @@ package nx.touch;
 		private var m_touchMoveSignal:XSignal;
 		private var m_touchEndSignal:XSignal;
 		
+		private var m_localPoint:XPoint;
 		private var m_stagePoint:XPoint;
 		
 		//------------------------------------------------------------------------------------------
@@ -70,6 +71,7 @@ package nx.touch;
 			m_touchMoveSignal = m_XApp.createXSignal ();
 			m_touchEndSignal = m_XApp.createXSignal ();
 			
+			m_localPoint = new XPoint ();
 			m_stagePoint = new XPoint ();
 		}
 		
@@ -143,10 +145,22 @@ package nx.touch;
 			m_startStageX = e.stageX;
 			m_startStageY = e.stageY;
 			
-			m_currentLocalX = e.localX;
-			m_currentLocalY = e.localY;
-			m_currentStageX = e.stageX;
-			m_currentStageY = e.stageY;
+			if (Utils.instance () != null) {
+				m_localPoint.x = e.localX;
+				m_localPoint.y = e.localY;
+				
+				Utils.instance ().translateDeviceCoords (m_localPoint);
+				
+				m_stagePoint.x = e.stageX;
+				m_stagePoint.y = e.stageY;
+				
+				Utils.instance ().translateDeviceCoords (m_stagePoint);
+
+				m_currentLocalX = m_localPoint.x;
+				m_currentLocalY = m_localPoint.y;
+				m_currentStageX = m_stagePoint.x;
+				m_currentStageY = m_stagePoint.y;
+			}
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -156,6 +170,33 @@ package nx.touch;
 			m_currentStageX = e.stageX;
 			m_currentStageY = e.stageY;
 
+			if (Utils.instance () != null) {
+				m_localPoint.x = e.localX;
+				m_localPoint.y = e.localY;
+				
+				Utils.instance ().translateDeviceCoords (m_localPoint);
+				
+				m_stagePoint.x = e.stageX;
+				m_stagePoint.y = e.stageY;
+				
+				Utils.instance ().translateDeviceCoords (m_stagePoint);
+
+				m_currentLocalX = m_localPoint.x;
+				m_currentLocalY = m_localPoint.y;
+				m_currentStageX = m_stagePoint.x;
+				m_currentStageY = m_stagePoint.y;
+
+				#if false
+				Utils.instance ().getDebugConsole ().setMessage ([
+					"" + m_XApp.getDeviceWidth (), "" + m_XApp.getDeviceHeight (),
+					"" + Utils.instance ().getXOffset (), "" + Utils.instance ().getYOffset(),
+					"" + e.localX, "" + e.localY,
+					"" + e.stageX, "" + e.stageY,
+					"" + m_stagePoint.x, "" + m_stagePoint.y,
+				]);
+				#end
+			}
+			
 			m_touchMoveSignal.fireSignal (this);
 		}
 		
