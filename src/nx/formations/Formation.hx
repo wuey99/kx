@@ -328,6 +328,10 @@ package nx.formations;
 		public override function spawnEnemy (__id:String, __class:Class<Dynamic>, __pattern:Array<Dynamic>, __x:Float, __y:Float, __params:Array<Dynamic> = null):FormationXLogicObject {
 			var __params2:Array<Dynamic> = ["", 0];
 		
+			if (__params == null) {
+				__params = [];
+			}
+			
 			var __formationPosition:FormationPosition = null;
 			
 			if (__id != null && __id != "") {
