@@ -22,10 +22,24 @@ package nx.task;
 					return null;
 				},
 					
-				4096, 256,
+				1024, 256,
 					
 				function (x:Dynamic /* */):Void {
 				}
 			);
+		}
+		
+//------------------------------------------------------------------------------------------
+		public override function addTask (__taskList:Array<Dynamic> /* <Dynamic> */, __findLabelsFlag:Bool = true):XTask {
+//			var __task:XTask = cast m_poolManager.borrowObject (); /* as XTask */
+			var __task:XTask = new XTask9 ();
+			__task.setup (__taskList, __findLabelsFlag);
+			
+			__task.setManager (this);
+			__task.setParent (this);
+			
+			m_XTasks.set (__task, 0);
+			
+			return __task;
 		}
 	}

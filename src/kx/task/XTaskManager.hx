@@ -113,8 +113,8 @@ package kx.task;
 		
 //------------------------------------------------------------------------------------------
 		public function addTask (__taskList:Array<Dynamic> /* <Dynamic> */, __findLabelsFlag:Bool = true):XTask {
-			var __task:XTask = cast m_poolManager.borrowObject (); /* as XTask */
-//			var __task:XTask = new XTask ();
+//			var __task:XTask = cast m_poolManager.borrowObject (); /* as XTask */
+			var __task:XTask = new XTask ();
 			__task.setup (__taskList, __findLabelsFlag);
 			
 			__task.setManager (this);
@@ -125,6 +125,19 @@ package kx.task;
 			return __task;
 		}
 
+//------------------------------------------------------------------------------------------
+		public function addTaskFromClass (__class:Class<Dynamic>, __taskList:Array<Dynamic> /* <Dynamic> */, __findLabelsFlag:Bool = true):XTask {
+			var __task:XTask = cast XType.createInstance (__class); /* as XTask */
+			__task.setup (__taskList, __findLabelsFlag);
+			
+			__task.setManager (this);
+			__task.setParent (this);
+			
+			m_XTasks.set (__task, 0);
+			
+			return __task;
+		}
+		
 //------------------------------------------------------------------------------------------
 		public function addXTask (__task:XTask):XTask {
 			__task.setManager (this);
