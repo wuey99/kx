@@ -196,7 +196,7 @@ package nx.touch;
 				m_currentStageX = m_stagePoint.x;
 				m_currentStageY = m_stagePoint.y;
 
-				#if true
+				#if false
 				Utils.instance ().getDebugConsole ().setMessage ([
 					"" + m_XApp.getDeviceWidth (), "" + m_XApp.getDeviceHeight (),
 					"" + m_stagePoint.x, "" + m_stagePoint.y,
