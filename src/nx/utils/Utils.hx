@@ -43,9 +43,7 @@ package nx.utils;
 		private var m_scaleRatio:Float;
 		private var m_xoffset:Float;
 		private var m_yoffset:Float;
-		
-		private var m_debugConsole:DebugConsole;
-		
+
 		private static var g_instance:Utils;
 		
 		//------------------------------------------------------------------------------------------
@@ -78,8 +76,8 @@ package nx.utils;
 			m_xoffset = (m_XApp.getDeviceWidth () - m_XApp.getScreenWidth () * m_scaleRatio) / 2;
 			m_yoffset = (m_XApp.getDeviceHeight () - m_XApp.getScreenHeight () * m_scaleRatio) / 2;
 		}
-
 		//------------------------------------------------------------------------------------------
+
 		public function getXOffset ():Float {
 			return m_xoffset;
 		}
@@ -96,23 +94,23 @@ package nx.utils;
 		
 		//------------------------------------------------------------------------------------------
 		public function translateDeviceCoords (__point:XPoint):Void {
-			var __x:Float = __point.x - m_xoffset;
-			var __y:Float = __point.y - m_yoffset;
+			var __x:Float = (__point.x - m_xoffset);
+			var __y:Float = (__point.y - m_yoffset);
 			
 			__x = Math.max (0, __x);
 			__y = Math.max (0, __y);
 			
-			__x = Math.min (m_XApp.getScreenWidth (), __x);
-			__y = Math.min (m_XApp.getScreenHeight (), __y);
+			__x = Math.min (m_XApp.getScreenWidth (), __x / m_scaleRatio);
+			__y = Math.min (m_XApp.getScreenHeight (), __y / m_scaleRatio);
 			
-			__point.x = __x / m_scaleRatio;
-			__point.y = __y / m_scaleRatio;
+			__point.x = __x;
+			__point.y = __y;
 		}
 		
 		//------------------------------------------------------------------------------------------
 		public function getDebugConsole ():DebugConsole {
-			if (m_debugConsole == null) {
-				m_debugConsole = cast xxx.getXLogicManager ().initXLogicObject (
+			if (DebugConsole.instance () == null) {
+				cast xxx.getXLogicManager ().initXLogicObject (
 					// parent
 					null,
 					// logicObject
@@ -126,7 +124,7 @@ package nx.utils;
 				);
 			}
 			
-			return m_debugConsole;
+			return DebugConsole.instance ();
 		}
 		
 	//------------------------------------------------------------------------------------------

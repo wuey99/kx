@@ -28,9 +28,18 @@ package nx.utils;
 		
 		public var script:XTask;
 		
+		private static var g_instance:DebugConsole;		
+
+		//------------------------------------------------------------------------------------------
+		public static function instance ():DebugConsole {
+			return g_instance;
+		}
+		
 		//------------------------------------------------------------------------------------------
 		public function new () {
 			super ();
+			
+			g_instance = this;
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -49,7 +58,7 @@ package nx.utils;
 			Idle_Script ();
 			
 			oY = 25;
-			oAlpha = 0.66;
+			oAlpha = 1.0;
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -80,6 +89,7 @@ package nx.utils;
 			
 			m_consoleBox = new Sprite ();
 			x_consoleBox = addSpriteAt (m_consoleBox, 0, 0);
+			x_consoleBox.setDepth (getDepth () + 1);
 			
 			m_consoleBox.graphics.beginFill (0xc0c0c0);
 			m_consoleBox.graphics.drawRect (__x, __y, __width, __height);
@@ -107,6 +117,7 @@ package nx.utils;
 			m_text.getTextField ().wordWrap = true;
 			
 			x_text = addSpriteAt (m_text, 0, 0);
+			x_text.setDepth (getDepth () + 2);
 			
 			m_text.x = __padding + 8;
 			m_text.y = __padding + 8;
