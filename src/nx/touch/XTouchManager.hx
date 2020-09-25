@@ -63,16 +63,16 @@ package nx.touch;
 			m_touchMoveSignal = m_XApp.createXSignal ();
 			m_touchEndSignal = m_XApp.createXSignal ();
 			
-			m_world.stage.addEventListener (TouchEvent.TOUCH_BEGIN, onTouchBegin);
-			m_world.stage.addEventListener (TouchEvent.TOUCH_MOVE, onTouchMove);
-			m_world.stage.addEventListener (TouchEvent.TOUCH_END, onTouchEnd);
+			m_world.addEventListener (TouchEvent.TOUCH_BEGIN, onTouchBegin);
+			m_world.addEventListener (TouchEvent.TOUCH_MOVE, onTouchMove);
+			m_world.addEventListener (TouchEvent.TOUCH_END, onTouchEnd);
 		}
 		
 		//------------------------------------------------------------------------------------------
 		public function cleanup ():Void {
-			m_world.stage.removeEventListener (TouchEvent.TOUCH_BEGIN, onTouchBegin);
-			m_world.stage.removeEventListener (TouchEvent.TOUCH_MOVE, onTouchMove);
-			m_world.stage.removeEventListener (TouchEvent.TOUCH_END, onTouchEnd);
+			m_world.removeEventListener (TouchEvent.TOUCH_BEGIN, onTouchBegin);
+			m_world.removeEventListener (TouchEvent.TOUCH_MOVE, onTouchMove);
+			m_world.removeEventListener (TouchEvent.TOUCH_END, onTouchEnd);
 		}
 
 		//------------------------------------------------------------------------------------------
