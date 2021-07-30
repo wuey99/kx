@@ -67,7 +67,9 @@ package kx.world.sprite;
 				m_poolManager = g_XApp.getXBitmapPoolManager ();
 			}
 			
-			m_bitmap = cast m_poolManager.borrowObject (); /* as XImageMap */
+			// m_bitmap = cast m_poolManager.borrowObject (); /* as XImageMap */
+			
+			m_bitmap = new XTilemap ();
 		}
 		
 		//------------------------------------------------------------------------------------------
@@ -78,7 +80,7 @@ package kx.world.sprite;
 			
 			m_bitmap.cleanup ();	
 			
-			m_poolManager.returnObject (m_bitmap);
+			// m_poolManager.returnObject (m_bitmap);
 		}
 
 		//------------------------------------------------------------------------------------------

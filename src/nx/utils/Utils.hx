@@ -76,8 +76,8 @@ package nx.utils;
 			m_xoffset = (m_XApp.getDeviceWidth () - m_XApp.getScreenWidth () * m_scaleRatio) / 2;
 			m_yoffset = (m_XApp.getDeviceHeight () - m_XApp.getScreenHeight () * m_scaleRatio) / 2;
 		}
+		
 		//------------------------------------------------------------------------------------------
-
 		public function getXOffset ():Float {
 			return m_xoffset;
 		}

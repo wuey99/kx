@@ -70,6 +70,8 @@ package kx.sound;
 			__completeListener:Dynamic /* Function */ = null
 			):Int {
 		
+			trace (": XSoundManager: __playSound: ", __class, __sound, __type, __loops);
+			
 			if (__transform == null) {
 				__transform = new SoundTransform (getSFXVolume (), 0);
 			}

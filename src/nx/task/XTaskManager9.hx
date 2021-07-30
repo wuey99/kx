@@ -31,8 +31,8 @@ package nx.task;
 		
 //------------------------------------------------------------------------------------------
 		public override function addTask (__taskList:Array<Dynamic> /* <Dynamic> */, __findLabelsFlag:Bool = true):XTask {
-//			var __task:XTask = cast m_poolManager.borrowObject (); /* as XTask */
-			var __task:XTask = new XTask9 ();
+			var __task:XTask = cast m_poolManager.borrowObject (); /* as XTask */
+//			var __task:XTask = new XTask9 ();
 			__task.setup (__taskList, __findLabelsFlag);
 			
 			__task.setManager (this);
